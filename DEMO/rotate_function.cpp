@@ -25,7 +25,7 @@
 
 void RotateFunc::deform(DeformableSimplicialComplex& dsc)
 {
-    clock_t init_time = clock();
+    auto init_time = std::chrono::system_clock::now();
     
     CGLA::Vec2d cen = dsc.get_center();
     CGLA::Vec3f center = CGLA::Vec3f(cen[0], cen[1], 0.f);
@@ -41,10 +41,10 @@ void RotateFunc::deform(DeformableSimplicialComplex& dsc)
             dsc.set_destination(*vi, CGLA::Vec2d(new_pos[0], new_pos[1]));
         }
     }
-    update_compute_time(clock() - init_time);
-    init_time = clock();
+    update_compute_time(init_time);
+    init_time = std::chrono::system_clock::now();
     
     dsc.deform();
     
-    update_deform_time(clock() - init_time);
+    update_deform_time(init_time);
 }

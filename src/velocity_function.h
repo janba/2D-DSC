@@ -118,20 +118,20 @@ protected:
     /**
      Updates the time it took to compute new positions for the interface vertices.
      */
-    void update_compute_time(const clock_t& compute_time_)
+    void update_compute_time(const std::chrono::time_point<std::chrono::system_clock>& start_time)
     {
-        double t = (double)(compute_time_) / ((double)CLOCKS_PER_SEC);
-        compute_time += t;
-        total_compute_time += t;
+        std::chrono::duration<double> t = std::chrono::system_clock::now() - start_time;
+        compute_time += t.count();
+        total_compute_time += t.count();
     }
     /**
      Updates the time it took to deform the interface.
      */
-    void update_deform_time(const clock_t& deform_time_)
+    void update_deform_time(const std::chrono::time_point<std::chrono::system_clock>& start_time)
     {
-        double t = (double)(deform_time_) / ((double)CLOCKS_PER_SEC);
-        deform_time += t;
-        total_deform_time += t;
+        std::chrono::duration<double> t = std::chrono::system_clock::now() - start_time;
+        deform_time += t.count();
+        total_deform_time += t.count();
     }
     
 private:

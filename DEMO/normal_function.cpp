@@ -18,7 +18,7 @@
 
 void NormalFunc::deform(DeformableSimplicialComplex& dsc)
 {
-    clock_t init_time = clock();
+    auto init_time = std::chrono::system_clock::now();
     for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
     {
         if(dsc.is_movable(*vi))
@@ -30,10 +30,10 @@ void NormalFunc::deform(DeformableSimplicialComplex& dsc)
 			}
         }
     }
-    update_compute_time(clock() - init_time);
-    init_time = clock();
+    update_compute_time(init_time);
+    init_time = std::chrono::system_clock::now();
     
     dsc.deform();
     
-    update_deform_time(clock() - init_time);
+    update_deform_time(init_time);
 }
