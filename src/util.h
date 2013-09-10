@@ -119,15 +119,15 @@ namespace Util
     }
     
     /**
-     Returns the minimum distance between line segment vw and point p.
+     Returns the squared minimum distance between line segment vw and point p.
      */
     template <class vec>
-    inline double min_dist(const vec& v, const vec& w, const vec& p)
+    inline double min_dist_sqr(const vec& v, const vec& w, const vec& p)
     {
         const double l2 = dot(v-w, v-w);  // i.e. |w-v|^2 -  avoid a sqrt
         if (l2 == 0.)
         {
-            return (p - v).length();   // v == w case
+            return sqr_length(p - v);   // v == w case
         }
         // Consider the line extending the segment, parameterized as v + t (w - v).
         // We find projection of point p onto the line.
@@ -135,14 +135,14 @@ namespace Util
         const double t = dot(p - v, w - v) / l2;
         if (t < 0.0)
         {
-            return (p - v).length();       // Beyond the 'v' end of the segment
+            return sqr_length(p - v);       // Beyond the 'v' end of the segment
         }
         else if (t > 1.0)
         {
-            return (p - w).length();  // Beyond the 'w' end of the segment
+            return sqr_length(p - w);  // Beyond the 'w' end of the segment
         }
         const vec projection = v + t * (w - v);  // Projection falls on the segment
-        return (p - projection).length();
+        return sqr_length(p - projection);
     }
     
     /**

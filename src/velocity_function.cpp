@@ -27,7 +27,7 @@ bool VelocityFunc::is_motion_finished(DeformableSimplicialComplex& dsc)
         bool match = false;
         for (int i = 0; i+1 < pos_old.size(); i += 2)
         {
-            if (Util::min_dist(pos_old[i], pos_old[i+1], *p) < ACCURACY)
+            if (Util::min_dist_sqr(pos_old[i], pos_old[i+1], *p) < ACCURACY*ACCURACY)
             {
                 match = true;
                 break;
