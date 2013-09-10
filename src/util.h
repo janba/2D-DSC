@@ -266,7 +266,7 @@ namespace Util
      Returns the sign of the input val.
      */
     template <typename T>
-    inline int sgn(T val) {
+    inline int sign(T val) {
         return (T(0) < val) - (val < T(0));
     }
     

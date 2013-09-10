@@ -1,0 +1,223 @@
+
+*** NORMAL MOTION ***
+
+*** SIMPLICIAL COMPLEX INFO ***
+	Size X		:	450
+	Size Y		:	450
+	Avg edge length	:	25
+	Min deformation	:	6.25
+	Total volume	:	202500
+	#vertices	:	497
+	#edges		:	2808
+	#faces		:	908
+
+*** VELOCITY FUNCTION INFO ***
+	Velocity	:	0.1
+	Accuracy	:	0.05
+
+*** Time step #1 ***
+
+	Compute time	:	0.000122 s
+	Deform time	:	0.043293 s
+	Total time	:	0.043415 s
+
+*** Time step #2 ***
+
+	Compute time	:	0.000105 s
+	Deform time	:	0.041235 s
+	Total time	:	0.04134 s
+
+*** Time step #3 ***
+
+	Compute time	:	9.7e-05 s
+	Deform time	:	0.04269 s
+	Total time	:	0.042787 s
+
+*** Time step #4 ***
+
+	Compute time	:	9.8e-05 s
+	Deform time	:	0.042579 s
+	Total time	:	0.042677 s
+
+*** Time step #5 ***
+
+	Compute time	:	0.000103 s
+	Deform time	:	0.041322 s
+	Total time	:	0.041425 s
+
+*** Time step #6 ***
+
+	Compute time	:	9.9e-05 s
+	Deform time	:	0.041777 s
+	Total time	:	0.041876 s
+
+*** Time step #7 ***
+
+	Compute time	:	0.000245 s
+	Deform time	:	0.047643 s
+	Total time	:	0.047888 s
+
+*** Time step #8 ***
+
+	Compute time	:	0.000105 s
+	Deform time	:	0.041451 s
+	Total time	:	0.041556 s
+
+*** Time step #9 ***
+
+	Compute time	:	0.000102 s
+	Deform time	:	0.043139 s
+	Total time	:	0.043241 s
+
+*** Time step #10 ***
+
+	Compute time	:	9.7e-05 s
+	Deform time	:	0.041598 s
+	Total time	:	0.041695 s
+
+*** Time step #11 ***
+
+	Compute time	:	0.000257 s
+	Deform time	:	0.047087 s
+	Total time	:	0.047344 s
+
+*** Time step #12 ***
+
+	Compute time	:	0.000101 s
+	Deform time	:	0.042996 s
+	Total time	:	0.043097 s
+
+*** Time step #13 ***
+
+	Compute time	:	0.000104 s
+	Deform time	:	0.04214 s
+	Total time	:	0.042244 s
+
+*** Time step #14 ***
+
+	Compute time	:	0.000107 s
+	Deform time	:	0.042341 s
+	Total time	:	0.042448 s
+
+*** Time step #15 ***
+
+	Compute time	:	0.000257 s
+	Deform time	:	0.046326 s
+	Total time	:	0.046583 s
+
+*** Time step #16 ***
+
+	Compute time	:	9.9e-05 s
+	Deform time	:	0.042688 s
+	Total time	:	0.042787 s
+
+*** Time step #17 ***
+
+	Compute time	:	0.000104 s
+	Deform time	:	0.041583 s
+	Total time	:	0.041687 s
+
+*** Time step #18 ***
+
+	Compute time	:	0.00011 s
+	Deform time	:	0.042452 s
+	Total time	:	0.042562 s
+
+*** Time step #19 ***
+
+	Compute time	:	0.0001 s
+	Deform time	:	0.042149 s
+	Total time	:	0.042249 s
+
+*** Time step #20 ***
+
+	Compute time	:	0.000176 s
+	Deform time	:	0.045679 s
+	Total time	:	0.045855 s
+
+*** Time step #21 ***
+
+	Compute time	:	0.000102 s
+	Deform time	:	0.043481 s
+	Total time	:	0.043583 s
+
+*** Time step #22 ***
+
+	Compute time	:	0.000109 s
+	Deform time	:	0.043821 s
+	Total time	:	0.04393 s
+
+*** Time step #23 ***
+
+	Compute time	:	0.000102 s
+	Deform time	:	0.041792 s
+	Total time	:	0.041894 s
+
+*** Time step #24 ***
+
+	Compute time	:	0.000101 s
+	Deform time	:	0.041566 s
+	Total time	:	0.041667 s
+
+*** Time step #25 ***
+
+	Compute time	:	0.000101 s
+	Deform time	:	0.041992 s
+	Total time	:	0.042093 s
+
+*** Time step #26 ***
+
+	Compute time	:	0.000114 s
+	Deform time	:	0.042732 s
+	Total time	:	0.042846 s
+
+*** Time step #27 ***
+
+	Compute time	:	0.000104 s
+	Deform time	:	0.042128 s
+	Total time	:	0.042232 s
+
+*** Time step #28 ***
+
+	Compute time	:	9.8e-05 s
+	Deform time	:	0.041655 s
+	Total time	:	0.041753 s
+
+*** Time step #29 ***
+
+	Compute time	:	0.000103 s
+	Deform time	:	0.041734 s
+	Total time	:	0.041837 s
+
+*** Time step #30 ***
+
+	Compute time	:	0.000259 s
+	Deform time	:	0.04741 s
+	Total time	:	0.047669 s
+
+*** Time step #31 ***
+
+	Compute time	:	0.000254 s
+	Deform time	:	0.047748 s
+	Total time	:	0.048002 s
+
+*** MOTION STOPPED ***
+
+*** SIMPLICIAL COMPLEX INFO ***
+	Size X		:	450
+	Size Y		:	450
+	Avg edge length	:	25
+	Min deformation	:	6.25
+	Total volume	:	202500
+	#vertices	:	494
+	#edges		:	2790
+	#faces		:	902
+
+*** VELOCITY FUNCTION INFO ***
+	Velocity	:	0.1
+	Accuracy	:	0.05
+
+*** TIMINGS ***
+	Total time	:	1.34226 s
+	Compute time	:	0.004035 s
+	Deform time	:	1.33823 s

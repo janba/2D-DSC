@@ -1,0 +1,22 @@
+
+*** NORMAL MOTION ***
+
+*** SIMPLICIAL COMPLEX INFO ***
+	Size X		:	450
+	Size Y		:	450
+	Avg edge length	:	25
+	Min deformation	:	6.25
+	Total volume	:	202500
+	#vertices	:	497
+	#edges		:	2808
+	#faces		:	908
+
+*** VELOCITY FUNCTION INFO ***
+	Velocity	:	0.1
+	Accuracy	:	0.05
+
+*** Time step #1 ***
+
+	Compute time	:	0.0001 s
+	Deform time	:	0.044607 s
+	Total time	:	0.044707 s
