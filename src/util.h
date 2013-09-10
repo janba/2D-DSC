@@ -28,10 +28,10 @@
 #include <GEL/CGLA/Vec3d.h>
 #endif
 
-const double EPSILON = 1e-8;
+constexpr double EPSILON = 1e-8;
 
 #ifndef INFINITY
-const double INFINITY = 1e32;
+constexpr double INFINITY = 1e32;
 #endif
 
 
