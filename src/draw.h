@@ -14,8 +14,7 @@
 //
 //  See licence.txt for a copy of the GNU General Public License.
 
-#ifndef ___D_DSC__draw__
-#define ___D_DSC__draw__
+#pragma once
 
 #include "DSC.h"
 #include "velocity_function.h"
@@ -107,6 +106,3 @@ public:
      */
     static void draw_lines(const DeformableSimplicialComplex& complex, const HMesh::VertexAttributeVector<CGLA::Vec2d> &lines, CGLA::Vec3d color = GREEN);
 };
-
-
-#endif /* defined(___D_DSC__draw__) */

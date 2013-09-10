@@ -14,8 +14,7 @@
 //
 //  See licence.txt for a copy of the GNU General Public License.
 
-#ifndef ___D_DSC__DSC_UI__
-#define ___D_DSC__DSC_UI__
+#pragma once
 
 #include "rotate_function.h"
 #include "average_function.h"
@@ -186,4 +185,3 @@ protected:
      */
     virtual void stop();
 };
-#endif /* defined(___D_DSC__DSC_UI__) */

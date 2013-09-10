@@ -14,11 +14,9 @@
 //
 //  See licence.txt for a copy of the GNU General Public License.
 
-#ifndef _DDSC_velocity_func_h
-#define _DDSC_velocity_func_h
+#pragma once
 
 #include "DSC.h"
-#include "ctime"
 
 /**
  An abstract class which a specific velocity function should inherit from.
@@ -163,5 +161,3 @@ public:
     }
     
 };
-
-#endif

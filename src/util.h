@@ -14,8 +14,7 @@
 //
 //  See licence.txt for a copy of the GNU General Public License.
 
-#ifndef _DDSC_util_h
-#define _DDSC_util_h
+#pragma once
 
 #include <vector>
 #include <cmath>
@@ -307,5 +306,3 @@ namespace Util
         return s.str();
     }
 }
-
-#endif

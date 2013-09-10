@@ -14,8 +14,7 @@
 //
 //  See licence.txt for a copy of the GNU General Public License.
 
-#ifndef _DDSC_LOG_h
-#define _DDSC_LOG_h
+#pragma once
 
 #include "util.h"
 #include "DSC.h"
@@ -100,7 +99,3 @@ public:
      */
     virtual void write_timings(const VelocityFunc *vel_fun);
 };
-
-
-
-#endif

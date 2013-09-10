@@ -14,8 +14,7 @@
 //
 //  See licence.txt for a copy of the GNU General Public License.
 
-#ifndef ___D_DSC__average_func__
-#define ___D_DSC__average_func__
+#pragma once
 
 #include "velocity_function.h"
 
@@ -46,5 +45,3 @@ public:
      */
     virtual void deform(DeformableSimplicialComplex& dsc);
 };
-
-#endif /* defined(___D_DSC__average_func__) */

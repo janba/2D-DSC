@@ -14,8 +14,7 @@
 //
 //  See licence.txt for a copy of the GNU General Public License.
 
-#ifndef _DDSC_mesh_h
-#define _DDSC_mesh_h
+#pragma once
 
 #include <queue>
 #include "util.h"
@@ -861,5 +860,3 @@ public:
     double intersection_with_link(const HMesh::VertexID& vid, CGLA::Vec2d destination) const;
     
 };
-
-#endif
