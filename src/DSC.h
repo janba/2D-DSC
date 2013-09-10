@@ -852,7 +852,7 @@ public:
     /**
      Returns whether or not the face with ID fid is inside the domain.
      */
-    bool inside_domain(HMesh::FaceID fid, Domain domain) const;
+    bool inside_domain(HMesh::FaceID fid, const Domain& domain) const;
     
     /**
      Calculates the intersection with the link of the vertex with ID vid and the line from the position of this vertex towards destination and to infinity. It returns t which is where on the line the intersection occurs. If t=0, the interesection occured at the position of the vertex with ID vid or never occured. If t=1 the intersection occured at the destination point. If 0<t<1 the intersection occured between these points. Finally, if t>1 the intersection occured farther away from the vertex position than destination.

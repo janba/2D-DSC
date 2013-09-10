@@ -231,7 +231,7 @@ HMesh::FaceAttributeVector<CGLA::Vec3d> DeformableSimplicialComplex::get_face_co
     return colors;
 }
 
-bool DeformableSimplicialComplex::inside_domain(HMesh::FaceID fid, Domain domain) const
+bool DeformableSimplicialComplex::inside_domain(HMesh::FaceID fid, const Domain& domain) const
 {
     for (HMesh::Walker hew = walker(fid); !hew.full_circle(); hew = hew.circulate_face_cw())
     {
