@@ -12,8 +12,6 @@
 		7A51F3CE17D6393200A8F8F2 /* rotate_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3C717D6393200A8F8F2 /* rotate_function.cpp */; };
 		7A51F3CF17D6393200A8F8F2 /* demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3C917D6393200A8F8F2 /* demo.cpp */; };
 		7A51F3D017D6393200A8F8F2 /* user_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3CA17D6393200A8F8F2 /* user_interface.cpp */; };
-		7A51F3D917D639C900A8F8F2 /* draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A317D6386100A8F8F2 /* draw.cpp */; };
-		7A51F3DA17D639C900A8F8F2 /* draw.h in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A417D6386100A8F8F2 /* draw.h */; };
 		7A51F3DB17D639C900A8F8F2 /* DSC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A517D6386100A8F8F2 /* DSC.cpp */; };
 		7A51F3DC17D639C900A8F8F2 /* DSC.h in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A617D6386100A8F8F2 /* DSC.h */; };
 		7A51F3DD17D639C900A8F8F2 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A717D6386100A8F8F2 /* log.cpp */; };
@@ -26,6 +24,7 @@
 		7A51F3E417D63A0800A8F8F2 /* GEL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A51F3B417D638B500A8F8F2 /* GEL.framework */; };
 		7A51F3E517D63A0E00A8F8F2 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A51F3B217D6388800A8F8F2 /* OpenGL.framework */; };
 		7A51F3E617D63A0E00A8F8F2 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A51F3B017D6388200A8F8F2 /* GLUT.framework */; };
+		7A9C20DB17DFBE080064171E /* draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A9C20D917DFBE070064171E /* draw.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,8 +40,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7A51F3A317D6386100A8F8F2 /* draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = draw.cpp; path = src/draw.cpp; sourceTree = SOURCE_ROOT; };
-		7A51F3A417D6386100A8F8F2 /* draw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = draw.h; path = src/draw.h; sourceTree = SOURCE_ROOT; };
 		7A51F3A517D6386100A8F8F2 /* DSC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DSC.cpp; path = src/DSC.cpp; sourceTree = SOURCE_ROOT; };
 		7A51F3A617D6386100A8F8F2 /* DSC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSC.h; path = src/DSC.h; sourceTree = SOURCE_ROOT; };
 		7A51F3A717D6386100A8F8F2 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = log.cpp; path = src/log.cpp; sourceTree = SOURCE_ROOT; };
@@ -64,6 +61,8 @@
 		7A51F3CA17D6393200A8F8F2 /* user_interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = user_interface.cpp; sourceTree = "<group>"; };
 		7A51F3CB17D6393200A8F8F2 /* user_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = user_interface.h; sourceTree = "<group>"; };
 		7A51F3D517D6399200A8F8F2 /* libDSC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDSC.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A9C20D917DFBE070064171E /* draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = draw.cpp; sourceTree = "<group>"; };
+		7A9C20DA17DFBE080064171E /* draw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = draw.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,8 +112,6 @@
 		7A51F39917D6383500A8F8F2 /* DSC */ = {
 			isa = PBXGroup;
 			children = (
-				7A51F3A317D6386100A8F8F2 /* draw.cpp */,
-				7A51F3A417D6386100A8F8F2 /* draw.h */,
 				7A51F3A517D6386100A8F8F2 /* DSC.cpp */,
 				7A51F3A617D6386100A8F8F2 /* DSC.h */,
 				7A51F3A717D6386100A8F8F2 /* log.cpp */,
@@ -129,6 +126,8 @@
 		7A51F3BB17D6391500A8F8F2 /* DEMO */ = {
 			isa = PBXGroup;
 			children = (
+				7A9C20D917DFBE070064171E /* draw.cpp */,
+				7A9C20DA17DFBE080064171E /* draw.h */,
 				7A51F3C317D6393200A8F8F2 /* average_function.cpp */,
 				7A51F3C417D6393200A8F8F2 /* average_function.h */,
 				7A51F3C517D6393200A8F8F2 /* normal_function.cpp */,
@@ -226,6 +225,7 @@
 				7A51F3CE17D6393200A8F8F2 /* rotate_function.cpp in Sources */,
 				7A51F3CF17D6393200A8F8F2 /* demo.cpp in Sources */,
 				7A51F3D017D6393200A8F8F2 /* user_interface.cpp in Sources */,
+				7A9C20DB17DFBE080064171E /* draw.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,8 +233,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A51F3D917D639C900A8F8F2 /* draw.cpp in Sources */,
-				7A51F3DA17D639C900A8F8F2 /* draw.h in Sources */,
 				7A51F3DB17D639C900A8F8F2 /* DSC.cpp in Sources */,
 				7A51F3DC17D639C900A8F8F2 /* DSC.h in Sources */,
 				7A51F3DD17D639C900A8F8F2 /* log.cpp in Sources */,
@@ -366,6 +364,7 @@
 				7A51F3C217D6391500A8F8F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7A51F3D617D6399200A8F8F2 /* Build configuration list for PBXNativeTarget "DSC" */ = {
 			isa = XCConfigurationList;
@@ -374,6 +373,7 @@
 				7A51F3D817D6399200A8F8F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
