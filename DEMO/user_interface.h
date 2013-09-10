@@ -117,7 +117,7 @@ public:
     
     
 protected:
-    virtual void motion1()
+    virtual void rotate_square()
     {
         stop();
         dsc = new DeformableSimplicialComplex(450, 450, DeformableSimplicialComplex::RECTANGLE, DeformableSimplicialComplex::SQUARE, DISCRETIZATION);
@@ -132,7 +132,7 @@ protected:
         reshape(WIN_SIZE_X, WIN_SIZE_Y);
     }
     
-    virtual void motion2()
+    virtual void smooth_filled()
     {
         stop();
         dsc = new DeformableSimplicialComplex(450, 450, DeformableSimplicialComplex::RECTANGLE, DeformableSimplicialComplex::FILLED, DISCRETIZATION);
@@ -147,7 +147,7 @@ protected:
         reshape(WIN_SIZE_X, WIN_SIZE_Y);
     }
     
-    virtual void motion3()
+    virtual void expand_blobs()
     {
         stop();
         dsc = new DeformableSimplicialComplex(450, 450, DeformableSimplicialComplex::RECTANGLE, DeformableSimplicialComplex::BLOBS, DISCRETIZATION);

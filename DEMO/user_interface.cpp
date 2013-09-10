@@ -191,13 +191,13 @@ void UI::keyboard(unsigned char key, int x, int y) {
             stop();
             break;
         case '1':
-            motion1();
+            rotate_square();
             break;
         case '2':
-            motion2();
+            smooth_filled();
             break;
         case '3':
-            motion3();
+            expand_blobs();
             break;
         case ' ':
             if(!CONTINUOUS)
