@@ -22,19 +22,19 @@ bool VelocityFunc::is_motion_finished(DeformableSimplicialComplex& dsc)
         return true;
     }
     std::vector<CGLA::Vec2d> pos = dsc.get_design_variable_positions();
-    for (auto p = pos.begin(); p != pos.end(); p++)
+    for (auto &p : pos)
     {
         bool match = false;
-        for (int i = 0; i+1 < pos_old.size(); i += 2)
+        for (int i = 0; i + 1 < pos_old.size(); i += 2)
         {
-            if (Util::min_dist_sqr(pos_old[i], pos_old[i+1], *p) < ACCURACY*ACCURACY)
+            if (Util::min_dist_sqr(pos_old[i], pos_old[i+1], p) < ACCURACY*ACCURACY)
             {
                 match = true;
                 break;
             }
         }
         if (!match) {
-            std::cout << "Stopping criteria: Position " << *p << " has moved." << std::endl;
+            std::cout << "Stopping criteria: Position " << p << " has moved." << std::endl;
             pos_old = dsc.get_interface_edge_positions();
             return false;
         }
