@@ -165,8 +165,6 @@ void UI::reshape(int width, int height)
 {
     if(dsc)
     {
-        WIN_SIZE_X = dsc->get_width();
-        WIN_SIZE_Y = dsc->get_height();
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         gluOrtho2D(0, WIN_SIZE_X, 0, WIN_SIZE_Y);

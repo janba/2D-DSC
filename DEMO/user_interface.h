@@ -20,6 +20,8 @@
 #include "average_function.h"
 #include "normal_function.h"
 
+#include "trializer.h"
+#include "object_generator.h"
 #include "velocity_function.h"
 #include "DSC.h"
 #include "log.h"
@@ -120,46 +122,86 @@ protected:
     virtual void rotate_square()
     {
         stop();
-        dsc = new DeformableSimplicialComplex(450, 450, DeformableSimplicialComplex::RECTANGLE, DeformableSimplicialComplex::SQUARE, DISCRETIZATION);
+        int width = 450;
+        int height = 450;
+        
+        std::vector<double> points;
+        std::vector<int> faces;
+        Trializer trializer(width, height, DISCRETIZATION);
+        trializer.trialize(points, faces);
+        
+        DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
+        
+        dsc = new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain);
         vel_fun = new RotateFunc(VELOCITY, ACCURACY);
         basic_log = new Log(create_log_path());
+        
+        ObjectGenerator::create_square(*dsc, CGLA::Vec2d(200., 200.), CGLA::Vec2d(100., 100.), 1);
         
         basic_log->write_message(vel_fun->get_name().c_str());
         basic_log->write_log(*dsc);
         basic_log->write_log(vel_fun);
         
         update_title();
-        reshape(WIN_SIZE_X, WIN_SIZE_Y);
+        reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
     }
     
     virtual void smooth_filled()
     {
         stop();
-        dsc = new DeformableSimplicialComplex(450, 450, DeformableSimplicialComplex::RECTANGLE, DeformableSimplicialComplex::FILLED, DISCRETIZATION);
+        int width = 450;
+        int height = 450;
+        
+        std::vector<double> points;
+        std::vector<int> faces;
+        std::vector<int> face_labels;
+        
+        Trializer trializer(width, height, DISCRETIZATION);
+        trializer.trialize(points, faces);
+        
+        DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
+        
+        dsc = new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain);
         vel_fun = new AverageFunc(VELOCITY, ACCURACY);
         basic_log = new Log(create_log_path());
+        
+        ObjectGenerator::create_square(*dsc, CGLA::Vec2d(200., 200.), CGLA::Vec2d(100., 100.), 1);
         
         basic_log->write_message(vel_fun->get_name().c_str());
         basic_log->write_log(*dsc);
         basic_log->write_log(vel_fun);
         
         update_title();
-        reshape(WIN_SIZE_X, WIN_SIZE_Y);
+        reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
     }
     
     virtual void expand_blobs()
     {
         stop();
-        dsc = new DeformableSimplicialComplex(450, 450, DeformableSimplicialComplex::RECTANGLE, DeformableSimplicialComplex::BLOBS, DISCRETIZATION);
+        int width = 450;
+        int height = 450;
+        
+        std::vector<double> points;
+        std::vector<int> faces;
+        std::vector<int> face_labels;
+        
+        Trializer trializer(width, height, DISCRETIZATION);
+        trializer.trialize(points, faces);
+        
+        DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
+        
+        dsc = new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain);
         vel_fun = new NormalFunc(VELOCITY, ACCURACY);
         basic_log = new Log(create_log_path());
+        
+        ObjectGenerator::create_blob(*dsc, CGLA::Vec2d(200., 200.), 100., 1);
         
         basic_log->write_message(vel_fun->get_name().c_str());
         basic_log->write_log(*dsc);
         basic_log->write_log(vel_fun);
         
         update_title();
-        reshape(WIN_SIZE_X, WIN_SIZE_Y);
+        reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
     }
     
     /**

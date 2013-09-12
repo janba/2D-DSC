@@ -73,7 +73,7 @@ void Painter::draw_complex(const DeformableSimplicialComplex& dsc)
     draw_vertices(dsc);
 }
 
-void Painter::draw_domain(const Domain& domain, CGLA::Vec3d color)
+void Painter::draw_domain(const DesignDomain& domain, CGLA::Vec3d color)
 {
     std::vector<CGLA::Vec2d> corners = domain.get_corners();
     glColor3dv(&color[0]);

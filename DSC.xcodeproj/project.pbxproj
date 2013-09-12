@@ -24,6 +24,12 @@
 		7A51F3E417D63A0800A8F8F2 /* GEL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A51F3B417D638B500A8F8F2 /* GEL.framework */; };
 		7A51F3E517D63A0E00A8F8F2 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A51F3B217D6388800A8F8F2 /* OpenGL.framework */; };
 		7A51F3E617D63A0E00A8F8F2 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A51F3B017D6388200A8F8F2 /* GLUT.framework */; };
+		7A82D64717E23E9400C19874 /* object_generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A82D64517E23E9400C19874 /* object_generator.cpp */; };
+		7A82D64817E23E9400C19874 /* object_generator.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A82D64617E23E9400C19874 /* object_generator.h */; };
+		7A82D64B17E23EAC00C19874 /* trializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A82D64917E23EAC00C19874 /* trializer.cpp */; };
+		7A82D64C17E23EAC00C19874 /* trializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A82D64A17E23EAC00C19874 /* trializer.h */; };
+		7A82D64F17E272BB00C19874 /* boundary_conditions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A82D64D17E272BB00C19874 /* boundary_conditions.cpp */; };
+		7A82D65017E272BB00C19874 /* boundary_conditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A82D64E17E272BB00C19874 /* boundary_conditions.h */; };
 		7A9C20DB17DFBE080064171E /* draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A9C20D917DFBE070064171E /* draw.cpp */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +67,12 @@
 		7A51F3CA17D6393200A8F8F2 /* user_interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = user_interface.cpp; sourceTree = "<group>"; };
 		7A51F3CB17D6393200A8F8F2 /* user_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = user_interface.h; sourceTree = "<group>"; };
 		7A51F3D517D6399200A8F8F2 /* libDSC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDSC.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A82D64517E23E9400C19874 /* object_generator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = object_generator.cpp; path = src/object_generator.cpp; sourceTree = SOURCE_ROOT; };
+		7A82D64617E23E9400C19874 /* object_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = object_generator.h; path = src/object_generator.h; sourceTree = SOURCE_ROOT; };
+		7A82D64917E23EAC00C19874 /* trializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trializer.cpp; path = src/trializer.cpp; sourceTree = SOURCE_ROOT; };
+		7A82D64A17E23EAC00C19874 /* trializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trializer.h; path = src/trializer.h; sourceTree = SOURCE_ROOT; };
+		7A82D64D17E272BB00C19874 /* boundary_conditions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = boundary_conditions.cpp; path = src/boundary_conditions.cpp; sourceTree = SOURCE_ROOT; };
+		7A82D64E17E272BB00C19874 /* boundary_conditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = boundary_conditions.h; path = src/boundary_conditions.h; sourceTree = SOURCE_ROOT; };
 		7A9C20D917DFBE070064171E /* draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = draw.cpp; sourceTree = "<group>"; };
 		7A9C20DA17DFBE080064171E /* draw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = draw.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,6 +131,12 @@
 				7A51F3A917D6386100A8F8F2 /* util.h */,
 				7A51F3AA17D6386100A8F8F2 /* velocity_function.cpp */,
 				7A51F3AB17D6386100A8F8F2 /* velocity_function.h */,
+				7A82D64517E23E9400C19874 /* object_generator.cpp */,
+				7A82D64617E23E9400C19874 /* object_generator.h */,
+				7A82D64917E23EAC00C19874 /* trializer.cpp */,
+				7A82D64A17E23EAC00C19874 /* trializer.h */,
+				7A82D64D17E272BB00C19874 /* boundary_conditions.cpp */,
+				7A82D64E17E272BB00C19874 /* boundary_conditions.h */,
 			);
 			path = DSC;
 			sourceTree = "<group>";
@@ -148,6 +166,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A82D64817E23E9400C19874 /* object_generator.h in Headers */,
+				7A82D64C17E23EAC00C19874 /* trializer.h in Headers */,
+				7A82D65017E272BB00C19874 /* boundary_conditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +261,9 @@
 				7A51F3DF17D639C900A8F8F2 /* util.h in Sources */,
 				7A51F3E017D639C900A8F8F2 /* velocity_function.cpp in Sources */,
 				7A51F3E117D639C900A8F8F2 /* velocity_function.h in Sources */,
+				7A82D64717E23E9400C19874 /* object_generator.cpp in Sources */,
+				7A82D64B17E23EAC00C19874 /* trializer.cpp in Sources */,
+				7A82D64F17E272BB00C19874 /* boundary_conditions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

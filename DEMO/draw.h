@@ -64,7 +64,7 @@ public:
     /**
      Draws the domain.
      */
-    static void draw_domain(const Domain& domain, CGLA::Vec3d color = GRAY);
+    static void draw_domain(const DesignDomain& domain, CGLA::Vec3d color = GRAY);
     
     /**
      Draws the vertices with the colors defined by the get_vertex_colors function in the simplicial complex.

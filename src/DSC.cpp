@@ -124,8 +124,7 @@ double Domain::get_volume()
     return volume;
 }
 
-DeformableSimplicialComplex::DeformableSimplicialComplex(int SIZE_X_, int SIZE_Y_, DESIGN_DOMAIN_TYPE design_domain, OBJECTS_TYPE obj, double AVG_EDGE_LENGTH_):
-    SIZE_X(SIZE_X_), SIZE_Y(SIZE_Y_), AVG_EDGE_LENGTH(AVG_EDGE_LENGTH_), BOUNDARY_GAP(AVG_EDGE_LENGTH_)
+DeformableSimplicialComplex::DeformableSimplicialComplex(double AVG_EDGE_LENGTH_, const std::vector<double>& points, const std::vector<int>& faces, DesignDomain *domain): AVG_EDGE_LENGTH(AVG_EDGE_LENGTH_), design_domain(domain)
 {
     MIN_ANGLE = M_PI * 2./180.;
     COS_MIN_ANGLE = cos(MIN_ANGLE);
@@ -149,16 +148,12 @@ DeformableSimplicialComplex::DeformableSimplicialComplex(int SIZE_X_, int SIZE_Y
     OUTSIDE_FACE_COLOR = INVISIBLE;
     DEFAULT_FACE_COLOR = BLUE;
     
-    create_design_domain(design_domain);
-    create_object_domains(obj);
-    create_simplicial_complex();
+    create_simplicial_complex(points, faces);
     
     new_pos = HMesh::VertexAttributeVector<CGLA::Vec2d>(get_no_vertices(), CGLA::Vec2d(0.));
     vertex_labels = HMesh::VertexAttributeVector<int>(get_no_vertices(), OUTSIDE);
     edge_labels = HMesh::HalfEdgeAttributeVector<int>(get_no_halfedges(), OUTSIDE);
     face_labels = HMesh::FaceAttributeVector<int>(get_no_faces(), OUTSIDE);
-    
-    create_objects();
 }
 
 void DeformableSimplicialComplex::cleanup_attributes(HMesh::IDRemap& cleanup_map)
@@ -488,136 +483,11 @@ void DeformableSimplicialComplex::create_design_domain(DESIGN_DOMAIN_TYPE design
     mesh->build(pts.size()/3, &pts[0], faces.size(), &faces[0], &indices[0]);
 }*/
 
-void DeformableSimplicialComplex::create_simplicial_complex()
+void DeformableSimplicialComplex::create_simplicial_complex(const std::vector<double>& points, const std::vector<int>& faces)
 {
     mesh = new HMesh::Manifold();
-  
-	const int Nx = std::max(std::ceil(SIZE_X/AVG_EDGE_LENGTH),1.); 
-    const int Ny = std::max(2*std::floor(SIZE_Y/(sqrt(3.)*AVG_EDGE_LENGTH)),2.);
-	
-	const double b = (double)SIZE_X/(double)Nx; // adjusted length of the triangle base
-	const double h = (double)SIZE_Y/(double)Ny; // adjusted triangle height
-
-    std::vector<double> pts;
-	std::vector<int> indices;
-
-	// POINTS
-	// x positions of points on triangle basis
-	std::vector<double> x_full;
-	std::vector<double> x_half;
-
-	x_full.push_back(0.);
-	for (double x=AVG_EDGE_LENGTH; x<AVG_EDGE_LENGTH+(Nx+1)*b; x+=b) // stopping condition: x<= AVG_EDGE_LENGTH+Nx*b
-	{
-		x_full.push_back(x);
-	}
-	x_full.push_back(SIZE_X+2*AVG_EDGE_LENGTH);
-
-	// x positions of points on triangle tops/bottoms
-	x_half.push_back(0.); x_half.push_back(AVG_EDGE_LENGTH);
-	for (double x=AVG_EDGE_LENGTH+b/2; x<AVG_EDGE_LENGTH+(Nx+1)*b-b/2; x+=b) // stopping condition: x<=AVG_EDGE_LENGTH+Nx*b-b/2
-	{
-		x_half.push_back(x);
-	}
-	x_half.push_back(SIZE_X+AVG_EDGE_LENGTH); x_half.push_back(SIZE_X+2*AVG_EDGE_LENGTH);
-
-	for (int k = 0; k<x_full.size(); k++)
-	{
-		pts.push_back(x_full[k]); pts.push_back(0); pts.push_back(0); // first line of points
-	}
-	
-	for (double y = AVG_EDGE_LENGTH; y<AVG_EDGE_LENGTH + Ny*h; y+=2*h) // stopping condition: y<=AVG_EDGE_LENGTH + (Ny-2)*h;
-	{
-		for (int k = 0; k<x_full.size(); k++)
-		{
-			pts.push_back(x_full[k]); pts.push_back(y); pts.push_back(0); // lines with points on triangle basis
-		}
-		for (int k = 0; k<x_half.size(); k++)
-		{
-			pts.push_back(x_half[k]); pts.push_back(y+h); pts.push_back(0); // lines with points on triangle tops/bottoms
-		}
-	}
-	for (int k = 0; k<x_full.size(); k++) 
-	{
-		pts.push_back(x_full[k]); pts.push_back(SIZE_Y+AVG_EDGE_LENGTH); pts.push_back(0); // line between inside and boundary
-	}
-	for (int k = 0; k<x_full.size(); k++)
-	{
-		pts.push_back(x_full[k]); pts.push_back(SIZE_Y+2*AVG_EDGE_LENGTH); pts.push_back(0); // last line of points
-	}
-
-	// INDICES
-	// boundary 
-	std::vector<int> f_b0(6,0), f_b1(6,0);
-	f_b0[0]=0; f_b0[1]=1; f_b0[2]=Nx+4; f_b0[3]=0; f_b0[4]=Nx+4; f_b0[5]=Nx+3; // line skip Nx+3	
-	f_b1[0]=0; f_b1[1]=1; f_b1[2]=Nx+5; f_b1[3]=0; f_b1[4]=Nx+5; f_b1[5]=Nx+4; // line skip Nx+4
-	
-	for (int i = 0; i<Nx+2; i++) // stopping condition: i<=Nx+1
-	{
-		for (int k = 0; k<f_b0.size(); k++)
-		{
-			indices.push_back(f_b0[k]+i); // boundary bottom
-		}
-		for (int k = 0; k<f_b0.size(); k++)
-		{
-			indices.push_back(f_b0[k]+(Nx+3)*(1+Ny)+Ny/2+i); // boundary top
-		}
-	}
-
-	for (int j = 0; j<Ny*(2*Nx+7)/2; j+=2*Nx+7) // stopping condition: j<=(Ny-2)*(2*Nx+7)/2
-	{
-		for (int k = 0; k<f_b0.size(); k++)
-		{
-			indices.push_back(f_b0[k]+Nx+3+j); // boundary left 
-		}
-		for (int k = 0; k<f_b1.size(); k++)
-		{
-			indices.push_back(f_b1[k]+2*Nx+4+j); // boundary right
-		}
-		for (int k = 0; k<f_b1.size(); k++)
-		{
-			indices.push_back(f_b1[k]+2*Nx+6+j); // boundary left
-		}
-		for (int k = 0; k<f_b0.size(); k++)
-		{
-			indices.push_back(f_b0[k]+3*Nx+8+j); // boundary right
-		}
-	}    
-    
-	// inside
-	std::vector<int> f_down(3,0), f_up(3,0);
-	f_down[0]=0; f_down[1]=1; f_down[2]=Nx+4; // triangles with base down
-	f_up[0]=0; f_up[1]=Nx+4; f_up[2]=Nx+3; // triangles with base down
-
-	for (int j = 0; j<(Ny/2)*(2*Nx+7); j+=2*Nx+7) // stopping condition: j<=(Ny/2-1)*(2*Nx+7)
-	{
-		for (int i = 0; i<Nx; i++) // stopping condition: i<=Nx-1
-		{
-			for (int k = 0; k<f_down.size(); k++)
-			{
-				indices.push_back(f_down[k]+Nx+4+i+j); 
-			}
-			for (int k = 0; k<f_up.size(); k++)
-			{
-				indices.push_back(f_up[k]+2*Nx+8+i+j);
-			}
-		}
-		for (int i = 0; i<Nx+1; i++) // stopping condition: i<=Nx
-		{
-			for (int k = 0; k<f_up.size(); k++)
-			{
-				indices.push_back(f_up[k]+Nx+4+i+j); 
-			}
-			for (int k = 0; k<f_down.size(); k++)
-			{
-				indices.push_back(f_down[k]+2*Nx+7+i+j); 
-			}
-		}
-	}
-	
-	std::vector<int> faces(indices.size()/3,3);
-
-    mesh->build(pts.size()/3, &pts[0], faces.size(), &faces[0], &indices[0]);
+	std::vector<int> temp(faces.size()/3,3);
+    mesh->build(points.size()/3, &points[0], temp.size(), &temp[0], &faces[0]);
 }
 
 void DeformableSimplicialComplex::validity_check()

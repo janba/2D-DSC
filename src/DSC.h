@@ -18,6 +18,7 @@
 
 #include <queue>
 #include "util.h"
+#include "boundary_conditions.h"
 
 #ifdef WIN32
 #include <HMesh/Manifold.h>
@@ -130,6 +131,7 @@ struct PQElem
  */
 class DeformableSimplicialComplex
 {
+    friend class ObjectGenerator;
 public:
     enum LABEL_OPT {NO_LABEL = -3, OUTSIDE = 0, INTERFACE = -1, CROSSING = -2};
     enum DESIGN_DOMAIN_TYPE {RECTANGLE, L, ESO};
@@ -164,8 +166,8 @@ protected:
     
 private:
     HMesh::Manifold *mesh;
-    Domain *design_domain;
     std::vector<Domain*> object_domains;
+    DesignDomain *design_domain;
     
     HMesh::VertexAttributeVector<CGLA::Vec2d> new_pos;
     
@@ -179,7 +181,7 @@ public:
     /**
      Creates a simplicial complex with size (SIZE_X_, SIZE_Y_). The input parameters specifies the design domain, the initial object(s) and the discretization. The latter is defined by the parameter AVG_EDGE_LENGTH, which tells how long edges are on average.
      */
-    DeformableSimplicialComplex(int SIZE_X_, int SIZE_Y_, DESIGN_DOMAIN_TYPE design_domain, OBJECTS_TYPE obj, double AVG_EDGE_LENGTH_ = 25.);
+    DeformableSimplicialComplex(double AVG_EDGE_LENGTH_, const std::vector<double>& points, const std::vector<int>& faces, DesignDomain *domain = nullptr);
     
     virtual ~DeformableSimplicialComplex()
     {
@@ -190,7 +192,6 @@ private:
     /**
      Creates the simplicial complex.
      */
-    void create_simplicial_complex();
     
     /**
      Creates the design domain.
@@ -211,6 +212,7 @@ private:
      Fit the interface exactly to the object domains.
      */
     void fit_to_objects();
+    void create_simplicial_complex(const std::vector<double>& points, const std::vector<int>& faces);
     
     //************** DISPLAY FUNCTIONS ***************
 public:
@@ -355,7 +357,7 @@ public:
     /**
      Returns the design domain.
      */
-    const Domain* get_design_domain() const
+    const DesignDomain* get_design_domain() const
     {
         return design_domain;
     }
