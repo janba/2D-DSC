@@ -111,8 +111,6 @@ void Log::write_timings(const VelocityFunc *vel_fun)
 void Log::write_log(const DeformableSimplicialComplex& dsc)
 {
     write_message("SIMPLICIAL COMPLEX INFO");
-    write_variable("Size X\t", dsc.get_size_x());
-    write_variable("Size Y\t", dsc.get_size_y());
     write_variable("Avg edge length", dsc.get_avg_edge_length());
     write_variable("Min deformation", dsc.get_min_deformation());
     write_variable("Total volume", dsc.get_volume());
