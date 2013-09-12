@@ -68,11 +68,6 @@ void Painter::end()
 void Painter::draw_complex(const DeformableSimplicialComplex& dsc)
 {
     draw_domain(*dsc.get_design_domain());
-    std::vector<Domain*> objects = dsc.get_object_domains();
-//    for (auto obj = objects.begin(); obj != objects.end(); obj++)
-//    {
-//        draw_domain(*obj, DARK_GRAY);
-//    }
     draw_faces(dsc);
     draw_edges(dsc);
     draw_vertices(dsc);
