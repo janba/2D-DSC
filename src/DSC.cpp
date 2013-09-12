@@ -1203,29 +1203,28 @@ double DeformableSimplicialComplex::min_angle(HMesh::FaceID fid)
 
 void DeformableSimplicialComplex::remove_needles()
 {
-    std::vector<HMesh::FaceID> fvec(get_no_faces());
-    int i = 0;
-    for(HMesh::FaceIDIterator fi = faces_begin(); fi != faces_end(); ++fi,++i)
+    std::vector<HMesh::FaceID> fvec(0);
+    for(HMesh::FaceIDIterator fi = faces_begin(); fi != faces_end(); ++fi)
     {
-        fvec[i] = *fi;
+        fvec.push_back(*fi);
     }
     
-    std::vector<HMesh::HalfEdgeID> edges;
-    for(i = 0; i < fvec.size(); ++i)
+    for(auto &f : fvec)
     {
-        edges = sorted_face_edges(fvec[i]);
-        if(min_angle(fvec[i]) < MIN_ANGLE
-           && std::abs(length(edges[1]) - length(edges[0])) > std::abs(length(edges[2]) - length(edges[1])))
+        auto edges = sorted_face_edges(f);
+        if(min_angle(f) < MIN_ANGLE
+           && std::abs(length(edges[1]) - length(edges[0])) > std::abs(length(edges[2]) - length(edges[1]))
+           && area(f) > DEG_AREA)
             //&& length(m,edges[2])/length(m,edges[1]) < 1.3
             //&& length(m,edges[2])/length(m,edges[1]) > 0.7)// length(m,edges[2])/length(m,edges[0]) > SPLIT_EDGE_RATIO)
         {
 #ifdef DEBUG
-            if (split(fvec[i]))
+            if (split(f))
             {
                 std::cout << "Split needle" << std::endl;
             }
 #else
-            split(fvec[i]);
+            split(f);
 #endif
         }
     }
