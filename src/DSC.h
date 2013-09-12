@@ -29,90 +29,6 @@
 #endif
 
 /**
- A domain class for specifying for example the design domain.
- */
-class Domain
-{
-    std::vector<CGLA::Vec2d> corners; // Specified in a clockwise order
-    double volume;
-    int label;
-    
-public:
-    Domain() {}
-    
-    /**
-     Creates a domain defined by the corners given as input. The corners should be specified in a clockwise order. It is possible to specify a boundary gap which translates the entire domain by the amount specified by the second input parameter. It is also possible to specify a label of the domain (used for easy creation of objects).
-     */
-    Domain(std::vector<CGLA::Vec2d> _corners, double boundary = 0., int _label = 1): corners(_corners), volume(-1.), label(_label)
-    {
-        for(std::vector<CGLA::Vec2d>::iterator ci = corners.begin(); ci != corners.end(); ci++)
-        {
-            (*ci)[0] = (*ci)[0] + boundary;
-            (*ci)[1] = (*ci)[1] + boundary;
-        }
-    }
-    
-    /**
-     Returns the corners of the design domain.
-     */
-    std::vector<CGLA::Vec2d> get_corners() const;
-    
-    /**
-     Returns an approximate center of the design domain.
-     */
-    CGLA::Vec2d get_center();
-    
-    /**
-     Returns the label associated with the domain.
-     */
-    int get_label();
-    
-    /**
-     Returns the total volume of the domain.
-     */
-    double get_volume();
-    
-    /**
-     Clamps the position pos to be within the domain.
-     */
-    void clamp_position(CGLA::Vec2d& p) const;
-    
-    /**
-     Clamps p + v to be within the domain by scaling the vector v if p is inside the domain. The position p is therefore not garanteed to be within the domain.
-     */
-    void clamp_vector(const CGLA::Vec2d& p, CGLA::Vec2d& v) const;
-    
-    /**
-     Returns whether the position p is inside the domain.
-     */
-    bool is_inside(CGLA::Vec2d p) const;
-};
-
-/**
- Extends the Domain class to be able to relate an attribute to the domain.
- */
-template <class att_type>
-class AttributeDomain : public Domain
-{
-    att_type att;
-    
-public:
-    AttributeDomain(std::vector<CGLA::Vec2d> _corners, att_type _att): Domain(_corners), att(_att)
-    {
-        
-    }
-    
-    /**
-     Returns the attribute of the domain.
-     */
-    att_type get_att()
-    {
-        return att;
-    }
-    
-};
-
-/**
  Used for max_min_angle optimization.
  */
 struct PQElem
@@ -134,14 +50,10 @@ class DeformableSimplicialComplex
     friend class ObjectGenerator;
 public:
     enum LABEL_OPT {NO_LABEL = -3, OUTSIDE = 0, INTERFACE = -1, CROSSING = -2};
-    enum DESIGN_DOMAIN_TYPE {RECTANGLE, L, ESO};
     enum OBJECTS_TYPE {FILLED_HALF, FILLED, SQUARE, BLOB, BLOBS};
     
 protected:
     double AVG_EDGE_LENGTH;
-    double BOUNDARY_GAP;
-    int SIZE_X;
-    int SIZE_Y;
     
     double DEG_ANGLE;
     double MIN_ANGLE;
@@ -166,7 +78,6 @@ protected:
     
 private:
     HMesh::Manifold *mesh;
-    std::vector<Domain*> object_domains;
     DesignDomain *design_domain;
     
     HMesh::VertexAttributeVector<CGLA::Vec2d> new_pos;
@@ -192,26 +103,6 @@ private:
     /**
      Creates the simplicial complex.
      */
-    
-    /**
-     Creates the design domain.
-     */
-    void create_design_domain(DESIGN_DOMAIN_TYPE design_domain);
-    
-    /**
-     Creates the object domains.
-     */
-    void create_object_domains(OBJECTS_TYPE obj);
-    
-    /**
-     Creates objects.
-     */
-    void create_objects();
-    
-    /**
-     Fit the interface exactly to the object domains.
-     */
-    void fit_to_objects();
     void create_simplicial_complex(const std::vector<double>& points, const std::vector<int>& faces);
     
     //************** DISPLAY FUNCTIONS ***************
@@ -291,21 +182,6 @@ public:
     
     //************** GETTERS ***************
 public:
-    /**
-     Returns the size of the simplicial complex in the x-direction.
-     */
-    int get_size_x() const
-    {
-        return SIZE_X;
-    }
-    
-    /**
-     Returns the size of the simplicial complex in the y-direction.
-     */
-    int get_size_y() const
-    {
-        return SIZE_Y;
-    }
     
     /**
      Returns the average edge length of the edges in the simplical complex.
@@ -313,14 +189,6 @@ public:
     double get_avg_edge_length() const
     {
         return AVG_EDGE_LENGTH;
-    }
-	
-    /**
-     Returns the boundary gap.
-     */
-	double get_boundary_gap() const
-    {
-        return BOUNDARY_GAP;
     }
 
     /**
@@ -360,14 +228,6 @@ public:
     const DesignDomain* get_design_domain() const
     {
         return design_domain;
-    }
-    
-    /**
-     Returns the object domains.
-     */
-    std::vector<Domain*> get_object_domains() const
-    {
-        return object_domains;
     }
     
     /**
@@ -855,11 +715,6 @@ public:
      Clamps the position of the vertex with ID vid plus the vector vec to be within the design domain by scaling the vector v.
      */
     void clamp_vector(const HMesh::VertexID& vid, CGLA::Vec2d& vec) const;
-    
-    /**
-     Returns whether or not the face with ID fid is inside the domain.
-     */
-    bool inside_domain(HMesh::FaceID fid, const Domain& domain) const;
     
     /**
      Calculates the intersection with the link of the vertex with ID vid and the line from the position of this vertex towards destination and to infinity. It returns t which is where on the line the intersection occurs. If t=0, the interesection occured at the position of the vertex with ID vid or never occured. If t=1 the intersection occured at the destination point. If 0<t<1 the intersection occured between these points. Finally, if t>1 the intersection occured farther away from the vertex position than destination.
