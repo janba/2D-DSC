@@ -620,6 +620,19 @@ void DeformableSimplicialComplex::create_simplicial_complex()
     mesh->build(pts.size()/3, &pts[0], faces.size(), &faces[0], &indices[0]);
 }
 
+void DeformableSimplicialComplex::validity_check()
+{
+    for (auto fi = faces_begin(); fi != faces_end(); fi++) {
+        int i = 0;
+        for (HMesh::Walker hew = walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw())
+        {
+            i++;
+        }
+        assert(i == 3);
+        assert(area(*fi) > EPSILON);
+    }
+}
+
 void DeformableSimplicialComplex::fix_mesh()
 {
     smooth();

@@ -763,6 +763,11 @@ private:
 private:
     
     /**
+     Checks that the mesh is valid, i.e. that each face has three vertices and that the area of a face is positive (the face is not degenerate).
+     */
+    void validity_check();
+    
+    /**
      Returns the minimum angle of the face with ID fid.
      */
     double min_angle(HMesh::FaceID fid);
