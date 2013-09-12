@@ -21,106 +21,11 @@
 
 class ObjectGenerator {
     
-    static void fit_mesh_to_object(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners)
-    {
-        // Move a vertex to all corners
-        for (auto fi = dsc.faces_begin(); fi != dsc.faces_end(); fi++)
-        {
-            auto verts = dsc.get_pos(*fi);
-            
-            for (auto & c : corners) {
-                if(Util::is_inside(c, verts))
-                {
-                    HMesh::VertexID vid;
-                    double min_dist = INFINITY;
-                    for (HMesh::Walker hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw())
-                    {
-                        double l = (dsc.get_pos(hew.vertex()) - c).length();
-                        if(l < min_dist)
-                        {
-                            min_dist = l;
-                            vid = hew.vertex();
-                        }
-                    }
-                    dsc.set_pos(vid, c);
-                }
-            }
-        }
-        
-        // Make sure no face is both inside and outside the object
-        for (auto fi = dsc.faces_begin(); fi != dsc.faces_end(); fi++)
-        {
-            auto verts = dsc.get_pos(*fi);
-            std::vector<bool> inside;
-            for (auto &v : verts) {
-                inside.push_back(Util::is_inside(v, corners));
-            }
-            int sum = inside[0] + inside[1] + inside[2];
-            
-            if(sum == 1 || sum == 2) // Face is on the interface of the object and two vertices are inside.
-            {
-                int i = 0;
-                for (HMesh::Walker hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw(), i++)
-                {
-                    if((sum == 1 && inside[i]) || (sum == 2 && !inside[i])) // Move the vertex
-                    {
-                        // Find intersection point
-                        CGLA::Vec2d point;
-                        CGLA::Vec2d p = dsc.get_pos(hew.opp().vertex());
-                        CGLA::Vec2d r = dsc.get_pos(hew.vertex()) - p;
-                        CGLA::Vec2d q, s;
-                        for(int j = 0; j < corners.size(); j++)
-                        {
-                            q = corners[j];
-                            s = corners[(j+1)%corners.size()] - q;
-                            double t = Util::intersection(p, r, q, s);
-                            if(0. <= t && t <= 1.)
-                            {
-                                point = p + t*r;
-                                break;
-                            }
-                        }
-                        
-                        if((point - p).length() < (point - (p + r)).length())
-                        {
-                            dsc.set_pos(hew.opp().vertex(), point);
-                        }
-                        else {
-                            dsc.set_pos(hew.vertex(), point);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    static void fit_mesh_to_object(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners);
     
-    static void label_faces(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners, int label)
-    {
-        for (auto fi = dsc.faces_begin(); fi != dsc.faces_end(); fi++)
-        {
-            auto verts = dsc.get_pos(*fi);
-            
-            std::vector<bool> inside;
-            for (auto &v : verts) {
-                inside.push_back(Util::is_inside(v, corners));
-            }
-            
-            if(inside[0] && inside[1] && inside[2]) // Face is inside the object.
-            {
-                dsc.face_labels[*fi] = label;
-            }
-        }
-    }
+    static void label_faces(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners, int label);
     
-    static void create_object(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners, int label)
-    {
-        fit_mesh_to_object(dsc, corners);
-        label_faces(dsc, corners, label);
-        
-        dsc.init_attributes();
-        dsc.update_attributes();
-        dsc.fix_mesh();
-    }
+    static void create_object(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners, int label);
     
 public:
     
