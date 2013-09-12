@@ -28,7 +28,10 @@ class DesignDomain
     
 public:
     enum DESIGN_DOMAIN_TYPE {RECTANGLE, L, ESO};
-        
+    
+    /**
+     Creates a design domain defined by the design domain type and size. It is possible to specify a boundary gap which translates the entire domain by the amount specified by the input parameter.
+     */
     DesignDomain(DESIGN_DOMAIN_TYPE design, int SIZE_X, int SIZE_Y, double boundary)
     {
         switch (design) {
@@ -58,22 +61,10 @@ public:
                 break;
         }
         
-        for(std::vector<CGLA::Vec2d>::iterator ci = corners.begin(); ci != corners.end(); ci++)
+        for(auto &c : corners)
         {
-            (*ci)[0] = (*ci)[0] + boundary;
-            (*ci)[1] = (*ci)[1] + boundary;
-        }
-    }
-    
-    /**
-     Creates a domain defined by the corners given as input. The corners should be specified in a clockwise order. It is possible to specify a boundary gap which translates the entire domain by the amount specified by the second input parameter. It is also possible to specify a label of the domain (used for easy creation of objects).
-     */
-    DesignDomain(std::vector<CGLA::Vec2d> _corners, double boundary = 0.): corners(_corners), volume(-1.)
-    {
-        for(std::vector<CGLA::Vec2d>::iterator ci = corners.begin(); ci != corners.end(); ci++)
-        {
-            (*ci)[0] = (*ci)[0] + boundary;
-            (*ci)[1] = (*ci)[1] + boundary;
+            c[0] += boundary;
+            c[1] += boundary;
         }
     }
     
@@ -86,11 +77,6 @@ public:
      Returns an approximate center of the design domain.
      */
     CGLA::Vec2d get_center();
-    
-    /**
-     Returns the label associated with the domain.
-     */
-    int get_label();
     
     /**
      Returns the total volume of the domain.
