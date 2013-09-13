@@ -22,16 +22,16 @@ namespace DSC2D {
     
     class Trializer {
         
-        static void create_points(int Nx, int Ny, double width, double height, double avg_edge_length, std::vector<double>& points);
+        static void create_points(int Nx, int Ny, real width, real height, real avg_edge_length, std::vector<real>& points);
         
         static void create_faces(int Nx, int Ny, std::vector<int>& faces);
         
     public:
         
-        static void trialize(double width, double height, double avg_edge_length, std::vector<double>& points, std::vector<int>& faces)
+        static void trialize(real width, real height, real avg_edge_length, std::vector<real>& points, std::vector<int>& faces)
         {
-            int Nx = std::max(std::ceil(width/avg_edge_length),1.);
-            int Ny = std::max(2*std::floor(height/(sqrt(3.)*avg_edge_length)),2.);
+            int Nx = Util::max(std::ceil(width/avg_edge_length),1.);
+            int Ny = Util::max(2.*std::floor(height/(sqrt(3.)*avg_edge_length)),2.);
             
             create_points(Nx, Ny, width, height, avg_edge_length, points);
             create_faces(Nx, Ny, faces);

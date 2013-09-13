@@ -27,10 +27,10 @@ void RotateFunc::deform(DSC2D::DeformableSimplicialComplex& dsc)
 {
     auto init_time = std::chrono::system_clock::now();
     
-    CGLA::Vec2d cen = dsc.get_center();
+    DSC2D::vec2 cen = dsc.get_center();
     CGLA::Vec3f center = CGLA::Vec3f(cen[0], cen[1], 0.f);
     CGLA::Mat3x3f mrot = rotation_Mat3x3f(CGLA::ZAXIS, VELOCITY);
-    CGLA::Vec2d p;
+    DSC2D::vec2 p;
     CGLA::Vec3f new_pos;
     for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
     {
@@ -38,7 +38,7 @@ void RotateFunc::deform(DSC2D::DeformableSimplicialComplex& dsc)
         {
             p = dsc.get_pos(*vi);
             new_pos = center + mrot * (CGLA::Vec3f(p[0], p[1], 0.) - center);
-            dsc.set_destination(*vi, CGLA::Vec2d(new_pos[0], new_pos[1]));
+            dsc.set_destination(*vi, DSC2D::vec2(new_pos[0], new_pos[1]));
         }
     }
     update_compute_time(init_time);

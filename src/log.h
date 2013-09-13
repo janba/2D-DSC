@@ -57,22 +57,22 @@ namespace DSC2D {
         /**
          Write a variable with name and value to the log.
          */
-        void write_variable(const char* name, double value);
+        void write_variable(const char* name, real value);
         
         /**
          Write a variable with name, value and change in value to the log.
          */
-        void write_variable(const char* name, double value, double change);
+        void write_variable(const char* name, real value, real change);
         
         /**
          Write a variable with name, value and unit of the value to the log.
          */
-        void write_variable(const char* name, double value, const char* unit);
+        void write_variable(const char* name, real value, const char* unit);
         
         /**
          Write a variable with name and values to the log.
          */
-        void write_variable(const char* name, const std::vector<double>* values);
+        void write_variable(const char* name, const std::vector<real>* values);
         
     public:
         

@@ -26,7 +26,7 @@ namespace DSC2D {
     class DesignDomain
     {
         std::vector<vec2> corners; // Specified in a clockwise order
-        double volume = -1.;
+        real volume = -1.;
         
     public:
         enum DESIGN_DOMAIN_TYPE {RECTANGLE, L, ESO};
@@ -34,7 +34,7 @@ namespace DSC2D {
         /**
          Creates a design domain defined by the design domain type and size. It is possible to specify a boundary gap which translates the entire domain by the amount specified by the input parameter.
          */
-        DesignDomain(DESIGN_DOMAIN_TYPE design, int SIZE_X, int SIZE_Y, double boundary)
+        DesignDomain(DESIGN_DOMAIN_TYPE design, int SIZE_X, int SIZE_Y, real boundary)
         {
             switch (design) {
                 case RECTANGLE:
@@ -83,7 +83,7 @@ namespace DSC2D {
         /**
          Returns the total volume of the domain.
          */
-        double get_volume();
+        real get_volume();
         
         /**
          Clamps the position pos to be within the domain.

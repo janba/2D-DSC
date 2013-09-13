@@ -18,17 +18,17 @@
 
 namespace DSC2D {
     
-    void Trializer::create_points(int Nx, int Ny, double width, double height, double avg_edge_length, std::vector<double>& points)
+    void Trializer::create_points(int Nx, int Ny, real width, real height, real avg_edge_length, std::vector<real>& points)
     {
-        double b = (double)width/(double)Nx; // adjusted length of the triangle base
-        double h = (double)height/(double)Ny; // adjusted triangle height
+        real b = (real)width/(real)Nx; // adjusted length of the triangle base
+        real h = (real)height/(real)Ny; // adjusted triangle height
         
         // x positions of points on triangle basis
-        std::vector<double> x_full;
-        std::vector<double> x_half;
+        std::vector<real> x_full;
+        std::vector<real> x_half;
         
         x_full.push_back(0.);
-        for (double x=avg_edge_length; x<avg_edge_length+(Nx+1)*b; x+=b) // stopping condition: x<= AVG_EDGE_LENGTH+Nx*b
+        for (real x=avg_edge_length; x<avg_edge_length+(Nx+1)*b; x+=b) // stopping condition: x<= AVG_EDGE_LENGTH+Nx*b
         {
             x_full.push_back(x);
         }
@@ -36,7 +36,7 @@ namespace DSC2D {
         
         // x positions of points on triangle tops/bottoms
         x_half.push_back(0.); x_half.push_back(avg_edge_length);
-        for (double x=avg_edge_length+b/2; x<avg_edge_length+(Nx+1)*b-b/2; x+=b) // stopping condition: x<=AVG_EDGE_LENGTH+Nx*b-b/2
+        for (real x=avg_edge_length+b/2; x<avg_edge_length+(Nx+1)*b-b/2; x+=b) // stopping condition: x<=AVG_EDGE_LENGTH+Nx*b-b/2
         {
             x_half.push_back(x);
         }
@@ -47,7 +47,7 @@ namespace DSC2D {
             points.push_back(x_full[k]); points.push_back(0); points.push_back(0); // first line of points
         }
         
-        for (double y = avg_edge_length; y<avg_edge_length + Ny*h; y+=2*h) // stopping condition: y<=AVG_EDGE_LENGTH + (Ny-2)*h;
+        for (real y = avg_edge_length; y<avg_edge_length + Ny*h; y+=2*h) // stopping condition: y<=AVG_EDGE_LENGTH + (Ny-2)*h;
         {
             for (int k = 0; k<x_full.size(); k++)
             {

@@ -19,7 +19,7 @@
 
 namespace DSC2D
 {    
-    DeformableSimplicialComplex::DeformableSimplicialComplex(double AVG_EDGE_LENGTH_, const std::vector<double>& points, const std::vector<int>& faces, DesignDomain *domain): AVG_EDGE_LENGTH(AVG_EDGE_LENGTH_), design_domain(domain)
+    DeformableSimplicialComplex::DeformableSimplicialComplex(real AVG_EDGE_LENGTH_, const std::vector<real>& points, const std::vector<int>& faces, DesignDomain *domain): AVG_EDGE_LENGTH(AVG_EDGE_LENGTH_), design_domain(domain)
     {
         MIN_ANGLE = M_PI * 2./180.;
         COS_MIN_ANGLE = cos(MIN_ANGLE);
@@ -31,7 +31,7 @@ namespace DSC2D
         
         MIN_DEFORMATION = DEG_EDGE_LENGTH;
         
-        double avg_area = 0.5*std::sqrt(3./4.)*AVG_EDGE_LENGTH*AVG_EDGE_LENGTH;
+        real avg_area = 0.5*std::sqrt(3./4.)*AVG_EDGE_LENGTH*AVG_EDGE_LENGTH;
         MAX_AREA = 1.5*avg_area;
         MIN_AREA = 0.5*avg_area;
         DEG_AREA = 0.5*MIN_AREA;
@@ -121,7 +121,7 @@ namespace DSC2D
         return colors;
     }
     
-    void DeformableSimplicialComplex::create_simplicial_complex(const std::vector<double>& points, const std::vector<int>& faces)
+    void DeformableSimplicialComplex::create_simplicial_complex(const std::vector<real>& points, const std::vector<int>& faces)
     {
         mesh = new HMesh::Manifold();
         std::vector<int> temp(faces.size()/3,3);
@@ -175,9 +175,9 @@ namespace DSC2D
         }
     }
     
-    double DeformableSimplicialComplex::intersection_with_link(const HMesh::VertexID& vid, vec2 destination) const
+    real DeformableSimplicialComplex::intersection_with_link(const HMesh::VertexID& vid, vec2 destination) const
     {
-        double scale = INFINITY;
+        real scale = INFINITY;
         vec2 p = get_pos(vid);
         vec2 r = destination - p;
         vec2 q, s;
@@ -185,7 +185,7 @@ namespace DSC2D
         {
             q = get_pos(hew.vertex());
             s = get_pos(hew.next().vertex()) - q;
-            double t = Util::intersection(p, r, q, s);
+            real t = Util::intersection(p, r, q, s);
             if(0. <= t && t < INFINITY)
             {
                 scale = t;
@@ -204,14 +204,14 @@ namespace DSC2D
     {
         vec2 v0_new = get_pos_new(vid);
         vec2 v0 = get_pos(vid);
-        double l = (v0 - v0_new).length();
+        real l = (v0 - v0_new).length();
         if (l < EPSILON)
         {
             return true;
         }
         
-        double scale = intersection_with_link(vid, v0_new);
-        l = std::max(std::min(l*scale - MIN_DEFORMATION, l), 0.);
+        real scale = intersection_with_link(vid, v0_new);
+        l = Util::max(Util::min(l*scale - MIN_DEFORMATION, l), 0.);
         vec2 v0_temp = v0 + l*normalize(v0_new - v0);
         
         vec2 v1, v2;
@@ -293,15 +293,15 @@ namespace DSC2D
         return unsafe_editable(eid) && !is_interface(eid);
     }
     
-    double DeformableSimplicialComplex::max_move_distance() const
+    real DeformableSimplicialComplex::max_move_distance() const
     {
-        double dist, max_dist = 0.;
+        real dist, max_dist = 0.;
         for(HMesh::VertexIDIterator vi = vertices_begin(); vi != vertices_end(); ++vi)
         {
             if(is_movable(*vi))
             {
                 dist = (new_pos[*vi] - get_pos(*vi)).length();
-                max_dist = std::max(max_dist, dist);
+                max_dist = Util::max(max_dist, dist);
             }
         }
         return max_dist;
@@ -412,8 +412,8 @@ namespace DSC2D
             {
                 if(is_interface(hew.halfedge()))
                 {
-                    labels[0] = std::min(get_label(hew.face()),	get_label(hew.opp().face()));
-                    labels[1] = std::max(get_label(hew.face()),	get_label(hew.opp().face()));
+                    labels[0] = Util::min(get_label(hew.face()),	get_label(hew.opp().face()));
+                    labels[1] = Util::max(get_label(hew.face()),	get_label(hew.opp().face()));
                 }
             }
         }
@@ -423,7 +423,7 @@ namespace DSC2D
     
     void DeformableSimplicialComplex::set_pos(HMesh::VertexID vid, vec2 p)
     {
-        mesh->pos(vid) = vec3(p[0], p[1], 0.f);
+        mesh->pos(vid) = CGLA::Vec3d(p[0], p[1], 0.f);
     }
     
     void DeformableSimplicialComplex::set_destination(HMesh::VertexID vid, vec2 dest)
@@ -627,7 +627,7 @@ namespace DSC2D
             positions.push_back(get_pos(hew.vertex()));
         }
         
-        double a, A;
+        real a, A;
         for(int j = 1; j < positions.size() - 1; j++)
         {
             A = Util::signed_area(positions[0], positions[j], positions[j+1]);
@@ -676,24 +676,24 @@ namespace DSC2D
         return edges;
     }
     
-    double DeformableSimplicialComplex::length(HMesh::HalfEdgeID eid) const
+    real DeformableSimplicialComplex::length(HMesh::HalfEdgeID eid) const
     {
         return HMesh::length(*mesh, eid);
     }
     
-    double DeformableSimplicialComplex::length_new(HMesh::HalfEdgeID eid) const
+    real DeformableSimplicialComplex::length_new(HMesh::HalfEdgeID eid) const
     {
         HMesh::Walker hew = walker(eid);
         return CGLA::length(get_pos_new(hew.vertex()) - get_pos_new(hew.opp().vertex()));
     }
     
-    double DeformableSimplicialComplex::min_edge_length(HMesh::FaceID fid)
+    real DeformableSimplicialComplex::min_edge_length(HMesh::FaceID fid)
     {
         std::vector<vec2> p = get_pos(fid);
-        return std::min(std::min(CGLA::length(p[0] - p[1]), CGLA::length(p[1] - p[2])), CGLA::length(p[0] - p[2]));
+        return Util::min(Util::min(CGLA::length(p[0] - p[1]), CGLA::length(p[1] - p[2])), CGLA::length(p[0] - p[2]));
     }
     
-    double DeformableSimplicialComplex::min_angle(HMesh::FaceID fid)
+    real DeformableSimplicialComplex::min_angle(HMesh::FaceID fid)
     {
         std::vector<vec2> p = get_pos(fid);
         return Util::min_angle(p[0], p[1], p[2]);
@@ -847,7 +847,7 @@ namespace DSC2D
         return hw.opp();
     }
     
-    vec2 DeformableSimplicialComplex::filter_vertex(HMesh::VertexID vid, std::vector<double> &filter) const
+    vec2 DeformableSimplicialComplex::filter_vertex(HMesh::VertexID vid, std::vector<real> &filter) const
     {
         if(!is_interface(vid)&&!is_crossing(vid))
         {
@@ -915,22 +915,22 @@ namespace DSC2D
         design_domain->clamp_vector(get_pos(vid), vec);
     }
     
-    double DeformableSimplicialComplex::area(HMesh::FaceID fid) const
+    real DeformableSimplicialComplex::area(HMesh::FaceID fid) const
     {
         return HMesh::area(*mesh, fid);
     }
     
-    double DeformableSimplicialComplex::area_new(HMesh::FaceID fid) const
+    real DeformableSimplicialComplex::area_new(HMesh::FaceID fid) const
     {
         std::vector<vec2> positions = get_pos_new(fid);
-        double A = std::abs(Util::signed_area(positions[0], positions[1], positions[2]));
+        real A = std::abs(Util::signed_area(positions[0], positions[1], positions[2]));
 #ifdef DEBUG
         assert(A > 0.);
 #endif
         return A;
     }
     
-    void DeformableSimplicialComplex::smooth(double t)
+    void DeformableSimplicialComplex::smooth(real t)
     {
         std::vector<vec2> positions(get_no_vertices());
         int i = 0;
@@ -995,8 +995,8 @@ namespace DSC2D
                 {
                     HMesh::VertexID vid = walker(*heit).opp().vertex();
                     std::vector<HMesh::VertexID> vertices = get_verts(vid, true);
-                    double angle = Util::cos_angle(get_pos(vertices[0]), get_pos(vid), get_pos(vertices[1]));
-                    //                double angle = dot(normalize(get_pos(vertices[0]) - get_pos(vid)), normalize(get_pos(vertices[1]) - get_pos(vid)));
+                    real angle = Util::cos_angle(get_pos(vertices[0]), get_pos(vid), get_pos(vertices[1]));
+                    //                real angle = dot(normalize(get_pos(vertices[0]) - get_pos(vid)), normalize(get_pos(vertices[1]) - get_pos(vid)));
                     if(angle < -COS_MIN_ANGLE || length(*heit) < DEG_EDGE_LENGTH)
                     {
                         bool success = safe_collapse(*heit);
@@ -1077,7 +1077,7 @@ namespace DSC2D
         HMesh::Walker w = walker(h);
         HMesh::HalfEdgeID ho = w.opp().halfedge();
         
-        double energy = efun.delta_energy(*mesh, h);
+        real energy = efun.delta_energy(*mesh, h);
         int t = touched[h] + 1;
         touched[h] = t;
         touched[ho] = t;

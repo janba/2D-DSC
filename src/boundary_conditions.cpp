@@ -23,7 +23,7 @@ namespace DSC2D {
         if(!is_inside(p))
         {
             vec2 c0, c1, b, p_proj, p_int1, p_int2;
-            double length, dist1 = INFINITY, dist2 = INFINITY;
+            real length, dist1 = INFINITY, dist2 = INFINITY;
             for (int i = 0; i < corners.size(); i++)
             {
                 c0 = corners[i];
@@ -59,7 +59,7 @@ namespace DSC2D {
         if(!is_inside(p+v))
         {
             vec2 c0, c1;
-            double t;
+            real t;
             for (int i = 0; i < corners.size(); i++)
             {
                 c0 = corners[i];
@@ -90,10 +90,10 @@ namespace DSC2D {
         {
             center += corners[i];
         }
-        return center/static_cast<double>(corners.size());
+        return center/static_cast<real>(corners.size());
     }
     
-    double DesignDomain::get_volume()
+    real DesignDomain::get_volume()
     {
         if(volume < 0.)
         {

@@ -324,7 +324,8 @@ using DSC2D::Trializer;
 using DSC2D::DesignDomain;
 using DSC2D::ObjectGenerator;
 using DSC2D::Log;
-
+using DSC2D::real;
+using DSC2D::vec2;
 
 void UI::rotate_square()
 {
@@ -332,7 +333,7 @@ void UI::rotate_square()
     int width = 450;
     int height = 450;
     
-    std::vector<double> points;
+    std::vector<real> points;
     std::vector<int> faces;
     Trializer::trialize(width, height, DISCRETIZATION, points, faces);
     
@@ -342,7 +343,7 @@ void UI::rotate_square()
     vel_fun = new RotateFunc(VELOCITY, ACCURACY);
     basic_log = new Log(create_log_path());
     
-    ObjectGenerator::create_square(*dsc, CGLA::Vec2d(150., 150.), CGLA::Vec2d(200., 200.), 1);
+    ObjectGenerator::create_square(*dsc, vec2(150., 150.), vec2(200., 200.), 1);
     
     basic_log->write_message(vel_fun->get_name().c_str());
     basic_log->write_log(*dsc);
@@ -358,7 +359,7 @@ void UI::smooth_filled()
     int width = 450;
     int height = 450;
     
-    std::vector<double> points;
+    std::vector<real> points;
     std::vector<int> faces;
     Trializer::trialize(width, height, DISCRETIZATION, points, faces);
     
@@ -368,7 +369,7 @@ void UI::smooth_filled()
     vel_fun = new AverageFunc(VELOCITY, ACCURACY);
     basic_log = new Log(create_log_path());
     
-    ObjectGenerator::create_square(*dsc, CGLA::Vec2d(DISCRETIZATION, DISCRETIZATION), CGLA::Vec2d(width, height), 1);
+    ObjectGenerator::create_square(*dsc, vec2(DISCRETIZATION, DISCRETIZATION), vec2(width, height), 1);
     
     basic_log->write_message(vel_fun->get_name().c_str());
     basic_log->write_log(*dsc);
@@ -384,7 +385,7 @@ void UI::expand_blobs()
     int width = 450;
     int height = 450;
     
-    std::vector<double> points;
+    std::vector<real> points;
     std::vector<int> faces;
     
     Trializer::trialize(width, height, DISCRETIZATION, points, faces);
@@ -395,9 +396,9 @@ void UI::expand_blobs()
     vel_fun = new NormalFunc(VELOCITY, ACCURACY);
     basic_log = new Log(create_log_path());
     
-    ObjectGenerator::create_blob(*dsc, CGLA::Vec2d(200., 200.), 100., 1);
-    ObjectGenerator::create_blob(*dsc, CGLA::Vec2d(300., 400.), 50., 2);
-    ObjectGenerator::create_blob(*dsc, CGLA::Vec2d(400., 100.), 30., 3);
+    ObjectGenerator::create_blob(*dsc, vec2(200., 200.), 100., 1);
+    ObjectGenerator::create_blob(*dsc, vec2(300., 400.), 50., 2);
+    ObjectGenerator::create_blob(*dsc, vec2(400., 100.), 30., 3);
     
     basic_log->write_message(vel_fun->get_name().c_str());
     basic_log->write_log(*dsc);

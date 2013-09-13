@@ -61,22 +61,22 @@ namespace DSC2D
         write_variable("Total time", vel_fun->get_compute_time() + vel_fun->get_deform_time(), "s");
     }
     
-    void Log::write_variable(const char* name, double value)
+    void Log::write_variable(const char* name, real value)
     {
         log << "\t" << name << "\t:\t" << value << std::endl;
     }
     
-    void Log::write_variable(const char* name, double value, double change)
+    void Log::write_variable(const char* name, real value, real change)
     {
         log << "\t" << name << "\t:\t" << value << "\t\tChange\t:\t" << change << std::endl;
     }
     
-    void Log::write_variable(const char* name, double value, const char* unit)
+    void Log::write_variable(const char* name, real value, const char* unit)
     {
         log << "\t" << name << "\t:\t" << value << " " << unit << std::endl;
     }
     
-    void Log::write_variable(const char* name, const std::vector<double>* values)
+    void Log::write_variable(const char* name, const std::vector<real>* values)
     {
         if(values->size() > 0)
         {
@@ -103,8 +103,8 @@ namespace DSC2D
     
     void Log::write_timings(const VelocityFunc *vel_fun)
     {
-        double deform_time = vel_fun->get_total_deform_time();
-        double compute_time = vel_fun->get_total_compute_time();
+        real deform_time = vel_fun->get_total_deform_time();
+        real compute_time = vel_fun->get_total_compute_time();
         write_message("TIMINGS");
         write_variable("Total time", deform_time + compute_time, "s");
         write_variable("Compute time", compute_time, "s");

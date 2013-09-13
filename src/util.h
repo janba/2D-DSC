@@ -31,15 +31,15 @@
 
 namespace DSC2D
 {
-    constexpr double EPSILON = 1e-8;
-    
-#ifndef INFINITY
-    constexpr double INFINITY = 1e32;
-#endif
-    
     typedef double real;
     typedef CGLA::Vec2d vec2;
     typedef CGLA::Vec3d vec3;
+    
+    constexpr real EPSILON = 1e-8;
+    
+#ifndef INFINITY
+    constexpr real INFINITY = 1e32;
+#endif
     
     namespace Util
     {
@@ -57,12 +57,12 @@ namespace DSC2D
         /**
          Computes the cosine to the angle at point p1.
          */
-        inline double cos_angle(const vec2& p0,const vec2& p1, const vec2& p2)
+        inline real cos_angle(const vec2& p0,const vec2& p1, const vec2& p2)
         {
             vec2 a = p2-p1;
             vec2 b = p0-p1;
             
-            double sqla = sqr_length(a);
+            real sqla = sqr_length(a);
             if(sqla < EPSILON)
             {
                 return 0.0;
@@ -70,14 +70,14 @@ namespace DSC2D
             a/= sqrt(sqla);
             
             
-            double sqlb = sqr_length(b);
+            real sqlb = sqr_length(b);
             if(sqlb < EPSILON)
             {
                 return 0.0;
             }
             b/= sqrt(sqlb);
             
-            double ang = std::max(-1.0, std::min(1.0, double(dot(a,b))));
+            real ang = max(-1., min(1., dot(a,b)));
 #ifdef DEBUG
             assert(!CGLA::isnan(ang));
 #endif
@@ -87,12 +87,12 @@ namespace DSC2D
         /**
          Computes the minimal angle of a triangle.
          */
-        inline double min_angle(const vec2& p0,const vec2& p1,const vec2& p2)
+        inline real min_angle(const vec2& p0,const vec2& p1,const vec2& p2)
         {
-            double a1 = acos(cos_angle(p2, p0, p1));
-            double a2 = acos(cos_angle(p0, p1, p2));
-            double a3 = acos(cos_angle(p1, p2, p0));
-            double m = std::min(a1,std::min(a2,a3));
+            real a1 = acos(cos_angle(p2, p0, p1));
+            real a2 = acos(cos_angle(p0, p1, p2));
+            real a3 = acos(cos_angle(p1, p2, p0));
+            real m = min(a1,min(a2,a3));
 #ifdef DEBUG
             assert(std::abs(a1 + a2 + a3 - M_PI) < 0.001 );
             assert(!CGLA::isnan(m));
@@ -104,9 +104,9 @@ namespace DSC2D
         /**
          Computes the signed area of a triangle.
          */
-        inline double signed_area(const vec2& v0,const vec2& v1,const vec2& v2)
+        inline real signed_area(const vec2& v0,const vec2& v1,const vec2& v2)
         {
-            double A = 0.5*CGLA::cross(v1-v0,v2-v0);
+            real A = 0.5*CGLA::cross(v1-v0,v2-v0);
 #ifdef DEBUG
             assert(!CGLA::isnan(A));
 #endif
@@ -116,7 +116,7 @@ namespace DSC2D
         /**
          Computes the area of a triangle.
          */
-        inline double area(const vec2& v0,const vec2& v1,const vec2& v2)
+        inline real area(const vec2& v0,const vec2& v1,const vec2& v2)
         {
             return std::abs(signed_area(v0, v1, v2));
         }
@@ -132,9 +132,9 @@ namespace DSC2D
         /**
          Returns the squared minimum distance between line segment vw and point p.
          */
-        inline double min_dist_sqr(const vec2& v, const vec2& w, const vec2& p)
+        inline real min_dist_sqr(const vec2& v, const vec2& w, const vec2& p)
         {
-            const double l2 = dot(v-w, v-w);  // i.e. |w-v|^2 -  avoid a sqrt
+            const real l2 = dot(v-w, v-w);  // i.e. |w-v|^2 -  avoid a sqrt
             if (l2 == 0.)
             {
                 return sqr_length(p - v);   // v == w case
@@ -142,7 +142,7 @@ namespace DSC2D
             // Consider the line extending the segment, parameterized as v + t (w - v).
             // We find projection of point p onto the line.
             // It falls where t = [(p-v) . (w-v)] / |w-v|^2
-            const double t = dot(p - v, w - v) / l2;
+            const real t = dot(p - v, w - v) / l2;
             if (t < 0.0)
             {
                 return sqr_length(p - v);       // Beyond the 'v' end of the segment
@@ -176,7 +176,7 @@ namespace DSC2D
             {
                 return false;
             }
-            double l = (a-b).length();
+            real l = (a-b).length();
             if ((a-c).length() <= l && (b-c).length() <= l)
             {
                 return true;
@@ -215,11 +215,11 @@ namespace DSC2D
         /**
          Calculates the intersection between the line segments defined by p + t*r and q + u*s, where 0 <= t <= 1 and 0 <= u <= 1. The method returns t if 0 <= u <= 1 and INFINITY otherwise. If t is not in the range 0 <= t <= 1, the line segments do not intersect.
          */
-        inline double intersection(vec2 p, vec2 r, vec2 q, vec2 s)
+        inline real intersection(vec2 p, vec2 r, vec2 q, vec2 s)
         {
-            double t = INFINITY;
-            double a = cross(q-p, s);
-            double b = cross(r,s);
+            real t = INFINITY;
+            real a = cross(q-p, s);
+            real b = cross(r,s);
             if(std::abs(b) < EPSILON) // r and s are parallel if true
             {
                 if(std::abs(a) < EPSILON) // r and s are collinear if true
@@ -232,7 +232,7 @@ namespace DSC2D
             }
             else
             {
-                double u = cross(q-p, r)/b;
+                real u = cross(q-p, r)/b;
                 if (0. <= u && u <= 1.)
                 {
                     t = a/b;
@@ -244,16 +244,16 @@ namespace DSC2D
         /**
          Calculates the jet color from the value.
          */
-        inline vec3 jet_color(double value)
+        inline vec3 jet_color(real value)
         {
-            double fourValue = 4 * value;
-            double red   = std::min(fourValue - 1.5, -fourValue + 4.5);
-            double green = std::min(fourValue - 0.5, -fourValue + 3.5);
-            double blue  = std::min(fourValue + 0.5, -fourValue + 2.5);
+            real fourValue = 4 * value;
+            real red   = min(fourValue - 1.5, -fourValue + 4.5);
+            real green = min(fourValue - 0.5, -fourValue + 3.5);
+            real blue  = min(fourValue + 0.5, -fourValue + 2.5);
             vec3 col(red, green, blue);
             for (int i = 0; i < 3; i++)
             {
-                col[i] = std::max(std::min(col[i] , 1.), 0.);
+                col[i] = max(min(col[i] , 1.), 0.);
             }
             return col;
         }
@@ -264,7 +264,7 @@ namespace DSC2D
                 return start_color;
             }
             i++;
-            double step = static_cast<double>(i - i%3)/3.;
+            real step = static_cast<real>(i - i%3)/3.;
             vec3 col = start_color;
             col[i%3] += 0.7*step;
             col[i%3] -= std::floor(col[i%3]);
@@ -284,9 +284,9 @@ namespace DSC2D
         /**
          Returns the maximum difference between the values x[i] and y[i] for all i less than the size of x and y.
          */
-        inline double max_diff(const std::vector<double>& x, const std::vector<double>& y)
+        inline real max_diff(const std::vector<real>& x, const std::vector<real>& y)
         {
-            double temp, diff = -INFINITY;
+            real temp, diff = -INFINITY;
             for (int i = 0; i < x.size(); i++)
             {
                 if (i < y.size()) {

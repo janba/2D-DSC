@@ -36,11 +36,11 @@ namespace DSC2D {
      */
     struct PQElem
     {
-        double pri;
+        real pri;
         HMesh::HalfEdgeID h;
         int time;
         
-        PQElem(double _pri, HMesh::HalfEdgeID _h, int _time):
+        PQElem(real _pri, HMesh::HalfEdgeID _h, int _time):
         pri(_pri), h(_h), time(_time) {}
     };
     
@@ -56,21 +56,21 @@ namespace DSC2D {
         enum OBJECTS_TYPE {FILLED_HALF, FILLED, SQUARE, BLOB, BLOBS};
         
     protected:
-        double AVG_EDGE_LENGTH;
+        real AVG_EDGE_LENGTH;
         
-        double DEG_ANGLE;
-        double MIN_ANGLE;
-        double COS_MIN_ANGLE;
+        real DEG_ANGLE;
+        real MIN_ANGLE;
+        real COS_MIN_ANGLE;
         
-        double DEG_AREA;
-        double MIN_AREA;
-        double MAX_AREA;
+        real DEG_AREA;
+        real MIN_AREA;
+        real MAX_AREA;
         
-        double DEG_EDGE_LENGTH;
-        double MIN_EDGE_LENGTH;
-        double MAX_EDGE_LENGTH;
+        real DEG_EDGE_LENGTH;
+        real MIN_EDGE_LENGTH;
+        real MAX_EDGE_LENGTH;
         
-        double MIN_DEFORMATION;
+        real MIN_DEFORMATION;
         
         vec3 INTERFACE_COLOR;
         vec3 OUTSIDE_COLOR;
@@ -95,7 +95,7 @@ namespace DSC2D {
         /**
          Creates a simplicial complex with size (SIZE_X_, SIZE_Y_). The input parameters specifies the design domain, the initial object(s) and the discretization. The latter is defined by the parameter AVG_EDGE_LENGTH, which tells how long edges are on average.
          */
-        DeformableSimplicialComplex(double AVG_EDGE_LENGTH_, const std::vector<double>& points, const std::vector<int>& faces, DesignDomain *domain = nullptr);
+        DeformableSimplicialComplex(real AVG_EDGE_LENGTH_, const std::vector<real>& points, const std::vector<int>& faces, DesignDomain *domain = nullptr);
         
         virtual ~DeformableSimplicialComplex()
         {
@@ -106,7 +106,7 @@ namespace DSC2D {
         /**
          Creates the simplicial complex.
          */
-        void create_simplicial_complex(const std::vector<double>& points, const std::vector<int>& faces);
+        void create_simplicial_complex(const std::vector<real>& points, const std::vector<int>& faces);
         
         //************** DISPLAY FUNCTIONS ***************
     public:
@@ -189,7 +189,7 @@ namespace DSC2D {
         /**
          Returns the average edge length of the edges in the simplical complex.
          */
-        double get_avg_edge_length() const
+        real get_avg_edge_length() const
         {
             return AVG_EDGE_LENGTH;
         }
@@ -197,7 +197,7 @@ namespace DSC2D {
         /**
          Returns the minimum deformation possible.
          */
-        double get_min_deformation() const
+        real get_min_deformation() const
         {
             return MIN_DEFORMATION;
         }
@@ -205,12 +205,12 @@ namespace DSC2D {
         /**
          Returns the width of the simplicial complex.
          */
-        double get_width() const;
+        real get_width() const;
         
         /**
          Returns the height of the simplicial complex.
          */
-        double get_height() const;
+        real get_height() const;
         
         /**
          Returns the approximate center of the simplicial complex.
@@ -220,7 +220,7 @@ namespace DSC2D {
         /**
          Returns the total volume of the simplicial complex.
          */
-        double get_volume() const
+        real get_volume() const
         {
             return design_domain->get_volume();
         }
@@ -577,7 +577,7 @@ namespace DSC2D {
         /**
          Performs Laplacian smoothing on all safe editable vertices.
          */
-        void smooth(double t = 1.);
+        void smooth(real t = 1.);
         
         /**
          Remove needles, triangles with one very short edge, by splitting the face (inserting a vertex at the barycenter of the face).
@@ -635,33 +635,33 @@ namespace DSC2D {
         /**
          Returns the minimum angle of the face with ID fid.
          */
-        double min_angle(HMesh::FaceID fid);
+        real min_angle(HMesh::FaceID fid);
         
         /**
          Returns the minimum edge length of the edges of the face with ID fid.
          */
-        double min_edge_length(HMesh::FaceID fid);
+        real min_edge_length(HMesh::FaceID fid);
         
     public:
         /**
          Returns the length of the edge with ID eid.
          */
-        double length(HMesh::HalfEdgeID eid) const;
+        real length(HMesh::HalfEdgeID eid) const;
         
         /**
          Returns the length of the edge with ID eid when using the new positions.
          */
-        double length_new(HMesh::HalfEdgeID eid) const;
+        real length_new(HMesh::HalfEdgeID eid) const;
         
         /**
          Calculates the area of the face with ID fid.
          */
-        double area(HMesh::FaceID fid) const;
+        real area(HMesh::FaceID fid) const;
         
         /**
          Calculates the area of the face with ID fid when using the new positions.
          */
-        double area_new(HMesh::FaceID fid) const;
+        real area_new(HMesh::FaceID fid) const;
         
         /**
          Returns the positions of the optimization variables (the movable interface nodes).
@@ -677,7 +677,7 @@ namespace DSC2D {
          Returns the maximum distance a vertex is supposed to be moved (the distance between its new and old position).
          Should be called before move_vertices().
          */
-        virtual double max_move_distance() const;
+        virtual real max_move_distance() const;
         
         /**
          Calculates the average position of the neighbouring vertices to the vertex with ID vid.
@@ -706,7 +706,7 @@ namespace DSC2D {
          applied to all vertices along all interfaces with distance 0,1,2.. from ID, which are subsequently averaged.
          E.g. filtering with [0 1] is the same as avg_pos, but works also on crossings.
          */
-        vec2 filter_vertex(HMesh::VertexID vid, std::vector<double> &filter) const;
+        vec2 filter_vertex(HMesh::VertexID vid, std::vector<real> &filter) const;
         
         /**
          Computes the normal of the interface vertex with ID vid.
@@ -722,7 +722,7 @@ namespace DSC2D {
         /**
          Calculates the intersection with the link of the vertex with ID vid and the line from the position of this vertex towards destination and to infinity. It returns t which is where on the line the intersection occurs. If t=0, the interesection occured at the position of the vertex with ID vid or never occured. If t=1 the intersection occured at the destination point. If 0<t<1 the intersection occured between these points. Finally, if t>1 the intersection occured farther away from the vertex position than destination.
          */
-        double intersection_with_link(const HMesh::VertexID& vid, vec2 destination) const;
+        real intersection_with_link(const HMesh::VertexID& vid, vec2 destination) const;
         
     };
     

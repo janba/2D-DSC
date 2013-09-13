@@ -29,10 +29,10 @@ namespace DSC2D {
                 if(Util::is_inside(c, verts))
                 {
                     HMesh::VertexID vid;
-                    double min_dist = INFINITY;
+                    real min_dist = INFINITY;
                     for (HMesh::Walker hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw())
                     {
-                        double l = (dsc.get_pos(hew.vertex()) - c).length();
+                        real l = (dsc.get_pos(hew.vertex()) - c).length();
                         if(l < min_dist)
                         {
                             min_dist = l;
@@ -66,12 +66,12 @@ namespace DSC2D {
                         vec2 p = dsc.get_pos(hew.opp().vertex());
                         vec2 r = dsc.get_pos(hew.vertex()) - p;
                         vec2 q, s;
-                        double scale = INFINITY;
+                        real scale = INFINITY;
                         for(int j = 0; j < corners.size(); j++)
                         {
                             q = corners[j];
                             s = corners[(j+1)%corners.size()] - q;
-                            double t = Util::intersection(p, r, q, s);
+                            real t = Util::intersection(p, r, q, s);
                             if(0. <= t && t <= 1.)
                             {
                                 scale = t;

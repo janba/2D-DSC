@@ -29,22 +29,22 @@ namespace DSC2D {
         int time_step;
         int MAX_TIME_STEPS;
         
-        double compute_time;
-        double deform_time;
+        real compute_time;
+        real deform_time;
         
-        double total_compute_time;
-        double total_deform_time;
+        real total_compute_time;
+        real total_deform_time;
         
     protected:
-        double VELOCITY; // Determines the distance each interface vertex moves at each iteration.
-        double ACCURACY; // Determines the accuracy of the final result.
+        real VELOCITY; // Determines the distance each interface vertex moves at each iteration.
+        real ACCURACY; // Determines the accuracy of the final result.
         
         std::vector<vec2> pos_old;
         
         /**
          Creates a velocity function which is applied to the simplicial complex. The velocity parameter determines the velocity of the function.
          */
-        VelocityFunc(double velocity, double accuracy, int max_time_steps = 500):
+        VelocityFunc(real velocity, real accuracy, int max_time_steps = 500):
         VELOCITY(velocity), ACCURACY(accuracy), time_step(0), MAX_TIME_STEPS(max_time_steps),
         compute_time(0.), deform_time(0.), total_compute_time(0.), total_deform_time(0.)
         {
@@ -70,7 +70,7 @@ namespace DSC2D {
         /**
          Returns the velocity.
          */
-        double get_velocity() const
+        real get_velocity() const
         {
             return VELOCITY;
         }
@@ -78,7 +78,7 @@ namespace DSC2D {
         /**
          Returns the accuracy.
          */
-        double get_accuracy() const
+        real get_accuracy() const
         {
             return ACCURACY;
         }
@@ -86,7 +86,7 @@ namespace DSC2D {
         /**
          Returns the time it took to deform the interface in this time step.
          */
-        double get_deform_time() const
+        real get_deform_time() const
         {
             return deform_time;
         }
@@ -94,7 +94,7 @@ namespace DSC2D {
         /**
          Returns the time it took to compute the new positions of the interface in this time step.
          */
-        double get_compute_time() const
+        real get_compute_time() const
         {
             return compute_time;
         }
@@ -102,7 +102,7 @@ namespace DSC2D {
         /**
          Returns the total time it took to deform the interface.
          */
-        double get_total_deform_time() const
+        real get_total_deform_time() const
         {
             return total_deform_time;
         }
@@ -110,7 +110,7 @@ namespace DSC2D {
         /**
          Returns the total time it took to compute the new positions of the interface.
          */
-        double get_total_compute_time() const
+        real get_total_compute_time() const
         {
             return total_compute_time;
         }
@@ -121,7 +121,7 @@ namespace DSC2D {
          */
         void update_compute_time(const std::chrono::time_point<std::chrono::system_clock>& start_time)
         {
-            std::chrono::duration<double> t = std::chrono::system_clock::now() - start_time;
+            std::chrono::duration<real> t = std::chrono::system_clock::now() - start_time;
             compute_time += t.count();
             total_compute_time += t.count();
         }
@@ -130,7 +130,7 @@ namespace DSC2D {
          */
         void update_deform_time(const std::chrono::time_point<std::chrono::system_clock>& start_time)
         {
-            std::chrono::duration<double> t = std::chrono::system_clock::now() - start_time;
+            std::chrono::duration<real> t = std::chrono::system_clock::now() - start_time;
             deform_time += t.count();
             total_deform_time += t.count();
         }

@@ -31,10 +31,10 @@ namespace DSC2D {
         
     public:
         
-        static void create_blob(DeformableSimplicialComplex& dsc, const vec2& center, const double& radius, int label)
+        static void create_blob(DeformableSimplicialComplex& dsc, const vec2& center, const real& radius, int label)
         {
             std::vector<vec2> corners;
-            for (double a = 0; a < 2*M_PI; a += (1./32.)*2*M_PI)
+            for (real a = 0; a < 2*M_PI; a += (1./32.)*2*M_PI)
             {
                 corners.push_back(radius*vec2(std::cos(a), -std::sin(a)) + center);
             }
