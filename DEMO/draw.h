@@ -59,50 +59,50 @@ public:
     /**
      Draws the simplicial complex.
      */
-    static void draw_complex(const DeformableSimplicialComplex& complex);
+    static void draw_complex(const DSC2D::DeformableSimplicialComplex& complex);
     
     /**
      Draws the domain.
      */
-    static void draw_domain(const DesignDomain& domain, CGLA::Vec3d color = GRAY);
+    static void draw_domain(const DSC2D::DesignDomain& domain, CGLA::Vec3d color = GRAY);
     
     /**
      Draws the vertices with the colors defined by the get_vertex_colors function in the simplicial complex.
      */
-    static void draw_vertices(const DeformableSimplicialComplex& complex);
+    static void draw_vertices(const DSC2D::DeformableSimplicialComplex& complex);
 
     /**
      Draws the edges with the colors defined by the get_edge_colors function in the simplicial complex.
      */
-    static void draw_edges(const DeformableSimplicialComplex& complex);
+    static void draw_edges(const DSC2D::DeformableSimplicialComplex& complex);
     
     /**
      Draws the faces with the colors defined by the get_face_colors function in the simplicial complex.
      */
-    static void draw_faces(const DeformableSimplicialComplex& complex);
+    static void draw_faces(const DSC2D::DeformableSimplicialComplex& complex);
     
     /**
      Draws the faces with the colors given as input.
      */
-    static void draw_faces(const DeformableSimplicialComplex& complex, const HMesh::FaceAttributeVector<CGLA::Vec3d> &colors);
+    static void draw_faces(const DSC2D::DeformableSimplicialComplex& complex, const HMesh::FaceAttributeVector<CGLA::Vec3d> &colors);
     
     /**
      Draws the faces using the 'jet' color scheme.
      */
-    static void draw_faces(const DeformableSimplicialComplex& complex, const HMesh::FaceAttributeVector<double> &values);
+    static void draw_faces(const DSC2D::DeformableSimplicialComplex& complex, const HMesh::FaceAttributeVector<double> &values);
     
     /**
      Draws the interface with the color given as input.
      */
-    static void draw_interface(const DeformableSimplicialComplex& complex, CGLA::Vec3d color = ORANGE);
+    static void draw_interface(const DSC2D::DeformableSimplicialComplex& complex, CGLA::Vec3d color = ORANGE);
     
     /**
      Draws the arrows given as input with the color given as input.
      */
-    static void draw_arrows(const DeformableSimplicialComplex& complex, const HMesh::VertexAttributeVector<CGLA::Vec2d> &arrows, CGLA::Vec3d color = ORANGE);
+    static void draw_arrows(const DSC2D::DeformableSimplicialComplex& complex, const HMesh::VertexAttributeVector<CGLA::Vec2d> &arrows, CGLA::Vec3d color = ORANGE);
 
     /**
      Draws the lines given as input with the color given as input.
      */
-    static void draw_lines(const DeformableSimplicialComplex& complex, const HMesh::VertexAttributeVector<CGLA::Vec2d> &lines, CGLA::Vec3d color = GREEN);
+    static void draw_lines(const DSC2D::DeformableSimplicialComplex& complex, const HMesh::VertexAttributeVector<CGLA::Vec2d> &lines, CGLA::Vec3d color = GREEN);
 };

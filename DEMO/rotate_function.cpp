@@ -23,7 +23,7 @@
 #endif
 
 
-void RotateFunc::deform(DeformableSimplicialComplex& dsc)
+void RotateFunc::deform(DSC2D::DeformableSimplicialComplex& dsc)
 {
     auto init_time = std::chrono::system_clock::now();
     

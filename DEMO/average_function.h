@@ -21,7 +21,7 @@
 /**
  A velocity function which moves the interface vertices towards the average of their neighbouring interface vertices, i.e. a constant smoothing of the interface.
  */
-class AverageFunc: public VelocityFunc {
+class AverageFunc: public DSC2D::VelocityFunc {
     
 public:
     /**
@@ -43,5 +43,5 @@ public:
     /**
      Computes the motion of each interface vertex and stores the new position in new_pos in the simplicial complex class.
      */
-    virtual void deform(DeformableSimplicialComplex& dsc);
+    virtual void deform(DSC2D::DeformableSimplicialComplex& dsc);
 };

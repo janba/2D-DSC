@@ -22,7 +22,7 @@
 /**
  A rotating velocity function.
  */
-class RotateFunc: public VelocityFunc {
+class RotateFunc: public DSC2D::VelocityFunc {
     
 public:
     /**
@@ -44,12 +44,12 @@ public:
     /**
      Computes the motion of each interface vertex and stores the new position in new_pos in the simplicial complex class.
      */
-    virtual void deform(DeformableSimplicialComplex& dsc);
+    virtual void deform(DSC2D::DeformableSimplicialComplex& dsc);
     
     /**
      Returns wether the motion has finished.
      */
-    virtual bool is_motion_finished(DeformableSimplicialComplex& dsc)
+    virtual bool is_motion_finished(DSC2D::DeformableSimplicialComplex& dsc)
     {
         return false;
     }

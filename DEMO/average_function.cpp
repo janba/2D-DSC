@@ -16,7 +16,7 @@
 
 #include "average_function.h"
 
-void AverageFunc::deform(DeformableSimplicialComplex& dsc)
+void AverageFunc::deform(DSC2D::DeformableSimplicialComplex& dsc)
 {
     auto init_time = std::chrono::system_clock::now();
     for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)

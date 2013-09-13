@@ -16,7 +16,7 @@
 
 #include "normal_function.h"
 
-void NormalFunc::deform(DeformableSimplicialComplex& dsc)
+void NormalFunc::deform(DSC2D::DeformableSimplicialComplex& dsc)
 {
     auto init_time = std::chrono::system_clock::now();
     for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)

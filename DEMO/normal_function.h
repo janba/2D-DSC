@@ -21,7 +21,7 @@
 /**
  A velocity function which moves the interface vertices in the normal direction.
  */
-class NormalFunc: public VelocityFunc {
+class NormalFunc: public DSC2D::VelocityFunc {
     
     
 public:
@@ -44,5 +44,5 @@ public:
     /**
      Computes the motion of each interface vertex and stores the new position in new_pos in the simplicial complex class.
      */
-    virtual void deform(DeformableSimplicialComplex& dsc);
+    virtual void deform(DSC2D::DeformableSimplicialComplex& dsc);
 };

@@ -26,6 +26,7 @@
 #include <GEL/GLGraphics/SOIL.h>
 #endif
 
+using namespace DSC2D;
 
 void Painter::save_painting(int width, int height, std::string folder, int time_step)
 {

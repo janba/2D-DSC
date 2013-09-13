@@ -43,9 +43,9 @@
 class UI
 {
 protected:
-    VelocityFunc *vel_fun;
-    DeformableSimplicialComplex *dsc;
-    Log *basic_log;
+    DSC2D::VelocityFunc *vel_fun;
+    DSC2D::DeformableSimplicialComplex *dsc;
+    DSC2D::Log *basic_log;
     
     int WIN_SIZE_X;
     int WIN_SIZE_Y;
@@ -119,89 +119,11 @@ public:
     
     
 protected:
-    virtual void rotate_square()
-    {
-        stop();
-        int width = 450;
-        int height = 450;
-        
-        std::vector<double> points;
-        std::vector<int> faces;
-        Trializer trializer(width, height, DISCRETIZATION);
-        trializer.trialize(points, faces);
-        
-        DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
-        
-        dsc = new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain);
-        vel_fun = new RotateFunc(VELOCITY, ACCURACY);
-        basic_log = new Log(create_log_path());
-        
-        ObjectGenerator::create_square(*dsc, CGLA::Vec2d(150., 150.), CGLA::Vec2d(200., 200.), 1);
-        
-        basic_log->write_message(vel_fun->get_name().c_str());
-        basic_log->write_log(*dsc);
-        basic_log->write_log(vel_fun);
-        
-        update_title();
-        reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
-    }
+    virtual void rotate_square();
     
-    virtual void smooth_filled()
-    {
-        stop();
-        int width = 450;
-        int height = 450;
-        
-        std::vector<double> points;
-        std::vector<int> faces;
-        Trializer trializer(width, height, DISCRETIZATION);
-        trializer.trialize(points, faces);
-        
-        DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
-        
-        dsc = new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain);
-        vel_fun = new AverageFunc(VELOCITY, ACCURACY);
-        basic_log = new Log(create_log_path());
-        
-        ObjectGenerator::create_square(*dsc, CGLA::Vec2d(DISCRETIZATION, DISCRETIZATION), CGLA::Vec2d(width, height), 1);
-        
-        basic_log->write_message(vel_fun->get_name().c_str());
-        basic_log->write_log(*dsc);
-        basic_log->write_log(vel_fun);
-        
-        update_title();
-        reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
-    }
+    virtual void smooth_filled();
     
-    virtual void expand_blobs()
-    {
-        stop();
-        int width = 450;
-        int height = 450;
-        
-        std::vector<double> points;
-        std::vector<int> faces;
-        
-        Trializer trializer(width, height, DISCRETIZATION);
-        trializer.trialize(points, faces);
-        
-        DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
-        
-        dsc = new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain);
-        vel_fun = new NormalFunc(VELOCITY, ACCURACY);
-        basic_log = new Log(create_log_path());
-        
-        ObjectGenerator::create_blob(*dsc, CGLA::Vec2d(200., 200.), 100., 1);
-        ObjectGenerator::create_blob(*dsc, CGLA::Vec2d(300., 400.), 50., 2);
-        ObjectGenerator::create_blob(*dsc, CGLA::Vec2d(400., 100.), 30., 3);
-        
-        basic_log->write_message(vel_fun->get_name().c_str());
-        basic_log->write_log(*dsc);
-        basic_log->write_log(vel_fun);
-        
-        update_title();
-        reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
-    }
+    virtual void expand_blobs();
     
     /**
      Updates the window title.
