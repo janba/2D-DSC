@@ -43,6 +43,17 @@ namespace DSC2D
     
     namespace Util
     {
+        
+        inline real min(real x, real y)
+        {
+            return std::min(x, y);
+        }
+        
+        inline real max(real x, real y)
+        {
+            return std::max(x, y);
+        }
+        
         /**
          Computes the cosine to the angle at point p1.
          */
