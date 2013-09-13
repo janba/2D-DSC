@@ -43,6 +43,12 @@ namespace DSC2D
     
     namespace Util
     {
+        using CGLA::normalize;
+        using CGLA::dot;
+        using CGLA::cross;
+        using CGLA::length;
+        using CGLA::sqr_length;
+        using CGLA::isnan;
         
         inline real min(real x, real y)
         {
@@ -79,7 +85,7 @@ namespace DSC2D
             
             real ang = max(-1., min(1., dot(a,b)));
 #ifdef DEBUG
-            assert(!CGLA::isnan(ang));
+            assert(!isnan(ang));
 #endif
             return ang;
         }
@@ -95,7 +101,7 @@ namespace DSC2D
             real m = min(a1,min(a2,a3));
 #ifdef DEBUG
             assert(std::abs(a1 + a2 + a3 - M_PI) < 0.001 );
-            assert(!CGLA::isnan(m));
+            assert(!isnan(m));
 #endif
             return m;
         }
@@ -106,9 +112,9 @@ namespace DSC2D
          */
         inline real signed_area(const vec2& v0,const vec2& v1,const vec2& v2)
         {
-            real A = 0.5*CGLA::cross(v1-v0,v2-v0);
+            real A = 0.5*cross(v1-v0,v2-v0);
 #ifdef DEBUG
-            assert(!CGLA::isnan(A));
+            assert(!isnan(A));
 #endif
             return A;
         }

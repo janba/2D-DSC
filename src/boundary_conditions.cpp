@@ -28,9 +28,9 @@ namespace DSC2D {
             {
                 c0 = corners[i];
                 c1 = corners[(i+1)%corners.size()];
-                b = CGLA::normalize(c1 - c0);
-                p_proj = c0 + CGLA::dot(p - c0, b)*b;
-                length = CGLA::sqr_length(p - p_proj);
+                b = Util::normalize(c1 - c0);
+                p_proj = c0 + Util::dot(p - c0, b)*b;
+                length = Util::sqr_length(p - p_proj);
                 if (length < dist1)
                 {
                     p_int2 = p_int1;

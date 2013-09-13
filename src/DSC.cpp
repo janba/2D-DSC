@@ -684,13 +684,13 @@ namespace DSC2D
     real DeformableSimplicialComplex::length_new(HMesh::HalfEdgeID eid) const
     {
         HMesh::Walker hew = walker(eid);
-        return CGLA::length(get_pos_new(hew.vertex()) - get_pos_new(hew.opp().vertex()));
+        return Util::length(get_pos_new(hew.vertex()) - get_pos_new(hew.opp().vertex()));
     }
     
     real DeformableSimplicialComplex::min_edge_length(HMesh::FaceID fid)
     {
         std::vector<vec2> p = get_pos(fid);
-        return Util::min(Util::min(CGLA::length(p[0] - p[1]), CGLA::length(p[1] - p[2])), CGLA::length(p[0] - p[2]));
+        return Util::min(Util::min(Util::length(p[0] - p[1]), Util::length(p[1] - p[2])), Util::length(p[0] - p[2]));
     }
     
     real DeformableSimplicialComplex::min_angle(HMesh::FaceID fid)
@@ -814,7 +814,7 @@ namespace DSC2D
         }
 #ifdef DEBUG
         assert(n > 0);
-        assert(!CGLA::isnan(avg_pos[0]) && !CGLA::isnan(avg_pos[1]));
+        assert(!Util::isnan(avg_pos[0]) && !Util::isnan(avg_pos[1]));
 #endif
         return avg_pos/n;
     }
@@ -901,7 +901,7 @@ namespace DSC2D
         }
 #ifdef DEBUG
         assert(i == 2);
-        assert(!CGLA::isnan(n[0]) && !CGLA::isnan(n[1]));
+        assert(!Util::isnan(n[0]) && !Util::isnan(n[1]));
 #endif
         if(sqr_length(n) > EPSILON)
         {
