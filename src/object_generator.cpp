@@ -64,6 +64,7 @@ void ObjectGenerator::fit_mesh_to_object(DeformableSimplicialComplex& dsc, const
                     CGLA::Vec2d p = dsc.get_pos(hew.opp().vertex());
                     CGLA::Vec2d r = dsc.get_pos(hew.vertex()) - p;
                     CGLA::Vec2d q, s;
+                    double scale = INFINITY;
                     for(int j = 0; j < corners.size(); j++)
                     {
                         q = corners[j];
@@ -71,11 +72,12 @@ void ObjectGenerator::fit_mesh_to_object(DeformableSimplicialComplex& dsc, const
                         double t = Util::intersection(p, r, q, s);
                         if(0. <= t && t <= 1.)
                         {
-                            point = p + t*r;
+                            scale = t;
                             break;
                         }
                     }
-                    
+                    assert(scale < INFINITY);
+                    point = p + scale*r;
                     if((point - p).length() < (point - (p + r)).length())
                     {
                         dsc.set_pos(hew.opp().vertex(), point);
@@ -105,10 +107,11 @@ void ObjectGenerator::label_faces(DeformableSimplicialComplex& dsc, const std::v
 
 void ObjectGenerator::create_object(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners, int label)
 {
+    dsc.init_attributes(); // Maybe not necessary??
+    
     fit_mesh_to_object(dsc, corners);
     label_faces(dsc, corners, label);
-    
-    dsc.init_attributes(); // Maybe not necessary??
     dsc.update_attributes(); // Maybe not necessary??
+    
     dsc.fix_mesh();
 }

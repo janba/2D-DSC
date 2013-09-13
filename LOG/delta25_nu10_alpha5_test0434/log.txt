@@ -1,0 +1,33 @@
+
+*** NORMAL MOTION ***
+
+*** SIMPLICIAL COMPLEX INFO ***
+	Avg edge length	:	25
+	Min deformation	:	6.25
+	Total volume	:	202500
+	#vertices	:	492
+	#edges		:	2778
+	#faces		:	898
+
+*** VELOCITY FUNCTION INFO ***
+	Velocity	:	0.1
+	Accuracy	:	0.05
+
+*** MOTION STOPPED ***
+
+*** SIMPLICIAL COMPLEX INFO ***
+	Avg edge length	:	25
+	Min deformation	:	6.25
+	Total volume	:	202500
+	#vertices	:	492
+	#edges		:	2778
+	#faces		:	898
+
+*** VELOCITY FUNCTION INFO ***
+	Velocity	:	0.1
+	Accuracy	:	0.05
+
+*** TIMINGS ***
+	Total time	:	0 s
+	Compute time	:	0 s
+	Deform time	:	0 s
