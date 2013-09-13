@@ -18,7 +18,7 @@
 
 namespace DSC2D {
     
-    void ObjectGenerator::fit_mesh_to_object(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners)
+    void ObjectGenerator::fit_mesh_to_object(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners)
     {
         // Move a vertex to all corners
         for (auto fi = dsc.faces_begin(); fi != dsc.faces_end(); fi++)
@@ -62,10 +62,10 @@ namespace DSC2D {
                     if((sum == 1 && inside[i]) || (sum == 2 && !inside[i])) // Move the vertex
                     {
                         // Find intersection point
-                        CGLA::Vec2d point;
-                        CGLA::Vec2d p = dsc.get_pos(hew.opp().vertex());
-                        CGLA::Vec2d r = dsc.get_pos(hew.vertex()) - p;
-                        CGLA::Vec2d q, s;
+                        vec2 point;
+                        vec2 p = dsc.get_pos(hew.opp().vertex());
+                        vec2 r = dsc.get_pos(hew.vertex()) - p;
+                        vec2 q, s;
                         double scale = INFINITY;
                         for(int j = 0; j < corners.size(); j++)
                         {
@@ -93,7 +93,7 @@ namespace DSC2D {
         }
     }
     
-    void ObjectGenerator::label_faces(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners, int label)
+    void ObjectGenerator::label_faces(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners, int label)
     {
         for (auto fi = dsc.faces_begin(); fi != dsc.faces_end(); fi++)
         {
@@ -107,7 +107,7 @@ namespace DSC2D {
         }
     }
     
-    void ObjectGenerator::create_object(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners, int label)
+    void ObjectGenerator::create_object(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners, int label)
     {
         dsc.init_attributes(); // Maybe not necessary??
         

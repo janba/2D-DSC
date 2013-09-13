@@ -23,31 +23,31 @@ namespace DSC2D {
     
     class ObjectGenerator {
         
-        static void fit_mesh_to_object(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners);
+        static void fit_mesh_to_object(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners);
         
-        static void label_faces(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners, int label);
+        static void label_faces(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners, int label);
         
-        static void create_object(DeformableSimplicialComplex& dsc, const std::vector<CGLA::Vec2d>& corners, int label);
+        static void create_object(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners, int label);
         
     public:
         
-        static void create_blob(DeformableSimplicialComplex& dsc, const CGLA::Vec2d& center, const double& radius, int label)
+        static void create_blob(DeformableSimplicialComplex& dsc, const vec2& center, const double& radius, int label)
         {
-            std::vector<CGLA::Vec2d> corners;
+            std::vector<vec2> corners;
             for (double a = 0; a < 2*M_PI; a += (1./32.)*2*M_PI)
             {
-                corners.push_back(radius*CGLA::Vec2d(std::cos(a), -std::sin(a)) + center);
+                corners.push_back(radius*vec2(std::cos(a), -std::sin(a)) + center);
             }
             create_object(dsc, corners, label);
         }
         
-        static void create_square(DeformableSimplicialComplex& dsc, const CGLA::Vec2d& origin, const CGLA::Vec2d& size, int label)
+        static void create_square(DeformableSimplicialComplex& dsc, const vec2& origin, const vec2& size, int label)
         {
-            std::vector<CGLA::Vec2d> corners;
+            std::vector<vec2> corners;
             corners.push_back(origin);
-            corners.push_back(origin + CGLA::Vec2d(0., size[1]));
+            corners.push_back(origin + vec2(0., size[1]));
             corners.push_back(origin + size);
-            corners.push_back(origin + CGLA::Vec2d(size[0], 0.));
+            corners.push_back(origin + vec2(size[0], 0.));
             
             create_object(dsc, corners, label);
         }

@@ -25,7 +25,7 @@ namespace DSC2D {
      */
     class DesignDomain
     {
-        std::vector<CGLA::Vec2d> corners; // Specified in a clockwise order
+        std::vector<vec2> corners; // Specified in a clockwise order
         double volume = -1.;
         
     public:
@@ -38,28 +38,28 @@ namespace DSC2D {
         {
             switch (design) {
                 case RECTANGLE:
-                    corners.push_back(CGLA::Vec2d(0.,0.));
-                    corners.push_back(CGLA::Vec2d(0., SIZE_Y));
-                    corners.push_back(CGLA::Vec2d(SIZE_X, SIZE_Y));
-                    corners.push_back(CGLA::Vec2d(SIZE_X, 0.));
+                    corners.push_back(vec2(0.,0.));
+                    corners.push_back(vec2(0., SIZE_Y));
+                    corners.push_back(vec2(SIZE_X, SIZE_Y));
+                    corners.push_back(vec2(SIZE_X, 0.));
                     break;
                 case L:
-                    corners.push_back(CGLA::Vec2d(0.,0.));
-                    corners.push_back(CGLA::Vec2d(0., SIZE_Y));
-                    corners.push_back(CGLA::Vec2d(SIZE_X/2., SIZE_Y));
-                    corners.push_back(CGLA::Vec2d(SIZE_X/2., SIZE_Y/2.));
-                    corners.push_back(CGLA::Vec2d(SIZE_X, SIZE_Y/2.));
-                    corners.push_back(CGLA::Vec2d(SIZE_X, 0.));
+                    corners.push_back(vec2(0.,0.));
+                    corners.push_back(vec2(0., SIZE_Y));
+                    corners.push_back(vec2(SIZE_X/2., SIZE_Y));
+                    corners.push_back(vec2(SIZE_X/2., SIZE_Y/2.));
+                    corners.push_back(vec2(SIZE_X, SIZE_Y/2.));
+                    corners.push_back(vec2(SIZE_X, 0.));
                     break;
                 case ESO:
-                    corners.push_back(CGLA::Vec2d(0.,0.));
-                    corners.push_back(CGLA::Vec2d(0., 3.*SIZE_Y/7.));
-                    corners.push_back(CGLA::Vec2d(30.*SIZE_X/32., 3.*SIZE_Y/7.));
-                    corners.push_back(CGLA::Vec2d(30.*SIZE_X/32., SIZE_Y));
-                    corners.push_back(CGLA::Vec2d(31.*SIZE_X/32., SIZE_Y));
-                    corners.push_back(CGLA::Vec2d(31.*SIZE_X/32., 3.*SIZE_Y/7.));
-                    corners.push_back(CGLA::Vec2d(SIZE_X, 3.*SIZE_Y/7.));
-                    corners.push_back(CGLA::Vec2d(SIZE_X, 0.));
+                    corners.push_back(vec2(0.,0.));
+                    corners.push_back(vec2(0., 3.*SIZE_Y/7.));
+                    corners.push_back(vec2(30.*SIZE_X/32., 3.*SIZE_Y/7.));
+                    corners.push_back(vec2(30.*SIZE_X/32., SIZE_Y));
+                    corners.push_back(vec2(31.*SIZE_X/32., SIZE_Y));
+                    corners.push_back(vec2(31.*SIZE_X/32., 3.*SIZE_Y/7.));
+                    corners.push_back(vec2(SIZE_X, 3.*SIZE_Y/7.));
+                    corners.push_back(vec2(SIZE_X, 0.));
                     break;
             }
             
@@ -73,12 +73,12 @@ namespace DSC2D {
         /**
          Returns the corners of the design domain.
          */
-        std::vector<CGLA::Vec2d> get_corners() const;
+        std::vector<vec2> get_corners() const;
         
         /**
          Returns an approximate center of the design domain.
          */
-        CGLA::Vec2d get_center();
+        vec2 get_center();
         
         /**
          Returns the total volume of the domain.
@@ -88,17 +88,17 @@ namespace DSC2D {
         /**
          Clamps the position pos to be within the domain.
          */
-        void clamp_position(CGLA::Vec2d& p) const;
+        void clamp_position(vec2& p) const;
         
         /**
          Clamps p + v to be within the domain by scaling the vector v if p is inside the domain. The position p is therefore not garanteed to be within the domain.
          */
-        void clamp_vector(const CGLA::Vec2d& p, CGLA::Vec2d& v) const;
+        void clamp_vector(const vec2& p, vec2& v) const;
         
         /**
          Returns whether the position p is inside the domain.
          */
-        bool is_inside(CGLA::Vec2d p) const;
+        bool is_inside(vec2 p) const;
     };
     
 }

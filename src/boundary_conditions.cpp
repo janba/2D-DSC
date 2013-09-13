@@ -18,11 +18,11 @@
 
 namespace DSC2D {
     
-    void DesignDomain::clamp_position(CGLA::Vec2d& p) const
+    void DesignDomain::clamp_position(vec2& p) const
     {
         if(!is_inside(p))
         {
-            CGLA::Vec2d c0, c1, b, p_proj, p_int1, p_int2;
+            vec2 c0, c1, b, p_proj, p_int1, p_int2;
             double length, dist1 = INFINITY, dist2 = INFINITY;
             for (int i = 0; i < corners.size(); i++)
             {
@@ -54,11 +54,11 @@ namespace DSC2D {
         }
     }
     
-    void DesignDomain::clamp_vector(const CGLA::Vec2d& p, CGLA::Vec2d& v) const
+    void DesignDomain::clamp_vector(const vec2& p, vec2& v) const
     {
         if(!is_inside(p+v))
         {
-            CGLA::Vec2d c0, c1;
+            vec2 c0, c1;
             double t;
             for (int i = 0; i < corners.size(); i++)
             {
@@ -73,19 +73,19 @@ namespace DSC2D {
         }
     }
     
-    bool DesignDomain::is_inside(CGLA::Vec2d p) const
+    bool DesignDomain::is_inside(vec2 p) const
     {
         return Util::is_inside(p, corners);
     }
     
-    std::vector<CGLA::Vec2d> DesignDomain::get_corners() const
+    std::vector<vec2> DesignDomain::get_corners() const
     {
         return corners;
     }
     
-    CGLA::Vec2d DesignDomain::get_center()
+    vec2 DesignDomain::get_center()
     {
-        CGLA::Vec2d center(0.);
+        vec2 center(0.);
         for (int i = 0; i < corners.size(); i++)
         {
             center += corners[i];
@@ -98,8 +98,8 @@ namespace DSC2D {
         if(volume < 0.)
         {
             volume = 0.;
-            std::vector<CGLA::Vec2d> c(corners);
-            CGLA::Vec2d c0, c1, c2;
+            std::vector<vec2> c(corners);
+            vec2 c0, c1, c2;
             while(c.size() > 2)
             {
                 int i = 0;

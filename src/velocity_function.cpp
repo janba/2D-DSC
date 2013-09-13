@@ -24,7 +24,7 @@ namespace DSC2D
         if (time_step == MAX_TIME_STEPS) {
             return true;
         }
-        std::vector<CGLA::Vec2d> pos = dsc.get_design_variable_positions();
+        std::vector<vec2> pos = dsc.get_design_variable_positions();
         for (auto &p : pos)
         {
             bool match = false;

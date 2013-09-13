@@ -45,7 +45,7 @@ namespace DSC2D
         
         create_simplicial_complex(points, faces);
         
-        new_pos = HMesh::VertexAttributeVector<CGLA::Vec2d>(get_no_vertices(), CGLA::Vec2d(0.));
+        new_pos = HMesh::VertexAttributeVector<vec2>(get_no_vertices(), vec2(0.));
         vertex_labels = HMesh::VertexAttributeVector<int>(get_no_vertices(), OUTSIDE);
         edge_labels = HMesh::HalfEdgeAttributeVector<int>(get_no_halfedges(), OUTSIDE);
         face_labels = HMesh::FaceAttributeVector<int>(get_no_faces(), OUTSIDE);
@@ -61,9 +61,9 @@ namespace DSC2D
     }
     
     
-    HMesh::VertexAttributeVector<CGLA::Vec3d> DeformableSimplicialComplex::get_vertex_colors() const
+    HMesh::VertexAttributeVector<vec3> DeformableSimplicialComplex::get_vertex_colors() const
     {
-        HMesh::VertexAttributeVector<CGLA::Vec3d> colors = HMesh::VertexAttributeVector<CGLA::Vec3d>();
+        HMesh::VertexAttributeVector<vec3> colors = HMesh::VertexAttributeVector<vec3>();
         for(HMesh::VertexIDIterator vi = vertices_begin(); vi != vertices_end(); ++vi)
         {
             switch (vertex_labels[*vi]) {
@@ -84,9 +84,9 @@ namespace DSC2D
         return colors;
     }
     
-    HMesh::HalfEdgeAttributeVector<CGLA::Vec3d> DeformableSimplicialComplex::get_edge_colors() const
+    HMesh::HalfEdgeAttributeVector<vec3> DeformableSimplicialComplex::get_edge_colors() const
     {
-        HMesh::HalfEdgeAttributeVector<CGLA::Vec3d> colors = HMesh::HalfEdgeAttributeVector<CGLA::Vec3d>();
+        HMesh::HalfEdgeAttributeVector<vec3> colors = HMesh::HalfEdgeAttributeVector<vec3>();
         for(HMesh::HalfEdgeIDIterator hei = halfedges_begin(); hei != halfedges_end(); ++hei)
         {
             switch (edge_labels[*hei]) {
@@ -104,9 +104,9 @@ namespace DSC2D
         return colors;
     }
     
-    HMesh::FaceAttributeVector<CGLA::Vec3d> DeformableSimplicialComplex::get_face_colors() const
+    HMesh::FaceAttributeVector<vec3> DeformableSimplicialComplex::get_face_colors() const
     {
-        HMesh::FaceAttributeVector<CGLA::Vec3d> colors = HMesh::FaceAttributeVector<CGLA::Vec3d>();
+        HMesh::FaceAttributeVector<vec3> colors = HMesh::FaceAttributeVector<vec3>();
         for(HMesh::FaceIDIterator fi = faces_begin(); fi != faces_end(); ++fi)
         {
             switch (get_label(*fi)) {
@@ -175,12 +175,12 @@ namespace DSC2D
         }
     }
     
-    double DeformableSimplicialComplex::intersection_with_link(const HMesh::VertexID& vid, CGLA::Vec2d destination) const
+    double DeformableSimplicialComplex::intersection_with_link(const HMesh::VertexID& vid, vec2 destination) const
     {
         double scale = INFINITY;
-        CGLA::Vec2d p = get_pos(vid);
-        CGLA::Vec2d r = destination - p;
-        CGLA::Vec2d q, s;
+        vec2 p = get_pos(vid);
+        vec2 r = destination - p;
+        vec2 q, s;
         for(HMesh::Walker hew = walker(vid); !hew.full_circle(); hew = hew.circulate_vertex_cw())
         {
             q = get_pos(hew.vertex());
@@ -202,8 +202,8 @@ namespace DSC2D
     
     bool DeformableSimplicialComplex::move_vertex(HMesh::VertexID vid)
     {
-        CGLA::Vec2d v0_new = get_pos_new(vid);
-        CGLA::Vec2d v0 = get_pos(vid);
+        vec2 v0_new = get_pos_new(vid);
+        vec2 v0 = get_pos(vid);
         double l = (v0 - v0_new).length();
         if (l < EPSILON)
         {
@@ -212,9 +212,9 @@ namespace DSC2D
         
         double scale = intersection_with_link(vid, v0_new);
         l = std::max(std::min(l*scale - MIN_DEFORMATION, l), 0.);
-        CGLA::Vec2d v0_temp = v0 + l*normalize(v0_new - v0);
+        vec2 v0_temp = v0 + l*normalize(v0_new - v0);
         
-        CGLA::Vec2d v1, v2;
+        vec2 v1, v2;
         for(HMesh::Walker hew = walker(vid); !hew.full_circle(); hew = hew.circulate_vertex_cw())
         {
             v1 = get_pos(hew.vertex());
@@ -307,9 +307,9 @@ namespace DSC2D
         return max_dist;
     }
     
-    std::vector<CGLA::Vec2d> DeformableSimplicialComplex::get_design_variable_positions()
+    std::vector<vec2> DeformableSimplicialComplex::get_design_variable_positions()
     {
-        std::vector<CGLA::Vec2d> p;
+        std::vector<vec2> p;
         for (auto vi = vertices_begin(); vi != vertices_end(); vi++)
         {
             if(is_movable(*vi))
@@ -320,9 +320,9 @@ namespace DSC2D
         return p;
     }
     
-    std::vector<CGLA::Vec2d> DeformableSimplicialComplex::get_interface_edge_positions()
+    std::vector<vec2> DeformableSimplicialComplex::get_interface_edge_positions()
     {
-        std::vector<CGLA::Vec2d> p;
+        std::vector<vec2> p;
         for (auto eit = halfedges_begin(); eit != halfedges_end(); eit++)
         {
             if(is_interface(*eit))
@@ -335,19 +335,19 @@ namespace DSC2D
         return p;
     }
     
-    CGLA::Vec2d DeformableSimplicialComplex::get_center()
+    vec2 DeformableSimplicialComplex::get_center()
     {
         return design_domain->get_center();
     }
     
-    CGLA::Vec2d DeformableSimplicialComplex::get_pos(HMesh::VertexID vid) const
+    vec2 DeformableSimplicialComplex::get_pos(HMesh::VertexID vid) const
     {
-        return CGLA::Vec2d(mesh->pos(vid)[0], mesh->pos(vid)[1]);
+        return vec2(mesh->pos(vid)[0], mesh->pos(vid)[1]);
     }
     
-    std::vector<CGLA::Vec2d> DeformableSimplicialComplex::get_pos(HMesh::FaceID fid) const
+    std::vector<vec2> DeformableSimplicialComplex::get_pos(HMesh::FaceID fid) const
     {
-        std::vector<CGLA::Vec2d> positions;
+        std::vector<vec2> positions;
         for (HMesh::Walker hew = walker(fid); !hew.full_circle(); hew = hew.circulate_face_cw())
         {
             positions.push_back( get_pos(hew.vertex()) );
@@ -355,14 +355,14 @@ namespace DSC2D
         return positions;
     }
     
-    CGLA::Vec2d DeformableSimplicialComplex::get_pos_new(HMesh::VertexID vid) const
+    vec2 DeformableSimplicialComplex::get_pos_new(HMesh::VertexID vid) const
     {
-        return CGLA::Vec2d(new_pos[vid]);
+        return vec2(new_pos[vid]);
     }
     
-    std::vector<CGLA::Vec2d> DeformableSimplicialComplex::get_pos_new(HMesh::FaceID fid) const
+    std::vector<vec2> DeformableSimplicialComplex::get_pos_new(HMesh::FaceID fid) const
     {
-        std::vector<CGLA::Vec2d> positions;
+        std::vector<vec2> positions;
         for (HMesh::Walker hew = walker(fid); !hew.full_circle(); hew = hew.circulate_face_cw())
         {
             positions.push_back(get_pos_new(hew.vertex()));
@@ -421,16 +421,16 @@ namespace DSC2D
     }
     
     
-    void DeformableSimplicialComplex::set_pos(HMesh::VertexID vid, CGLA::Vec2d p)
+    void DeformableSimplicialComplex::set_pos(HMesh::VertexID vid, vec2 p)
     {
-        mesh->pos(vid) = CGLA::Vec3d(p[0], p[1], 0.f);
+        mesh->pos(vid) = vec3(p[0], p[1], 0.f);
     }
     
-    void DeformableSimplicialComplex::set_destination(HMesh::VertexID vid, CGLA::Vec2d dest)
+    void DeformableSimplicialComplex::set_destination(HMesh::VertexID vid, vec2 dest)
     {
         if(is_movable(vid))
         {
-            CGLA::Vec2d vec = dest - get_pos(vid);
+            vec2 vec = dest - get_pos(vid);
             clamp_vector(vid, vec);
             new_pos[vid] = get_pos(vid) + vec;
         }
@@ -621,7 +621,7 @@ namespace DSC2D
     
     bool DeformableSimplicialComplex::safe_collapse(HMesh::HalfEdgeID eid)
     {
-        std::vector<CGLA::Vec2d> positions;
+        std::vector<vec2> positions;
         for(HMesh::Walker hew = walker(eid); !hew.full_circle(); hew = hew.circulate_vertex_ccw())
         {
             positions.push_back(get_pos(hew.vertex()));
@@ -689,13 +689,13 @@ namespace DSC2D
     
     double DeformableSimplicialComplex::min_edge_length(HMesh::FaceID fid)
     {
-        std::vector<CGLA::Vec2d> p = get_pos(fid);
+        std::vector<vec2> p = get_pos(fid);
         return std::min(std::min(CGLA::length(p[0] - p[1]), CGLA::length(p[1] - p[2])), CGLA::length(p[0] - p[2]));
     }
     
     double DeformableSimplicialComplex::min_angle(HMesh::FaceID fid)
     {
-        std::vector<CGLA::Vec2d> p = get_pos(fid);
+        std::vector<vec2> p = get_pos(fid);
         return Util::min_angle(p[0], p[1], p[2]);
     }
     
@@ -738,8 +738,8 @@ namespace DSC2D
                    min_angle(*fi) < DEG_ANGLE || area(*fi) < DEG_AREA)
                 {
                     HMesh::Walker hew = walker(sorted_face_edges(*fi)[0]);
-                    CGLA::Vec2d next = get_pos(hew.vertex()) - get_pos(hew.next().vertex());
-                    CGLA::Vec2d prev = get_pos(hew.prev().vertex()) - get_pos(hew.prev().prev().vertex());
+                    vec2 next = get_pos(hew.vertex()) - get_pos(hew.next().vertex());
+                    vec2 prev = get_pos(hew.prev().vertex()) - get_pos(hew.prev().prev().vertex());
                     if(sqr_length(next) < sqr_length(prev) && unsafe_editable(hew.vertex()))
                     {
                         hew = hew.opp();
@@ -763,7 +763,7 @@ namespace DSC2D
         while (change)
         {
             change = false;
-            CGLA::Vec2d p0, p1, p2, p3;
+            vec2 p0, p1, p2, p3;
             int fa;
             for(HMesh::HalfEdgeIDIterator hei = halfedges_begin(); hei != halfedges_end(); ++hei)
             {
@@ -794,14 +794,14 @@ namespace DSC2D
         }
     }
     
-    CGLA::Vec2d DeformableSimplicialComplex::avg_pos(HMesh::VertexID vid, bool interface) const
+    vec2 DeformableSimplicialComplex::avg_pos(HMesh::VertexID vid, bool interface) const
     {
         if(interface && !is_interface(vid))
         {
-            return CGLA::Vec2d(0.f);
+            return vec2(0.f);
         }
         
-        CGLA::Vec2d avg_pos(0.);
+        vec2 avg_pos(0.);
         int n = 0;
         
         for (HMesh::Walker hew = walker(vid); !hew.full_circle(); hew = hew.circulate_vertex_cw())
@@ -847,13 +847,13 @@ namespace DSC2D
         return hw.opp();
     }
     
-    CGLA::Vec2d DeformableSimplicialComplex::filter_vertex(HMesh::VertexID vid, std::vector<double> &filter) const
+    vec2 DeformableSimplicialComplex::filter_vertex(HMesh::VertexID vid, std::vector<double> &filter) const
     {
         if(!is_interface(vid)&&!is_crossing(vid))
         {
-            return CGLA::Vec2d(0.f);
+            return vec2(0.f);
         }
-        CGLA::Vec2d sum_pos(0.);
+        vec2 sum_pos(0.);
         int n = 0;
         for (HMesh::Walker hew = walker(vid); !hew.full_circle(); hew = hew.circulate_vertex_cw())
         {
@@ -874,14 +874,14 @@ namespace DSC2D
     }
 	
     
-    CGLA::Vec2d DeformableSimplicialComplex::normal(HMesh::VertexID vid) const
+    vec2 DeformableSimplicialComplex::normal(HMesh::VertexID vid) const
     {
         if(!is_interface(vid))
         {
-            return CGLA::Vec2d(0.);
+            return vec2(0.);
         }
         
-        CGLA::Vec2d n(0.f), r(0.f);
+        vec2 n(0.f), r(0.f);
         int i = 0;
         for(HMesh::Walker hew = walker(vid); !hew.full_circle(); hew = hew.circulate_vertex_cw())
         {
@@ -895,7 +895,7 @@ namespace DSC2D
                 {
                     r = normalize(get_pos(vid) - get_pos(hew.vertex()));
                 }
-                n += CGLA::Vec2d(r[1], -r[0]);
+                n += vec2(r[1], -r[0]);
                 i++;
             }
         }
@@ -910,7 +910,7 @@ namespace DSC2D
         return n;
     }
     
-    void DeformableSimplicialComplex::clamp_vector(const HMesh::VertexID& vid, CGLA::Vec2d& vec) const
+    void DeformableSimplicialComplex::clamp_vector(const HMesh::VertexID& vid, vec2& vec) const
     {
         design_domain->clamp_vector(get_pos(vid), vec);
     }
@@ -922,8 +922,8 @@ namespace DSC2D
     
     double DeformableSimplicialComplex::area_new(HMesh::FaceID fid) const
     {
-        std::vector<CGLA::Vec2d> positions = get_pos_new(fid);
-        double A = std::abs(Util::signed_area<CGLA::Vec2d>(positions[0], positions[1], positions[2]));
+        std::vector<vec2> positions = get_pos_new(fid);
+        double A = std::abs(Util::signed_area(positions[0], positions[1], positions[2]));
 #ifdef DEBUG
         assert(A > 0.);
 #endif
@@ -932,7 +932,7 @@ namespace DSC2D
     
     void DeformableSimplicialComplex::smooth(double t)
     {
-        std::vector<CGLA::Vec2d> positions(get_no_vertices());
+        std::vector<vec2> positions(get_no_vertices());
         int i = 0;
         for(HMesh::VertexIDIterator vi = vertices_begin(); vi != vertices_end(); ++vi,++i)
         {

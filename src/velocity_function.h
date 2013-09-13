@@ -39,7 +39,7 @@ namespace DSC2D {
         double VELOCITY; // Determines the distance each interface vertex moves at each iteration.
         double ACCURACY; // Determines the accuracy of the final result.
         
-        std::vector<CGLA::Vec2d> pos_old;
+        std::vector<vec2> pos_old;
         
         /**
          Creates a velocity function which is applied to the simplicial complex. The velocity parameter determines the velocity of the function.

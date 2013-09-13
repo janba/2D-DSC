@@ -72,18 +72,18 @@ namespace DSC2D {
         
         double MIN_DEFORMATION;
         
-        CGLA::Vec3d INTERFACE_COLOR;
-        CGLA::Vec3d OUTSIDE_COLOR;
-        CGLA::Vec3d CROSSING_COLOR;
-        CGLA::Vec3d DEFAULT_COLOR;
-        CGLA::Vec3d OUTSIDE_FACE_COLOR;
-        CGLA::Vec3d DEFAULT_FACE_COLOR;
+        vec3 INTERFACE_COLOR;
+        vec3 OUTSIDE_COLOR;
+        vec3 CROSSING_COLOR;
+        vec3 DEFAULT_COLOR;
+        vec3 OUTSIDE_FACE_COLOR;
+        vec3 DEFAULT_FACE_COLOR;
         
     private:
         HMesh::Manifold *mesh;
         DesignDomain *design_domain;
         
-        HMesh::VertexAttributeVector<CGLA::Vec2d> new_pos;
+        HMesh::VertexAttributeVector<vec2> new_pos;
         
         HMesh::VertexAttributeVector<int> vertex_labels;
         HMesh::HalfEdgeAttributeVector<int> edge_labels;
@@ -113,17 +113,17 @@ namespace DSC2D {
         /**
          Returns the vertex colors.
          */
-        virtual HMesh::VertexAttributeVector<CGLA::Vec3d> get_vertex_colors() const;
+        virtual HMesh::VertexAttributeVector<vec3> get_vertex_colors() const;
         
         /**
          Returns the edge colors.
          */
-        virtual HMesh::HalfEdgeAttributeVector<CGLA::Vec3d> get_edge_colors() const;
+        virtual HMesh::HalfEdgeAttributeVector<vec3> get_edge_colors() const;
         
         /**
          Returns the face colors.
          */
-        virtual HMesh::FaceAttributeVector<CGLA::Vec3d> get_face_colors() const;
+        virtual HMesh::FaceAttributeVector<vec3> get_face_colors() const;
         
         //************** ATTRIBUTE FUNCTIONS ***************
     protected:
@@ -215,7 +215,7 @@ namespace DSC2D {
         /**
          Returns the approximate center of the simplicial complex.
          */
-        CGLA::Vec2d get_center();
+        vec2 get_center();
         
         /**
          Returns the total volume of the simplicial complex.
@@ -260,22 +260,22 @@ namespace DSC2D {
         /**
          Returns the position of the vertex with ID vid.
          */
-        CGLA::Vec2d get_pos(HMesh::VertexID vid) const;
+        vec2 get_pos(HMesh::VertexID vid) const;
         
         /**
          Returns the positions of the vertices of the face with ID fid.
          */
-        std::vector<CGLA::Vec2d> get_pos(HMesh::FaceID fid) const;
+        std::vector<vec2> get_pos(HMesh::FaceID fid) const;
         
         /**
          Returns the new position of the vertex with ID vid.
          */
-        CGLA::Vec2d get_pos_new(HMesh::VertexID vid) const;
+        vec2 get_pos_new(HMesh::VertexID vid) const;
         
         /**
          Returns the new positions of the vertices of the face with ID fid.
          */
-        std::vector<CGLA::Vec2d> get_pos_new(HMesh::FaceID fid) const;
+        std::vector<vec2> get_pos_new(HMesh::FaceID fid) const;
         
         /**
          Returns the IDs of the neighbouring vertices of the vertex with ID vid. If the interface parameter is true, it only returns the neighbouring vertices which are also interface.
@@ -329,14 +329,14 @@ namespace DSC2D {
         /**
          Sets the position of the vertex with ID vid to p. Should only be used internally by the simplicial complex class.
          */
-        void set_pos(HMesh::VertexID vid, CGLA::Vec2d p);
+        void set_pos(HMesh::VertexID vid, vec2 p);
         
     public:
         /**
          Sets the destination of the vertex with ID vid to dest.
          To actually move the vertices to their destination, call the deform function.
          */
-        virtual void set_destination(HMesh::VertexID vid, CGLA::Vec2d dest);
+        virtual void set_destination(HMesh::VertexID vid, vec2 dest);
         
         //************** ITERATORS ***************
     public:
@@ -666,12 +666,12 @@ namespace DSC2D {
         /**
          Returns the positions of the optimization variables (the movable interface nodes).
          */
-        std::vector<CGLA::Vec2d> get_design_variable_positions();
+        std::vector<vec2> get_design_variable_positions();
         
         /**
          Returns the positions of the interface edges.
          */
-        std::vector<CGLA::Vec2d> get_interface_edge_positions();
+        std::vector<vec2> get_interface_edge_positions();
         
         /**
          Returns the maximum distance a vertex is supposed to be moved (the distance between its new and old position).
@@ -683,7 +683,7 @@ namespace DSC2D {
          Calculates the average position of the neighbouring vertices to the vertex with ID vid.
          If interface is true, the average position is only calculated among the neighbouring vertices that are interface.
          */
-        CGLA::Vec2d avg_pos(HMesh::VertexID vid, bool interface) const;
+        vec2 avg_pos(HMesh::VertexID vid, bool interface) const;
         
         /**
          For a given walker on a interface edge returnes walker moved to the next edge allong the interface. 
@@ -706,23 +706,23 @@ namespace DSC2D {
          applied to all vertices along all interfaces with distance 0,1,2.. from ID, which are subsequently averaged.
          E.g. filtering with [0 1] is the same as avg_pos, but works also on crossings.
          */
-        CGLA::Vec2d filter_vertex(HMesh::VertexID vid, std::vector<double> &filter) const;
+        vec2 filter_vertex(HMesh::VertexID vid, std::vector<double> &filter) const;
         
         /**
          Computes the normal of the interface vertex with ID vid.
          If the vertex is not on the interface, the function returns a zero vector.
          */
-        CGLA::Vec2d normal(HMesh::VertexID vid) const;
+        vec2 normal(HMesh::VertexID vid) const;
         
         /**
          Clamps the position of the vertex with ID vid plus the vector vec to be within the design domain by scaling the vector v.
          */
-        void clamp_vector(const HMesh::VertexID& vid, CGLA::Vec2d& vec) const;
+        void clamp_vector(const HMesh::VertexID& vid, vec2& vec) const;
         
         /**
          Calculates the intersection with the link of the vertex with ID vid and the line from the position of this vertex towards destination and to infinity. It returns t which is where on the line the intersection occurs. If t=0, the interesection occured at the position of the vertex with ID vid or never occured. If t=1 the intersection occured at the destination point. If 0<t<1 the intersection occured between these points. Finally, if t>1 the intersection occured farther away from the vertex position than destination.
          */
-        double intersection_with_link(const HMesh::VertexID& vid, CGLA::Vec2d destination) const;
+        double intersection_with_link(const HMesh::VertexID& vid, vec2 destination) const;
         
     };
     
