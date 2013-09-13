@@ -22,29 +22,19 @@ namespace DSC2D {
     
     class Trializer {
         
-        double WIDTH;
-        double HEIGHT;
-        double AVG_EDGE_LENGTH;
+        static void create_points(int Nx, int Ny, double width, double height, double avg_edge_length, std::vector<double>& points);
         
-        int Nx, Ny;
-        
-        void create_points(std::vector<double>& points);
-        
-        void create_faces(std::vector<int>& faces);
+        static void create_faces(int Nx, int Ny, std::vector<int>& faces);
         
     public:
         
-        Trializer(double width, double height, double avg_edge_length): WIDTH(width), HEIGHT(height), AVG_EDGE_LENGTH(avg_edge_length)
+        static void trialize(double width, double height, double avg_edge_length, std::vector<double>& points, std::vector<int>& faces)
         {
-            Nx = std::max(std::ceil(WIDTH/AVG_EDGE_LENGTH),1.);
-            Ny = std::max(2*std::floor(HEIGHT/(sqrt(3.)*AVG_EDGE_LENGTH)),2.);
+            int Nx = std::max(std::ceil(width/avg_edge_length),1.);
+            int Ny = std::max(2*std::floor(height/(sqrt(3.)*avg_edge_length)),2.);
             
-        }
-        
-        void trialize(std::vector<double>& points, std::vector<int>& faces)
-        {
-            create_points(points);
-            create_faces(faces);
+            create_points(Nx, Ny, width, height, avg_edge_length, points);
+            create_faces(Nx, Ny, faces);
         }
     };
     

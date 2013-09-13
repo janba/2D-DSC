@@ -18,36 +18,36 @@
 
 namespace DSC2D {
     
-    void Trializer::create_points(std::vector<double>& points)
+    void Trializer::create_points(int Nx, int Ny, double width, double height, double avg_edge_length, std::vector<double>& points)
     {
-        double b = (double)WIDTH/(double)Nx; // adjusted length of the triangle base
-        double h = (double)HEIGHT/(double)Ny; // adjusted triangle height
+        double b = (double)width/(double)Nx; // adjusted length of the triangle base
+        double h = (double)height/(double)Ny; // adjusted triangle height
         
         // x positions of points on triangle basis
         std::vector<double> x_full;
         std::vector<double> x_half;
         
         x_full.push_back(0.);
-        for (double x=AVG_EDGE_LENGTH; x<AVG_EDGE_LENGTH+(Nx+1)*b; x+=b) // stopping condition: x<= AVG_EDGE_LENGTH+Nx*b
+        for (double x=avg_edge_length; x<avg_edge_length+(Nx+1)*b; x+=b) // stopping condition: x<= AVG_EDGE_LENGTH+Nx*b
         {
             x_full.push_back(x);
         }
-        x_full.push_back(WIDTH+2*AVG_EDGE_LENGTH);
+        x_full.push_back(width+2*avg_edge_length);
         
         // x positions of points on triangle tops/bottoms
-        x_half.push_back(0.); x_half.push_back(AVG_EDGE_LENGTH);
-        for (double x=AVG_EDGE_LENGTH+b/2; x<AVG_EDGE_LENGTH+(Nx+1)*b-b/2; x+=b) // stopping condition: x<=AVG_EDGE_LENGTH+Nx*b-b/2
+        x_half.push_back(0.); x_half.push_back(avg_edge_length);
+        for (double x=avg_edge_length+b/2; x<avg_edge_length+(Nx+1)*b-b/2; x+=b) // stopping condition: x<=AVG_EDGE_LENGTH+Nx*b-b/2
         {
             x_half.push_back(x);
         }
-        x_half.push_back(WIDTH+AVG_EDGE_LENGTH); x_half.push_back(WIDTH+2*AVG_EDGE_LENGTH);
+        x_half.push_back(width+avg_edge_length); x_half.push_back(width+2*avg_edge_length);
         
         for (int k = 0; k<x_full.size(); k++)
         {
             points.push_back(x_full[k]); points.push_back(0); points.push_back(0); // first line of points
         }
         
-        for (double y = AVG_EDGE_LENGTH; y<AVG_EDGE_LENGTH + Ny*h; y+=2*h) // stopping condition: y<=AVG_EDGE_LENGTH + (Ny-2)*h;
+        for (double y = avg_edge_length; y<avg_edge_length + Ny*h; y+=2*h) // stopping condition: y<=AVG_EDGE_LENGTH + (Ny-2)*h;
         {
             for (int k = 0; k<x_full.size(); k++)
             {
@@ -60,15 +60,15 @@ namespace DSC2D {
         }
         for (int k = 0; k<x_full.size(); k++)
         {
-            points.push_back(x_full[k]); points.push_back(HEIGHT+AVG_EDGE_LENGTH); points.push_back(0); // line between inside and boundary
+            points.push_back(x_full[k]); points.push_back(height+avg_edge_length); points.push_back(0); // line between inside and boundary
         }
         for (int k = 0; k<x_full.size(); k++)
         {
-            points.push_back(x_full[k]); points.push_back(HEIGHT+2*AVG_EDGE_LENGTH); points.push_back(0); // last line of points
+            points.push_back(x_full[k]); points.push_back(height+2*avg_edge_length); points.push_back(0); // last line of points
         }
     }
     
-    void Trializer::create_faces(std::vector<int>& faces)
+    void Trializer::create_faces(int Nx, int Ny, std::vector<int>& faces)
     {
         // boundary
         std::vector<int> f_b0(6,0), f_b1(6,0);

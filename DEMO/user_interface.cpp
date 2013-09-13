@@ -334,8 +334,7 @@ void UI::rotate_square()
     
     std::vector<double> points;
     std::vector<int> faces;
-    Trializer trializer(width, height, DISCRETIZATION);
-    trializer.trialize(points, faces);
+    Trializer::trialize(width, height, DISCRETIZATION, points, faces);
     
     DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
     
@@ -361,8 +360,7 @@ void UI::smooth_filled()
     
     std::vector<double> points;
     std::vector<int> faces;
-    Trializer trializer(width, height, DISCRETIZATION);
-    trializer.trialize(points, faces);
+    Trializer::trialize(width, height, DISCRETIZATION, points, faces);
     
     DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
     
@@ -389,8 +387,7 @@ void UI::expand_blobs()
     std::vector<double> points;
     std::vector<int> faces;
     
-    Trializer trializer(width, height, DISCRETIZATION);
-    trializer.trialize(points, faces);
+    Trializer::trialize(width, height, DISCRETIZATION, points, faces);
     
     DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
     
