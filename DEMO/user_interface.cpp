@@ -16,6 +16,14 @@
 
 #include "user_interface.h"
 
+#include "rotate_function.h"
+#include "average_function.h"
+#include "normal_function.h"
+
+#include "trializer.h"
+#include "object_generator.h"
+#include "draw.h"
+
 void _check_gl_error(const char *file, int line)
 {
     GLenum err (glGetError());

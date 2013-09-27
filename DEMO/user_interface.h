@@ -16,16 +16,9 @@
 
 #pragma once
 
-#include "rotate_function.h"
-#include "average_function.h"
-#include "normal_function.h"
-
-#include "trializer.h"
-#include "object_generator.h"
 #include "velocity_function.h"
 #include "DSC.h"
 #include "log.h"
-#include "draw.h"
 
 #ifdef WIN32
 #include <GL/glew.h>
@@ -42,7 +35,6 @@
  */
 class UI
 {
-protected:
     std::unique_ptr<DSC2D::VelocityFunc> vel_fun;
     std::unique_ptr<DSC2D::DeformableSimplicialComplex> dsc;
     std::unique_ptr<Log> basic_log;
@@ -68,20 +60,20 @@ public:
         return instance;
     }
     
-    virtual std::string create_log_path()
+    std::string create_log_path()
     {
         std::ostringstream s;
         s << "LOG/delta" << DISCRETIZATION << "_nu" << VELOCITY << "_alpha" << ACCURACY;
         return s.str();
     }
     
-    virtual void display();
+    void display();
     
-    virtual void animate();
+    void animate();
     
-    virtual void reshape(int width, int height);
+    void reshape(int width, int height);
     
-    virtual void visible(int v);
+    void visible(int v);
     
     /**
      The keyboard is used for all inputs.
@@ -115,25 +107,25 @@ public:
      5:         Selects motion type 5.
      6:         Selects motion type 6.
      */
-    virtual void keyboard(unsigned char key, int x, int y);
+    void keyboard(unsigned char key, int x, int y);
     
     
 private:
-    virtual void rotate_square();
+    void rotate_square();
     
-    virtual void smooth_filled();
+    void smooth_filled();
     
-    virtual void expand_blobs();
+    void expand_blobs();
     
     /**
      Updates the window title.
      */
-    virtual void update_title();
+    void update_title();
     
     /**
      Switches between different types of display if implemented.
      */
-    virtual void switch_display_type()
+    void switch_display_type()
     {
         
     }
@@ -141,7 +133,7 @@ private:
     /**
      Draws the simplicial complex.
      */
-    virtual void draw();
+    void draw();
     
     /**
      Should be called when a motion is started.
@@ -151,5 +143,5 @@ private:
     /**
      Should be called when a motion is stopped.
      */
-    virtual void stop();
+    void stop();
 };
