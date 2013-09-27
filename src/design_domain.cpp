@@ -73,7 +73,7 @@ namespace DSC2D {
         }
     }
     
-    bool DesignDomain::is_inside(vec2 p) const
+    bool DesignDomain::is_inside(const vec2& p) const
     {
         return Util::is_inside(p, corners);
     }

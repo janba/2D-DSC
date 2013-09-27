@@ -164,7 +164,7 @@ namespace DSC2D
         /**
          Returns whether you have to turn left when going from a to b to c.
          */
-        inline bool is_left_of(vec2 a, vec2 b, vec2 c)
+        inline bool is_left_of(const vec2& a, const vec2& b, const vec2& c)
         {
             if(signed_area(a,b,c) > 0.)
             {
@@ -176,7 +176,7 @@ namespace DSC2D
         /**
          Returns whether the point c is between point a and b.
          */
-        inline bool is_between(vec2 a, vec2 b, vec2 c)
+        inline bool is_between(const vec2& a, const vec2& b, const vec2& c)
         {
             if(cross(a-b,c-b) > 0.)
             {
@@ -193,7 +193,7 @@ namespace DSC2D
         /**
          Returns whether the point p is between the points in the vector corners.
          */
-        inline bool is_inside(vec2 p, std::vector<vec2> corners)
+        inline bool is_inside(const vec2& p, std::vector<vec2> corners)
         {
             vec2 c0, c1, c2;
             while(corners.size() > 2)
@@ -221,7 +221,7 @@ namespace DSC2D
         /**
          Calculates the intersection between the line segments defined by p + t*r and q + u*s, where 0 <= t <= 1 and 0 <= u <= 1. The method returns t if 0 <= u <= 1 and INFINITY otherwise. If t is not in the range 0 <= t <= 1, the line segments do not intersect.
          */
-        inline real intersection(vec2 p, vec2 r, vec2 q, vec2 s)
+        inline real intersection(const vec2& p, const vec2& r, const vec2& q, const vec2& s)
         {
             real t = INFINITY;
             real a = cross(q-p, s);
@@ -264,7 +264,7 @@ namespace DSC2D
             return col;
         }
         
-        inline vec3 color(vec3 start_color, int i)
+        inline vec3 color(const vec3& start_color, int i)
         {
             if (i <= 0) {
                 return start_color;

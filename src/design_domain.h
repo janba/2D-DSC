@@ -98,7 +98,7 @@ namespace DSC2D {
         /**
          Returns whether the position p is inside the domain.
          */
-        bool is_inside(vec2 p) const;
+        bool is_inside(const vec2& p) const;
     };
     
 }
