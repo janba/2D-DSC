@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A470AE617F5282C001FC0CB /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A470AE417F5282C001FC0CB /* log.cpp */; };
 		7A51F3CC17D6393200A8F8F2 /* average_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3C317D6393200A8F8F2 /* average_function.cpp */; };
 		7A51F3CD17D6393200A8F8F2 /* normal_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3C517D6393200A8F8F2 /* normal_function.cpp */; };
 		7A51F3CE17D6393200A8F8F2 /* rotate_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3C717D6393200A8F8F2 /* rotate_function.cpp */; };
@@ -14,8 +15,6 @@
 		7A51F3D017D6393200A8F8F2 /* user_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3CA17D6393200A8F8F2 /* user_interface.cpp */; };
 		7A51F3DB17D639C900A8F8F2 /* DSC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A517D6386100A8F8F2 /* DSC.cpp */; };
 		7A51F3DC17D639C900A8F8F2 /* DSC.h in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A617D6386100A8F8F2 /* DSC.h */; };
-		7A51F3DD17D639C900A8F8F2 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A717D6386100A8F8F2 /* log.cpp */; };
-		7A51F3DE17D639C900A8F8F2 /* log.h in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A817D6386100A8F8F2 /* log.h */; };
 		7A51F3DF17D639C900A8F8F2 /* util.h in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A917D6386100A8F8F2 /* util.h */; };
 		7A51F3E017D639C900A8F8F2 /* velocity_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3AA17D6386100A8F8F2 /* velocity_function.cpp */; };
 		7A51F3E117D639C900A8F8F2 /* velocity_function.h in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3AB17D6386100A8F8F2 /* velocity_function.h */; };
@@ -28,8 +27,8 @@
 		7A82D64817E23E9400C19874 /* object_generator.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A82D64617E23E9400C19874 /* object_generator.h */; };
 		7A82D64B17E23EAC00C19874 /* trializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A82D64917E23EAC00C19874 /* trializer.cpp */; };
 		7A82D64C17E23EAC00C19874 /* trializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A82D64A17E23EAC00C19874 /* trializer.h */; };
-		7A82D64F17E272BB00C19874 /* boundary_conditions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A82D64D17E272BB00C19874 /* boundary_conditions.cpp */; };
-		7A82D65017E272BB00C19874 /* boundary_conditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A82D64E17E272BB00C19874 /* boundary_conditions.h */; };
+		7A82D64F17E272BB00C19874 /* design_domain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A82D64D17E272BB00C19874 /* design_domain.cpp */; };
+		7A82D65017E272BB00C19874 /* design_domain.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A82D64E17E272BB00C19874 /* design_domain.h */; };
 		7A9C20DB17DFBE080064171E /* draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A9C20D917DFBE070064171E /* draw.cpp */; };
 /* End PBXBuildFile section */
 
@@ -46,10 +45,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7A470AE417F5282C001FC0CB /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
+		7A470AE517F5282C001FC0CB /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
 		7A51F3A517D6386100A8F8F2 /* DSC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DSC.cpp; path = src/DSC.cpp; sourceTree = SOURCE_ROOT; };
 		7A51F3A617D6386100A8F8F2 /* DSC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSC.h; path = src/DSC.h; sourceTree = SOURCE_ROOT; };
-		7A51F3A717D6386100A8F8F2 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = log.cpp; path = src/log.cpp; sourceTree = SOURCE_ROOT; };
-		7A51F3A817D6386100A8F8F2 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = log.h; path = src/log.h; sourceTree = SOURCE_ROOT; };
 		7A51F3A917D6386100A8F8F2 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = src/util.h; sourceTree = SOURCE_ROOT; };
 		7A51F3AA17D6386100A8F8F2 /* velocity_function.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = velocity_function.cpp; path = src/velocity_function.cpp; sourceTree = SOURCE_ROOT; };
 		7A51F3AB17D6386100A8F8F2 /* velocity_function.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = velocity_function.h; path = src/velocity_function.h; sourceTree = SOURCE_ROOT; };
@@ -71,8 +70,8 @@
 		7A82D64617E23E9400C19874 /* object_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = object_generator.h; path = src/object_generator.h; sourceTree = SOURCE_ROOT; };
 		7A82D64917E23EAC00C19874 /* trializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trializer.cpp; path = src/trializer.cpp; sourceTree = SOURCE_ROOT; };
 		7A82D64A17E23EAC00C19874 /* trializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trializer.h; path = src/trializer.h; sourceTree = SOURCE_ROOT; };
-		7A82D64D17E272BB00C19874 /* boundary_conditions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = boundary_conditions.cpp; path = src/boundary_conditions.cpp; sourceTree = SOURCE_ROOT; };
-		7A82D64E17E272BB00C19874 /* boundary_conditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = boundary_conditions.h; path = src/boundary_conditions.h; sourceTree = SOURCE_ROOT; };
+		7A82D64D17E272BB00C19874 /* design_domain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = design_domain.cpp; path = src/design_domain.cpp; sourceTree = SOURCE_ROOT; };
+		7A82D64E17E272BB00C19874 /* design_domain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = design_domain.h; path = src/design_domain.h; sourceTree = SOURCE_ROOT; };
 		7A9C20D917DFBE070064171E /* draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = draw.cpp; sourceTree = "<group>"; };
 		7A9C20DA17DFBE080064171E /* draw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = draw.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,8 +125,6 @@
 			children = (
 				7A51F3A517D6386100A8F8F2 /* DSC.cpp */,
 				7A51F3A617D6386100A8F8F2 /* DSC.h */,
-				7A51F3A717D6386100A8F8F2 /* log.cpp */,
-				7A51F3A817D6386100A8F8F2 /* log.h */,
 				7A51F3A917D6386100A8F8F2 /* util.h */,
 				7A51F3AA17D6386100A8F8F2 /* velocity_function.cpp */,
 				7A51F3AB17D6386100A8F8F2 /* velocity_function.h */,
@@ -135,8 +132,8 @@
 				7A82D64617E23E9400C19874 /* object_generator.h */,
 				7A82D64917E23EAC00C19874 /* trializer.cpp */,
 				7A82D64A17E23EAC00C19874 /* trializer.h */,
-				7A82D64D17E272BB00C19874 /* boundary_conditions.cpp */,
-				7A82D64E17E272BB00C19874 /* boundary_conditions.h */,
+				7A82D64D17E272BB00C19874 /* design_domain.cpp */,
+				7A82D64E17E272BB00C19874 /* design_domain.h */,
 			);
 			path = DSC;
 			sourceTree = "<group>";
@@ -144,6 +141,8 @@
 		7A51F3BB17D6391500A8F8F2 /* DEMO */ = {
 			isa = PBXGroup;
 			children = (
+				7A470AE417F5282C001FC0CB /* log.cpp */,
+				7A470AE517F5282C001FC0CB /* log.h */,
 				7A9C20D917DFBE070064171E /* draw.cpp */,
 				7A9C20DA17DFBE080064171E /* draw.h */,
 				7A51F3C317D6393200A8F8F2 /* average_function.cpp */,
@@ -168,7 +167,7 @@
 			files = (
 				7A82D64817E23E9400C19874 /* object_generator.h in Headers */,
 				7A82D64C17E23EAC00C19874 /* trializer.h in Headers */,
-				7A82D65017E272BB00C19874 /* boundary_conditions.h in Headers */,
+				7A82D65017E272BB00C19874 /* design_domain.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +242,7 @@
 			files = (
 				7A51F3CC17D6393200A8F8F2 /* average_function.cpp in Sources */,
 				7A51F3CD17D6393200A8F8F2 /* normal_function.cpp in Sources */,
+				7A470AE617F5282C001FC0CB /* log.cpp in Sources */,
 				7A51F3CE17D6393200A8F8F2 /* rotate_function.cpp in Sources */,
 				7A51F3CF17D6393200A8F8F2 /* demo.cpp in Sources */,
 				7A51F3D017D6393200A8F8F2 /* user_interface.cpp in Sources */,
@@ -256,14 +256,12 @@
 			files = (
 				7A51F3DB17D639C900A8F8F2 /* DSC.cpp in Sources */,
 				7A51F3DC17D639C900A8F8F2 /* DSC.h in Sources */,
-				7A51F3DD17D639C900A8F8F2 /* log.cpp in Sources */,
-				7A51F3DE17D639C900A8F8F2 /* log.h in Sources */,
 				7A51F3DF17D639C900A8F8F2 /* util.h in Sources */,
 				7A51F3E017D639C900A8F8F2 /* velocity_function.cpp in Sources */,
 				7A51F3E117D639C900A8F8F2 /* velocity_function.h in Sources */,
 				7A82D64717E23E9400C19874 /* object_generator.cpp in Sources */,
 				7A82D64B17E23EAC00C19874 /* trializer.cpp in Sources */,
-				7A82D64F17E272BB00C19874 /* boundary_conditions.cpp in Sources */,
+				7A82D64F17E272BB00C19874 /* design_domain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

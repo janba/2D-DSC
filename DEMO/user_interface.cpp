@@ -149,7 +149,7 @@ void UI::display()
     if(vel_fun && CONTINUOUS)
     {
         vel_fun->take_time_step(*dsc);
-        basic_log->write_timestep(vel_fun);
+        basic_log->write_timestep(*vel_fun);
         if (vel_fun->is_motion_finished(*dsc))
         {
             stop();
@@ -308,8 +308,8 @@ void UI::stop()
         draw();
         basic_log->write_message("MOTION STOPPED");
         basic_log->write_log(*dsc);
-        basic_log->write_log(vel_fun);
-        basic_log->write_timings(vel_fun);
+        basic_log->write_log(*vel_fun);
+        basic_log->write_timings(*vel_fun);
         delete vel_fun;
         delete dsc;
         delete basic_log;
@@ -318,14 +318,7 @@ void UI::stop()
     }
 }
 
-
-using DSC2D::DeformableSimplicialComplex;
-using DSC2D::Trializer;
-using DSC2D::DesignDomain;
-using DSC2D::ObjectGenerator;
-using DSC2D::Log;
-using DSC2D::real;
-using DSC2D::vec2;
+using namespace DSC2D;
 
 void UI::rotate_square()
 {
@@ -347,7 +340,7 @@ void UI::rotate_square()
     
     basic_log->write_message(vel_fun->get_name().c_str());
     basic_log->write_log(*dsc);
-    basic_log->write_log(vel_fun);
+    basic_log->write_log(*vel_fun);
     
     update_title();
     reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
@@ -373,7 +366,7 @@ void UI::smooth_filled()
     
     basic_log->write_message(vel_fun->get_name().c_str());
     basic_log->write_log(*dsc);
-    basic_log->write_log(vel_fun);
+    basic_log->write_log(*vel_fun);
     
     update_title();
     reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
@@ -402,7 +395,7 @@ void UI::expand_blobs()
     
     basic_log->write_message(vel_fun->get_name().c_str());
     basic_log->write_log(*dsc);
-    basic_log->write_log(vel_fun);
+    basic_log->write_log(*vel_fun);
     
     update_title();
     reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);

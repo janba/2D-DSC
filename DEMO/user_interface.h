@@ -45,7 +45,7 @@ class UI
 protected:
     DSC2D::VelocityFunc *vel_fun;
     DSC2D::DeformableSimplicialComplex *dsc;
-    DSC2D::Log *basic_log;
+    Log *basic_log;
     
     int WIN_SIZE_X;
     int WIN_SIZE_Y;
