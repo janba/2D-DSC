@@ -23,7 +23,7 @@ void AverageFunc::deform(DSC2D::DeformableSimplicialComplex& dsc)
     {
         if(dsc.is_movable(*vi))
         {
-            dsc.set_destination(*vi, dsc.get_pos(*vi) + VELOCITY * (dsc.avg_pos(*vi, true) - dsc.get_pos(*vi)));
+            dsc.set_destination(*vi, dsc.get_pos(*vi) + VELOCITY * (dsc.get_barycenter(*vi, true) - dsc.get_pos(*vi)));
         }
     }
     update_compute_time(init_time);

@@ -683,7 +683,7 @@ namespace DSC2D {
          Calculates the average position of the neighbouring vertices to the vertex with ID vid.
          If interface is true, the average position is only calculated among the neighbouring vertices that are interface.
          */
-        vec2 avg_pos(HMesh::VertexID vid, bool interface) const;
+        vec2 get_barycenter(HMesh::VertexID vid, bool interface) const;
         
         /**
          For a given walker on a interface edge returnes walker moved to the next edge allong the interface. 

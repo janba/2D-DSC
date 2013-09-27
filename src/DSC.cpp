@@ -794,11 +794,11 @@ namespace DSC2D
         }
     }
     
-    vec2 DeformableSimplicialComplex::avg_pos(HMesh::VertexID vid, bool interface) const
+    vec2 DeformableSimplicialComplex::get_barycenter(HMesh::VertexID vid, bool interface) const
     {
         if(interface && !is_interface(vid))
         {
-            return vec2(0.f);
+            return get_pos(vid);
         }
         
         vec2 avg_pos(0.);
@@ -938,7 +938,7 @@ namespace DSC2D
         {
             if(safe_editable(*vi))
             {
-                positions[i] =  t * (avg_pos(*vi, false) - get_pos(*vi)) + get_pos(*vi);
+                positions[i] =  t * (get_barycenter(*vi, false) - get_pos(*vi)) + get_pos(*vi);
             }
         }
         i = 0;
