@@ -43,9 +43,9 @@
 class UI
 {
 protected:
-    DSC2D::VelocityFunc *vel_fun;
-    DSC2D::DeformableSimplicialComplex *dsc;
-    Log *basic_log;
+    std::unique_ptr<DSC2D::VelocityFunc> vel_fun;
+    std::unique_ptr<DSC2D::DeformableSimplicialComplex> dsc;
+    std::unique_ptr<Log> basic_log;
     
     int WIN_SIZE_X;
     int WIN_SIZE_Y;
@@ -118,7 +118,7 @@ public:
     virtual void keyboard(unsigned char key, int x, int y);
     
     
-protected:
+private:
     virtual void rotate_square();
     
     virtual void smooth_filled();
@@ -144,7 +144,12 @@ protected:
     virtual void draw();
     
     /**
-     Stops the motion and deletes the DSC object.
+     Should be called when a motion is started.
+     */
+    void start();
+    
+    /**
+     Should be called when a motion is stopped.
      */
     virtual void stop();
 };

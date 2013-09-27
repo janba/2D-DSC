@@ -303,19 +303,29 @@ void UI::draw()
 
 void UI::stop()
 {
-    if(dsc)
+    draw();
+    
+    if(basic_log)
     {
-        draw();
         basic_log->write_message("MOTION STOPPED");
         basic_log->write_log(*dsc);
         basic_log->write_log(*vel_fun);
         basic_log->write_timings(*vel_fun);
-        delete vel_fun;
-        delete dsc;
-        delete basic_log;
-        vel_fun = nullptr;
-        dsc = nullptr;
     }
+    
+    basic_log = nullptr;
+    vel_fun = nullptr;
+    dsc = nullptr;
+}
+
+void UI::start()
+{
+    basic_log = std::unique_ptr<Log>(new Log(create_log_path()));
+    basic_log->write_message(vel_fun->get_name().c_str());
+    basic_log->write_log(*dsc);
+    basic_log->write_log(*vel_fun);
+    
+    update_title();
 }
 
 using namespace DSC2D;
@@ -332,18 +342,13 @@ void UI::rotate_square()
     
     DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
     
-    dsc = new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain);
-    vel_fun = new RotateFunc(VELOCITY, ACCURACY);
-    basic_log = new Log(create_log_path());
+    dsc = std::unique_ptr<DeformableSimplicialComplex>(new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain));
+    vel_fun = std::unique_ptr<VelocityFunc>(new RotateFunc(VELOCITY, ACCURACY));
     
     ObjectGenerator::create_square(*dsc, vec2(150., 150.), vec2(200., 200.), 1);
     
-    basic_log->write_message(vel_fun->get_name().c_str());
-    basic_log->write_log(*dsc);
-    basic_log->write_log(*vel_fun);
-    
-    update_title();
     reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
+    start();
 }
 
 void UI::smooth_filled()
@@ -358,18 +363,13 @@ void UI::smooth_filled()
     
     DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
     
-    dsc = new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain);
-    vel_fun = new AverageFunc(VELOCITY, ACCURACY);
-    basic_log = new Log(create_log_path());
+    dsc = std::unique_ptr<DeformableSimplicialComplex>(new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain));
+    vel_fun = std::unique_ptr<VelocityFunc>(new AverageFunc(VELOCITY, ACCURACY));
     
     ObjectGenerator::create_square(*dsc, vec2(DISCRETIZATION, DISCRETIZATION), vec2(width, height), 1);
     
-    basic_log->write_message(vel_fun->get_name().c_str());
-    basic_log->write_log(*dsc);
-    basic_log->write_log(*vel_fun);
-    
-    update_title();
     reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
+    start();
 }
 
 void UI::expand_blobs()
@@ -385,19 +385,14 @@ void UI::expand_blobs()
     
     DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
     
-    dsc = new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain);
-    vel_fun = new NormalFunc(VELOCITY, ACCURACY);
-    basic_log = new Log(create_log_path());
+    dsc = std::unique_ptr<DeformableSimplicialComplex>(new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain));
+    vel_fun = std::unique_ptr<VelocityFunc>(new NormalFunc(VELOCITY, ACCURACY));
     
     ObjectGenerator::create_blob(*dsc, vec2(200., 200.), 100., 1);
     ObjectGenerator::create_blob(*dsc, vec2(300., 400.), 50., 2);
     ObjectGenerator::create_blob(*dsc, vec2(400., 100.), 30., 3);
     
-    basic_log->write_message(vel_fun->get_name().c_str());
-    basic_log->write_log(*dsc);
-    basic_log->write_log(*vel_fun);
-    
-    update_title();
     reshape(width + 2*DISCRETIZATION, height + 2*DISCRETIZATION);
+    start();
 }
 
