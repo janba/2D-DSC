@@ -18,7 +18,7 @@
 
 #include <queue>
 #include "util.h"
-#include "boundary_conditions.h"
+#include "design_domain.h"
 
 #ifdef WIN32
 #include <HMesh/Manifold.h>
