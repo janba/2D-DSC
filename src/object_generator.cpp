@@ -28,9 +28,9 @@ namespace DSC2D {
             for (auto & c : corners) {
                 if(Util::is_inside(c, verts))
                 {
-                    HMesh::VertexID vid;
+                    DeformableSimplicialComplex::node_key vid;
                     real min_dist = INFINITY;
-                    for (HMesh::Walker hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw())
+                    for (auto hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw())
                     {
                         real l = (dsc.get_pos(hew.vertex()) - c).length();
                         if(l < min_dist)
@@ -57,7 +57,7 @@ namespace DSC2D {
             if(sum == 1 || sum == 2) // Face is on the interface of the object and two vertices are inside.
             {
                 int i = 0;
-                for (HMesh::Walker hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw(), i++)
+                for (auto hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw(), i++)
                 {
                     if((sum == 1 && inside[i]) || (sum == 2 && !inside[i])) // Move the vertex
                     {

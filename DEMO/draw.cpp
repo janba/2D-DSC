@@ -112,7 +112,7 @@ void Painter::draw_vertices(const DeformableSimplicialComplex& dsc)
     glPointSize(std::max(std::floor(POINT_SIZE*dsc.get_avg_edge_length()), 1.));
 	glBegin(GL_POINTS);
     vec3 p;
-	for(HMesh::VertexIDIterator vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
+	for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
     {
         p = vec3(dsc.get_pos(*vi)[0], dsc.get_pos(*vi)[1], 0.);
         glColor3d(static_cast<double>(colors[*vi][0]), static_cast<double>(colors[*vi][1]), static_cast<double>(colors[*vi][2]));
@@ -127,7 +127,7 @@ void Painter::draw_interface(const DeformableSimplicialComplex& dsc, vec3 color)
 	glBegin(GL_POINTS);
     vec3 p;
     glColor3d(static_cast<double>(color[0]), static_cast<double>(color[1]), static_cast<double>(color[2]));
-	for(HMesh::VertexIDIterator vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
+	for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
     {
         if (dsc.is_movable(*vi)) {
             vec3 temp(dsc.get_pos_new(*vi)[0], dsc.get_pos_new(*vi)[1], 0.);
@@ -138,9 +138,9 @@ void Painter::draw_interface(const DeformableSimplicialComplex& dsc, vec3 color)
     glLineWidth(std::max(std::floor(LINE_WIDTH*dsc.get_avg_edge_length()), 1.));
     vec3 p1, p2;
 	glBegin(GL_LINES);
-    for(HMesh::HalfEdgeIDIterator hei = dsc.halfedges_begin(); hei != dsc.halfedges_end(); ++hei)
+    for(auto hei = dsc.halfedges_begin(); hei != dsc.halfedges_end(); ++hei)
     {
-        HMesh::Walker hew = dsc.walker(*hei);
+        auto hew = dsc.walker(*hei);
         if (dsc.is_movable(hew.halfedge()) && (dsc.is_movable(hew.vertex()) || dsc.is_movable(hew.opp().vertex())))
         {
             p1 = vec3(dsc.get_pos_new(hew.vertex())[0], dsc.get_pos_new(hew.vertex())[1], 0.);
@@ -157,7 +157,7 @@ void Painter::draw_arrows(const DeformableSimplicialComplex& dsc, const HMesh::V
     glColor3d(static_cast<double>(color[0]), static_cast<double>(color[1]), static_cast<double>(color[2]));
     glLineWidth(std::max(std::floor(LINE_WIDTH*dsc.get_avg_edge_length()), 1.));
     vec3 arrow, a_hat, p;
-    for(HMesh::VertexIDIterator vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
+    for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
     {
         arrow = vec3(arrows[*vi][0], arrows[*vi][1], 0.f);
         if(arrow.length() > EPSILON)
@@ -189,7 +189,7 @@ void Painter::draw_lines(const DeformableSimplicialComplex& dsc, const HMesh::Ve
     glColor3d(static_cast<double>(color[0]), static_cast<double>(color[1]), static_cast<double>(color[2]));
     glLineWidth(std::max(std::floor(LINE_WIDTH*dsc.get_avg_edge_length()), 1.));
     vec3 line, p;
-    for(HMesh::VertexIDIterator vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
+    for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
     {
         line = vec3(lines[*vi][0], lines[*vi][1], 0.f);
         if(line.length() > EPSILON)
@@ -210,11 +210,11 @@ void Painter::draw_edges(const DeformableSimplicialComplex& dsc)
     glLineWidth(std::max(std::floor(LINE_WIDTH*dsc.get_avg_edge_length()), 1.));
     vec3 p1, p2;
 	glBegin(GL_LINES);
-	for(HMesh::HalfEdgeIDIterator hei = dsc.halfedges_begin(); hei != dsc.halfedges_end(); ++hei)
+	for(auto hei = dsc.halfedges_begin(); hei != dsc.halfedges_end(); ++hei)
     {
         glColor3d(static_cast<double>(colors[*hei][0]), static_cast<double>(colors[*hei][1]), static_cast<double>(colors[*hei][2]));
         
-        HMesh::Walker hew = dsc.walker(*hei);
+        auto hew = dsc.walker(*hei);
         p1 = vec3(dsc.get_pos(hew.vertex())[0], dsc.get_pos(hew.vertex())[1], 0.);
         p2 = vec3(dsc.get_pos(hew.opp().vertex())[0], dsc.get_pos(hew.opp().vertex())[1], 0.);
         glVertex3d(static_cast<double>(p1[0]), static_cast<double>(p1[1]), static_cast<double>(p1[2]));
@@ -232,12 +232,12 @@ void Painter::draw_faces(const DeformableSimplicialComplex& dsc)
 void Painter::draw_faces(const DeformableSimplicialComplex& dsc, const HMesh::FaceAttributeVector<vec3> &colors)
 {
     glBegin(GL_TRIANGLES);
-	for(HMesh::FaceIDIterator fi = dsc.faces_begin(); fi != dsc.faces_end(); ++fi)
+	for(auto fi = dsc.faces_begin(); fi != dsc.faces_end(); ++fi)
     {
         if(colors[*fi] != INVISIBLE)
         {
             glColor3d(static_cast<double>(colors[*fi][0]), static_cast<double>(colors[*fi][1]), static_cast<double>(colors[*fi][2]));
-            for (HMesh::Walker hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw())
+            for (auto hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw())
             {
                 vec2 p = dsc.get_pos(hew.vertex());
                 glVertex3d(static_cast<double>(p[0]), static_cast<double>(p[1]), static_cast<double>(0.));
@@ -250,13 +250,13 @@ void Painter::draw_faces(const DeformableSimplicialComplex& dsc, const HMesh::Fa
 void Painter::draw_faces(const DeformableSimplicialComplex& dsc, const HMesh::FaceAttributeVector<double> &values)
 {
     glBegin(GL_TRIANGLES);
-	for(HMesh::FaceIDIterator fi = dsc.faces_begin(); fi != dsc.faces_end(); ++fi)
+	for(auto fi = dsc.faces_begin(); fi != dsc.faces_end(); ++fi)
     {
         if(values[*fi] >= 0.)
         {
             vec3 color = Util::jet_color(values[*fi]);
             glColor3d(static_cast<double>(color[0]), static_cast<double>(color[1]), static_cast<double>(color[2]));
-            for (HMesh::Walker hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw())
+            for (auto hew = dsc.walker(*fi); !hew.full_circle(); hew = hew.circulate_face_cw())
             {
                 vec2 p = dsc.get_pos(hew.vertex());
                 glVertex3d(static_cast<double>(p[0]), static_cast<double>(p[1]), static_cast<double>(0.));

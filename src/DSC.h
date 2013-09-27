@@ -31,19 +31,6 @@
 
 namespace DSC2D {
     
-    /**
-     Used for max_min_angle optimization.
-     */
-    struct PQElem
-    {
-        real pri;
-        HMesh::HalfEdgeID h;
-        int time;
-        
-        PQElem(real _pri, HMesh::HalfEdgeID _h, int _time):
-        pri(_pri), h(_h), time(_time) {}
-    };
-    
     
     /**
      The base class representing a simplicial complex.
@@ -55,7 +42,25 @@ namespace DSC2D {
         enum LABEL_OPT {NO_LABEL = -3, OUTSIDE = 0, INTERFACE = -1, CROSSING = -2};
         enum OBJECTS_TYPE {FILLED_HALF, FILLED, SQUARE, BLOB, BLOBS};
         
+        typedef HMesh::VertexID node_key;
+        typedef HMesh::HalfEdgeID edge_key;
+        typedef HMesh::FaceID face_key;
+        
+        /**
+         Used for max_min_angle optimization.
+         */
+        struct PQElem
+        {
+            real pri;
+            edge_key h;
+            int time;
+            
+            PQElem(real _pri, edge_key _h, int _time):
+            pri(_pri), h(_h), time(_time) {}
+        };
+        
     protected:
+        
         real AVG_EDGE_LENGTH;
         
         real DEG_ANGLE;
@@ -141,12 +146,12 @@ namespace DSC2D {
         /**
          Initialise the attribute vectors for the vertex with ID vid. Should be called after a new vertex has been created.
          */
-        virtual void init_attributes(HMesh::VertexID vid);
+        virtual void init_attributes(node_key vid);
         
         /**
          Initialise the attribute vectors for the edge with ID eid. Should be called after a new edge has been created.
          */
-        virtual void init_attributes(HMesh::HalfEdgeID eid)
+        virtual void init_attributes(edge_key eid)
         {
             
         }
@@ -154,27 +159,27 @@ namespace DSC2D {
         /**
          Initialise the attribute vectors for the face with ID fid. Should be called after a new face has been created.
          */
-        virtual void init_attributes(HMesh::FaceID fid, int label = NO_LABEL);
+        virtual void init_attributes(face_key fid, int label = NO_LABEL);
         
         /**
          Updates the attributes of the vertex with ID vid.
          */
-        virtual void update_attributes(HMesh::VertexID vid, int label = NO_LABEL);
+        virtual void update_attributes(node_key vid, int label = NO_LABEL);
         
         /**
          Updates the attributes of the edge with ID heid.
          */
-        virtual void update_attributes(HMesh::HalfEdgeID heid, int label1 = NO_LABEL, int label2 = NO_LABEL);
+        virtual void update_attributes(edge_key heid, int label1 = NO_LABEL, int label2 = NO_LABEL);
         
         /**
          Updates the attributes of the face with ID fid.
          */
-        virtual void update_attributes(HMesh::FaceID fid, int label = NO_LABEL);
+        virtual void update_attributes(face_key fid, int label = NO_LABEL);
         
         /**
          Updates the attributes of the faces having the vertex with ID vid as a vertex.
          */
-        virtual void update_locally(HMesh::VertexID vid);
+        virtual void update_locally(node_key vid);
         
     public:
         /**
@@ -260,42 +265,42 @@ namespace DSC2D {
         /**
          Returns the position of the vertex with ID vid.
          */
-        vec2 get_pos(HMesh::VertexID vid) const;
+        vec2 get_pos(node_key vid) const;
         
         /**
          Returns the positions of the vertices of the face with ID fid.
          */
-        std::vector<vec2> get_pos(HMesh::FaceID fid) const;
+        std::vector<vec2> get_pos(face_key fid) const;
         
         /**
          Returns the new position of the vertex with ID vid.
          */
-        vec2 get_pos_new(HMesh::VertexID vid) const;
+        vec2 get_pos_new(node_key vid) const;
         
         /**
          Returns the new positions of the vertices of the face with ID fid.
          */
-        std::vector<vec2> get_pos_new(HMesh::FaceID fid) const;
+        std::vector<vec2> get_pos_new(face_key fid) const;
         
         /**
          Returns the IDs of the neighbouring vertices of the vertex with ID vid. If the interface parameter is true, it only returns the neighbouring vertices which are also interface.
          */
-        std::vector<HMesh::VertexID> get_verts(HMesh::VertexID vid, bool interface = false) const;
+        std::vector<node_key> get_verts(node_key vid, bool interface = false) const;
         
         /**
          Returns the IDs of the vertices of the face with ID fid.
          */
-        std::vector<HMesh::VertexID> get_verts(HMesh::FaceID fid) const;
+        std::vector<node_key> get_verts(face_key fid) const;
         
         /**
          Returns the IDs of the edges of the face with ID fid.
          */
-        std::vector<HMesh::HalfEdgeID> get_edges(HMesh::FaceID fid) const;
+        std::vector<edge_key> get_edges(face_key fid) const;
         
         /**
          Returns the label of the face with ID fid.
          */
-        int get_label(HMesh::FaceID fid) const
+        int get_label(face_key fid) const
         {
             return face_labels[fid];
         }
@@ -303,7 +308,7 @@ namespace DSC2D {
         /**
          Returns the label of the edge with ID eid.
          */
-        int get_label(HMesh::HalfEdgeID eid) const
+        int get_label(edge_key eid) const
         {
             return edge_labels[eid];
         }
@@ -311,7 +316,7 @@ namespace DSC2D {
         /**
          Returns the label of the vertex with ID vid.
          */
-        int get_label(HMesh::VertexID vid) const
+        int get_label(node_key vid) const
         {
             return vertex_labels[vid];
         }
@@ -320,7 +325,7 @@ namespace DSC2D {
         /**
          Returns sorted labels of the neighbouring faces of the interface vertex with ID vid.
          */
-        std::vector<int> get_interface_labels(HMesh::VertexID vid) const;
+        std::vector<int> get_interface_labels(node_key vid) const;
         
         
         //************** SETTERS ***************
@@ -329,14 +334,14 @@ namespace DSC2D {
         /**
          Sets the position of the vertex with ID vid to p. Should only be used internally by the simplicial complex class.
          */
-        void set_pos(HMesh::VertexID vid, vec2 p);
+        void set_pos(node_key vid, vec2 p);
         
     public:
         /**
          Sets the destination of the vertex with ID vid to dest.
          To actually move the vertices to their destination, call the deform function.
          */
-        virtual void set_destination(HMesh::VertexID vid, vec2 dest);
+        virtual void set_destination(node_key vid, vec2 dest);
         
         //************** ITERATORS ***************
     public:
@@ -370,17 +375,17 @@ namespace DSC2D {
             return mesh->faces_end();
         }
         
-        HMesh::Walker walker(HMesh::VertexID vid) const
+        HMesh::Walker walker(node_key vid) const
         {
             return mesh->walker(vid);
         }
         
-        HMesh::Walker walker(HMesh::HalfEdgeID eid) const
+        HMesh::Walker walker(edge_key eid) const
         {
             return mesh->walker(eid);
         }
         
-        HMesh::Walker walker(HMesh::FaceID fid) const
+        HMesh::Walker walker(face_key fid) const
         {
             return mesh->walker(fid);
         }
@@ -390,7 +395,7 @@ namespace DSC2D {
         /**
          Returns whether the vertex with ID vid is situated at a crossing of interfaces.
          */
-        bool is_crossing(HMesh::VertexID vid)
+        bool is_crossing(node_key vid)
         {
             return vertex_labels[vid] == CROSSING;
         }
@@ -398,7 +403,7 @@ namespace DSC2D {
         /**
          Returns whether the vertex with ID vid is situated at a crossing of interfaces.
          */
-        bool is_crossing(HMesh::VertexID vid) const
+        bool is_crossing(node_key vid) const
         {
             return vertex_labels[vid] == CROSSING;
         }
@@ -406,7 +411,7 @@ namespace DSC2D {
         /**
          Returns whether the vertex with ID vid is a part of the interface.
          */
-        bool is_interface(HMesh::VertexID vid)
+        bool is_interface(node_key vid)
         {
             return vertex_labels[vid] == INTERFACE;
         }
@@ -414,7 +419,7 @@ namespace DSC2D {
         /**
          Returns whether the vertex with ID vid is a part of the interface.
          */
-        bool is_interface(HMesh::VertexID vid) const
+        bool is_interface(node_key vid) const
         {
             return vertex_labels[vid] == INTERFACE;
         }
@@ -422,7 +427,7 @@ namespace DSC2D {
         /**
          Returns whether the edge with ID eid is a part of the interface.
          */
-        bool is_interface(HMesh::HalfEdgeID eid)
+        bool is_interface(edge_key eid)
         {
             return edge_labels[eid] == INTERFACE;
         }
@@ -430,7 +435,7 @@ namespace DSC2D {
         /**
          Returns whether the edge with ID eid is a part of the interface.
          */
-        bool is_interface(HMesh::HalfEdgeID eid) const
+        bool is_interface(edge_key eid) const
         {
             return edge_labels[eid] == INTERFACE;
         }
@@ -438,7 +443,7 @@ namespace DSC2D {
         /**
          Returns whether the vertex with ID vid is outside.
          */
-        bool is_outside(HMesh::VertexID vid)
+        bool is_outside(node_key vid)
         {
             return vertex_labels[vid] == OUTSIDE;
         }
@@ -446,7 +451,7 @@ namespace DSC2D {
         /**
          Returns whether the vertex with ID vid is outside.
          */
-        bool is_outside(HMesh::VertexID vid) const
+        bool is_outside(node_key vid) const
         {
             return vertex_labels[vid] == OUTSIDE;
         }
@@ -454,7 +459,7 @@ namespace DSC2D {
         /**
          Returns whether the edge with ID eid is outside.
          */
-        bool is_outside(HMesh::HalfEdgeID eid)
+        bool is_outside(edge_key eid)
         {
             return edge_labels[eid] == OUTSIDE;
         }
@@ -462,7 +467,7 @@ namespace DSC2D {
         /**
          Returns whether the edge with ID eid is outside.
          */
-        bool is_outside(HMesh::HalfEdgeID eid) const
+        bool is_outside(edge_key eid) const
         {
             return edge_labels[eid] == OUTSIDE;
         }
@@ -470,7 +475,7 @@ namespace DSC2D {
         /**
          Returns whether the face with ID fid is outside.
          */
-        bool is_outside(HMesh::FaceID fid)
+        bool is_outside(face_key fid)
         {
             return get_label(fid) == OUTSIDE;
         }
@@ -478,7 +483,7 @@ namespace DSC2D {
         /**
          Returns whether the face with ID fid is outside.
          */
-        bool is_outside(HMesh::FaceID fid) const
+        bool is_outside(face_key fid) const
         {
             return get_label(fid) == OUTSIDE;
         }
@@ -486,34 +491,34 @@ namespace DSC2D {
         /**
          Returns whether the vertex with ID vid is movable, i.e. interface and unsafe editable.
          */
-        virtual bool is_movable(HMesh::VertexID vid) const;
+        virtual bool is_movable(node_key vid) const;
         
         /**
          Returns whether the edge with ID eid is movable, i.e. interface and unsafe editable.
          */
-        virtual bool is_movable(HMesh::HalfEdgeID eid) const;
+        virtual bool is_movable(edge_key eid) const;
         
     protected:
         
         /**
          Returns whether the vertex with ID vid is editable, but not safe to interface changes i.e. if you edit the vertex you may change the interface.
          */
-        virtual bool unsafe_editable(HMesh::VertexID vid) const;
+        virtual bool unsafe_editable(node_key vid) const;
         
         /**
          Returns whether the vertex with ID vid is completely safe to edit.
          */
-        virtual bool safe_editable(HMesh::VertexID vid) const;
+        virtual bool safe_editable(node_key vid) const;
         
         /**
          Returns whether the edge with ID eid is editable, but not safe to interface changes i.e. if you edit the edge you may change the interface.
          */
-        virtual bool unsafe_editable(HMesh::HalfEdgeID eid) const;
+        virtual bool unsafe_editable(edge_key eid) const;
         
         /**
          Returns whether the edge with ID eid is completely safe to edit.
          */
-        virtual bool safe_editable(HMesh::HalfEdgeID eid) const;
+        virtual bool safe_editable(edge_key eid) const;
         
         //************** MESH FUNCTIONS ***************
     public:
@@ -527,27 +532,27 @@ namespace DSC2D {
         /**
          Moves a the vertex with ID vid to its new position. Returns whether the vertex was succesfully moved to its new position.
          */
-        bool move_vertex(HMesh::VertexID vid);
+        bool move_vertex(node_key vid);
         
         /**
          Splits the face fid by inserting a vertex at the barycenter of the face. Returns whether it suceeds or not.
          */
-        bool split(HMesh::FaceID fid);
+        bool split(face_key fid);
         
         /**
          Splits the edge eid by inserting a vertex at the center of the edge and splitting the two neighbouring faces of the edge. Returns whether it suceeds or not.
          */
-        bool split(HMesh::HalfEdgeID eid);
+        bool split(edge_key eid);
         
         /**
          Safely collapses the halfedge with ID heid and updates attributes. Returns whether it suceeds or not.
          */
-        bool safe_collapse(HMesh::HalfEdgeID eid);
+        bool safe_collapse(edge_key eid);
         
         /**
          Collapses the halfedge with ID heid and updates attributes. Returns whether it suceeds or not. Note that this method may edit the interface.
          */
-        bool unsafe_collapse(HMesh::HalfEdgeID heid);
+        bool unsafe_collapse(edge_key heid);
         
         
         //************** QUALITY CONTROL ***************
@@ -560,11 +565,11 @@ namespace DSC2D {
         
     private:
         
-        std::vector<HMesh::HalfEdgeID> sorted_face_edges(HMesh::FaceID fid);
+        std::vector<edge_key> sorted_face_edges(face_key fid);
         
-        void add_one_ring_to_queue(HMesh::HalfEdgeAttributeVector<int>& touched, std::priority_queue<PQElem>& Q, HMesh::VertexID v, const HMesh::EnergyFun& efun);
+        void add_one_ring_to_queue(HMesh::HalfEdgeAttributeVector<int>& touched, std::priority_queue<PQElem>& Q, node_key v, const HMesh::EnergyFun& efun);
         
-        void add_to_queue(HMesh::HalfEdgeAttributeVector<int>& touched, std::priority_queue<PQElem>& Q, HMesh::HalfEdgeID h, const HMesh::EnergyFun& efun);
+        void add_to_queue(HMesh::HalfEdgeAttributeVector<int>& touched, std::priority_queue<PQElem>& Q, edge_key h, const HMesh::EnergyFun& efun);
         
         void priority_queue_optimization(const HMesh::EnergyFun& efun);
         
@@ -635,33 +640,33 @@ namespace DSC2D {
         /**
          Returns the minimum angle of the face with ID fid.
          */
-        real min_angle(HMesh::FaceID fid);
+        real min_angle(face_key fid);
         
         /**
          Returns the minimum edge length of the edges of the face with ID fid.
          */
-        real min_edge_length(HMesh::FaceID fid);
+        real min_edge_length(face_key fid);
         
     public:
         /**
          Returns the length of the edge with ID eid.
          */
-        real length(HMesh::HalfEdgeID eid) const;
+        real length(edge_key eid) const;
         
         /**
          Returns the length of the edge with ID eid when using the new positions.
          */
-        real length_new(HMesh::HalfEdgeID eid) const;
+        real length_new(edge_key eid) const;
         
         /**
          Calculates the area of the face with ID fid.
          */
-        real area(HMesh::FaceID fid) const;
+        real area(face_key fid) const;
         
         /**
          Calculates the area of the face with ID fid when using the new positions.
          */
-        real area_new(HMesh::FaceID fid) const;
+        real area_new(face_key fid) const;
         
         /**
          Returns the positions of the optimization variables (the movable interface nodes).
@@ -683,7 +688,7 @@ namespace DSC2D {
          Calculates the average position of the neighbouring vertices to the vertex with ID vid.
          If interface is true, the average position is only calculated among the neighbouring vertices that are interface.
          */
-        vec2 get_barycenter(HMesh::VertexID vid, bool interface) const;
+        vec2 get_barycenter(node_key vid, bool interface) const;
         
         /**
          For a given walker on a interface edge returnes walker moved to the next edge allong the interface. 
@@ -706,23 +711,23 @@ namespace DSC2D {
          applied to all vertices along all interfaces with distance 0,1,2.. from ID, which are subsequently averaged.
          E.g. filtering with [0 1] is the same as avg_pos, but works also on crossings.
          */
-        vec2 filter_vertex(HMesh::VertexID vid, std::vector<real> &filter) const;
+        vec2 filter_vertex(node_key vid, std::vector<real> &filter) const;
         
         /**
          Computes the normal of the interface vertex with ID vid.
          If the vertex is not on the interface, the function returns a zero vector.
          */
-        vec2 normal(HMesh::VertexID vid) const;
+        vec2 normal(node_key vid) const;
         
         /**
          Clamps the position of the vertex with ID vid plus the vector vec to be within the design domain by scaling the vector v.
          */
-        void clamp_vector(const HMesh::VertexID& vid, vec2& vec) const;
+        void clamp_vector(const node_key& vid, vec2& vec) const;
         
         /**
          Calculates the intersection with the link of the vertex with ID vid and the line from the position of this vertex towards destination and to infinity. It returns t which is where on the line the intersection occurs. If t=0, the interesection occured at the position of the vertex with ID vid or never occured. If t=1 the intersection occured at the destination point. If 0<t<1 the intersection occured between these points. Finally, if t>1 the intersection occured farther away from the vertex position than destination.
          */
-        real intersection_with_link(const HMesh::VertexID& vid, vec2 destination) const;
+        real intersection_with_link(const node_key& vid, vec2 destination) const;
         
     };
     
