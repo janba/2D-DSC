@@ -643,20 +643,25 @@ namespace DSC2D
     bool DeformableSimplicialComplex::unsafe_collapse(edge_key eid)
     {
         auto hew = walker(eid);
-        if (!precond_collapse_edge(*mesh, eid) || !unsafe_editable(eid) || !unsafe_editable(hew.opp().vertex())) {
+        if (!precond_collapse_edge(*mesh, eid) || !unsafe_editable(eid))
+        {
             return false;
+        }
+        if(!unsafe_editable(hew.opp().vertex()) && unsafe_editable(hew.vertex()))
+        {
+            hew = hew.opp();
         }
         
         node_key vid = hew.vertex();
         
-        update_attributes(eid, OUTSIDE, OUTSIDE);
+        update_attributes(hew.halfedge(), OUTSIDE, OUTSIDE);
         update_attributes(hew.prev().halfedge(), OUTSIDE, OUTSIDE);
         update_attributes(hew.opp().next().halfedge(), OUTSIDE, OUTSIDE);
         update_attributes(hew.next().halfedge(), OUTSIDE, OUTSIDE);
         update_attributes(hew.opp().prev().halfedge(), OUTSIDE, OUTSIDE);
         update_attributes(hew.opp().vertex(), OUTSIDE);
         
-        mesh->collapse_edge(eid);
+        mesh->collapse_edge(hew.halfedge());
         
         update_locally(vid);
         return true;
