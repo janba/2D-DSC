@@ -874,7 +874,7 @@ namespace DSC2D
     }
 	
     
-    vec2 DeformableSimplicialComplex::normal(node_key vid) const
+    vec2 DeformableSimplicialComplex::get_normal(node_key vid) const
     {
         if(!is_interface(vid))
         {

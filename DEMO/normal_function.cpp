@@ -26,7 +26,7 @@ void NormalFunc::deform(DSC2D::DeformableSimplicialComplex& dsc)
 			std::vector<int> labels = dsc.get_interface_labels(*vi);
 			if (labels[0]==0)
 			{
-				dsc.set_destination(*vi, dsc.get_pos(*vi) + VELOCITY * dsc.normal(*vi));
+				dsc.set_destination(*vi, dsc.get_pos(*vi) + VELOCITY * dsc.get_normal(*vi));
 			}
         }
     }

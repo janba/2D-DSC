@@ -717,7 +717,7 @@ namespace DSC2D {
          Computes the normal of the interface vertex with ID vid.
          If the vertex is not on the interface, the function returns a zero vector.
          */
-        vec2 normal(node_key vid) const;
+        vec2 get_normal(node_key vid) const;
         
         /**
          Clamps the position of the vertex with ID vid plus the vector vec to be within the design domain by scaling the vector v.
