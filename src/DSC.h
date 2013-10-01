@@ -208,16 +208,6 @@ namespace DSC2D {
         }
         
         /**
-         Returns the width of the simplicial complex.
-         */
-        real get_width() const;
-        
-        /**
-         Returns the height of the simplicial complex.
-         */
-        real get_height() const;
-        
-        /**
          Returns the approximate center of the simplicial complex.
          */
         vec2 get_center();
@@ -329,7 +319,7 @@ namespace DSC2D {
         
         
         //************** SETTERS ***************
-    private:
+    protected:
         
         /**
          Sets the position of the vertex with ID vid to p. Should only be used internally by the simplicial complex class.
