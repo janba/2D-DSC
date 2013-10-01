@@ -24,6 +24,7 @@ namespace DSC2D {
     /**
      An abstract class which a specific velocity function should inherit from.
      */
+    template <typename DeformableSimplicialComplex = DeformableSimplicialComplex>
     class VelocityFunc
     {
         int time_step;
@@ -153,12 +154,37 @@ namespace DSC2D {
         /**
          Returns whether the motion has finished.
          */
-        virtual bool is_motion_finished(DeformableSimplicialComplex& complex);
+        virtual bool is_motion_finished(DeformableSimplicialComplex& dsc)
+        {
+            if (time_step == MAX_TIME_STEPS) {
+                return true;
+            }
+            std::vector<vec2> pos = dsc.get_design_variable_positions();
+            for (auto &p : pos)
+            {
+                bool match = false;
+                for (int i = 0; i + 1 < pos_old.size(); i += 2)
+                {
+                    if (Util::min_dist_sqr(pos_old[i], pos_old[i+1], p) < ACCURACY*ACCURACY)
+                    {
+                        match = true;
+                        break;
+                    }
+                }
+                if (!match) {
+                    std::cout << "Stopping criteria: Position " << p << " has moved." << std::endl;
+                    pos_old = dsc.get_interface_edge_positions();
+                    return false;
+                }
+            }
+            pos_old = dsc.get_interface_edge_positions();
+            return true;
+        }
         
         /**
          An optional test function which can be used to test some aspect of the velocity function.
          */
-        virtual void test(DeformableSimplicialComplex& complex)
+        virtual void test(DeformableSimplicialComplex& dsc)
         {
             
         }

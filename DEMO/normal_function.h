@@ -21,7 +21,7 @@
 /**
  A velocity function which moves the interface vertices in the normal direction.
  */
-class NormalFunc: public DSC2D::VelocityFunc {
+class NormalFunc: public DSC2D::VelocityFunc<> {
     
     
 public:

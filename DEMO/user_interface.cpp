@@ -351,7 +351,7 @@ void UI::rotate_square()
     DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
     
     dsc = std::unique_ptr<DeformableSimplicialComplex>(new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain));
-    vel_fun = std::unique_ptr<VelocityFunc>(new RotateFunc(VELOCITY, ACCURACY));
+    vel_fun = std::unique_ptr<VelocityFunc<>>(new RotateFunc(VELOCITY, ACCURACY));
     
     ObjectGenerator::create_square(*dsc, vec2(150., 150.), vec2(200., 200.), 1);
     
@@ -372,7 +372,7 @@ void UI::smooth_filled()
     DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
     
     dsc = std::unique_ptr<DeformableSimplicialComplex>(new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain));
-    vel_fun = std::unique_ptr<VelocityFunc>(new AverageFunc(VELOCITY, ACCURACY));
+    vel_fun = std::unique_ptr<VelocityFunc<>>(new AverageFunc(VELOCITY, ACCURACY));
     
     ObjectGenerator::create_square(*dsc, vec2(DISCRETIZATION, DISCRETIZATION), vec2(width, height), 1);
     
@@ -394,7 +394,7 @@ void UI::expand_blobs()
     DesignDomain *domain = new DesignDomain(DesignDomain::RECTANGLE, width, height, DISCRETIZATION);
     
     dsc = std::unique_ptr<DeformableSimplicialComplex>(new DeformableSimplicialComplex(DISCRETIZATION, points, faces, domain));
-    vel_fun = std::unique_ptr<VelocityFunc>(new NormalFunc(VELOCITY, ACCURACY));
+    vel_fun = std::unique_ptr<VelocityFunc<>>(new NormalFunc(VELOCITY, ACCURACY));
     
     ObjectGenerator::create_blob(*dsc, vec2(200., 200.), 100., 1);
     ObjectGenerator::create_blob(*dsc, vec2(300., 400.), 50., 2);

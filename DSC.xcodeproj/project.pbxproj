@@ -16,7 +16,6 @@
 		7A51F3DB17D639C900A8F8F2 /* DSC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A517D6386100A8F8F2 /* DSC.cpp */; };
 		7A51F3DC17D639C900A8F8F2 /* DSC.h in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A617D6386100A8F8F2 /* DSC.h */; };
 		7A51F3DF17D639C900A8F8F2 /* util.h in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3A917D6386100A8F8F2 /* util.h */; };
-		7A51F3E017D639C900A8F8F2 /* velocity_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3AA17D6386100A8F8F2 /* velocity_function.cpp */; };
 		7A51F3E117D639C900A8F8F2 /* velocity_function.h in Sources */ = {isa = PBXBuildFile; fileRef = 7A51F3AB17D6386100A8F8F2 /* velocity_function.h */; };
 		7A51F3E217D639D800A8F8F2 /* GEL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A51F3B417D638B500A8F8F2 /* GEL.framework */; };
 		7A51F3E317D639FD00A8F8F2 /* libDSC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A51F3D517D6399200A8F8F2 /* libDSC.a */; };
@@ -50,7 +49,6 @@
 		7A51F3A517D6386100A8F8F2 /* DSC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DSC.cpp; path = src/DSC.cpp; sourceTree = SOURCE_ROOT; };
 		7A51F3A617D6386100A8F8F2 /* DSC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSC.h; path = src/DSC.h; sourceTree = SOURCE_ROOT; };
 		7A51F3A917D6386100A8F8F2 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = src/util.h; sourceTree = SOURCE_ROOT; };
-		7A51F3AA17D6386100A8F8F2 /* velocity_function.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = velocity_function.cpp; path = src/velocity_function.cpp; sourceTree = SOURCE_ROOT; };
 		7A51F3AB17D6386100A8F8F2 /* velocity_function.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = velocity_function.h; path = src/velocity_function.h; sourceTree = SOURCE_ROOT; };
 		7A51F3B017D6388200A8F8F2 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		7A51F3B217D6388800A8F8F2 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -126,7 +124,6 @@
 				7A51F3A517D6386100A8F8F2 /* DSC.cpp */,
 				7A51F3A617D6386100A8F8F2 /* DSC.h */,
 				7A51F3A917D6386100A8F8F2 /* util.h */,
-				7A51F3AA17D6386100A8F8F2 /* velocity_function.cpp */,
 				7A51F3AB17D6386100A8F8F2 /* velocity_function.h */,
 				7A82D64517E23E9400C19874 /* object_generator.cpp */,
 				7A82D64617E23E9400C19874 /* object_generator.h */,
@@ -257,7 +254,6 @@
 				7A51F3DB17D639C900A8F8F2 /* DSC.cpp in Sources */,
 				7A51F3DC17D639C900A8F8F2 /* DSC.h in Sources */,
 				7A51F3DF17D639C900A8F8F2 /* util.h in Sources */,
-				7A51F3E017D639C900A8F8F2 /* velocity_function.cpp in Sources */,
 				7A51F3E117D639C900A8F8F2 /* velocity_function.h in Sources */,
 				7A82D64717E23E9400C19874 /* object_generator.cpp in Sources */,
 				7A82D64B17E23EAC00C19874 /* trializer.cpp in Sources */,

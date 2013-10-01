@@ -29,7 +29,6 @@
 class Log {
     
     std::string path;
-protected:
     std::ofstream log;
     
 public:
@@ -51,7 +50,7 @@ public:
         return path;
     }
     
-protected:
+private:
     /**
      Write a variable with name and value to the log.
      */
@@ -77,25 +76,25 @@ public:
     /**
      Write the time step number, timings and additional time step information to the log.
      */
-    virtual void write_timestep(const DSC2D::VelocityFunc& vel_fun);
+    void write_timestep(const DSC2D::VelocityFunc<>& vel_fun);
     
     /**
      Write a message to the terminal and the log.
      */
-    virtual void write_message(const std::string& message);
+    void write_message(const std::string& message);
     
     /**
      Writes simplicial complex information to the log.
      */
-    virtual void write_log(const DSC2D::DeformableSimplicialComplex& complex);
+    void write_log(const DSC2D::DeformableSimplicialComplex& complex);
     
     /**
      Writes velocity function information to the log.
      */
-    virtual void write_log(const DSC2D::VelocityFunc& vel_fun);
+    void write_log(const DSC2D::VelocityFunc<>& vel_fun);
     
     /**
      Writes timings to the log.
      */
-    virtual void write_timings(const DSC2D::VelocityFunc& vel_fun);
+    void write_timings(const DSC2D::VelocityFunc<>& vel_fun);
 };

@@ -22,7 +22,7 @@
 /**
  A rotating velocity function.
  */
-class RotateFunc: public DSC2D::VelocityFunc {
+class RotateFunc: public DSC2D::VelocityFunc<> {
     
 public:
     /**

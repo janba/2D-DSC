@@ -21,7 +21,7 @@
 /**
  A velocity function which moves the interface vertices towards the average of their neighbouring interface vertices, i.e. a constant smoothing of the interface.
  */
-class AverageFunc: public DSC2D::VelocityFunc {
+class AverageFunc: public DSC2D::VelocityFunc<> {
     
 public:
     /**

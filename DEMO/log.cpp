@@ -49,16 +49,6 @@ void Log::write_message(const std::string& message)
     std::cout << "*** " << message << " ***" << std::endl;
 }
 
-void Log::write_timestep(const VelocityFunc& vel_fun)
-{
-    //    std::cout << "\n\n*** Time step #" << vel_fun.get_time_step() << " ***" << std::endl;
-    log << std::endl << "*** Time step #" << vel_fun.get_time_step() << " ***" << std::endl;
-    log << std::endl;
-    write_variable("Compute time", vel_fun.get_compute_time(), "s");
-    write_variable("Deform time", vel_fun.get_deform_time(), "s");
-    write_variable("Total time", vel_fun.get_compute_time() + vel_fun.get_deform_time(), "s");
-}
-
 void Log::write_variable(const std::string& name, real value)
 {
     log << "\t" << name << "\t:\t" << value << std::endl;
@@ -91,7 +81,17 @@ void Log::write_variable(const std::string& name, const std::vector<real>& value
     }
 }
 
-void Log::write_log(const VelocityFunc& vel_fun)
+void Log::write_timestep(const VelocityFunc<>& vel_fun)
+{
+    //    std::cout << "\n\n*** Time step #" << vel_fun.get_time_step() << " ***" << std::endl;
+    log << std::endl << "*** Time step #" << vel_fun.get_time_step() << " ***" << std::endl;
+    log << std::endl;
+    write_variable("Compute time", vel_fun.get_compute_time(), "s");
+    write_variable("Deform time", vel_fun.get_deform_time(), "s");
+    write_variable("Total time", vel_fun.get_compute_time() + vel_fun.get_deform_time(), "s");
+}
+
+void Log::write_log(const VelocityFunc<>& vel_fun)
 {
     write_message("VELOCITY FUNCTION INFO");
     write_variable("Velocity", vel_fun.get_velocity());
@@ -99,7 +99,7 @@ void Log::write_log(const VelocityFunc& vel_fun)
     
 }
 
-void Log::write_timings(const VelocityFunc& vel_fun)
+void Log::write_timings(const VelocityFunc<>& vel_fun)
 {
     real deform_time = vel_fun.get_total_deform_time();
     real compute_time = vel_fun.get_total_compute_time();

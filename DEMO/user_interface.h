@@ -35,7 +35,7 @@
  */
 class UI
 {
-    std::unique_ptr<DSC2D::VelocityFunc> vel_fun;
+    std::unique_ptr<DSC2D::VelocityFunc<>> vel_fun;
     std::unique_ptr<DSC2D::DeformableSimplicialComplex> dsc;
     std::unique_ptr<Log> basic_log;
     
