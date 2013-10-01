@@ -88,7 +88,7 @@ namespace DSC2D {
         HMesh::Manifold *mesh;
         DesignDomain *design_domain;
         
-        HMesh::VertexAttributeVector<vec2> new_pos;
+        HMesh::VertexAttributeVector<vec2> destination;
         
         HMesh::VertexAttributeVector<int> vertex_labels;
         HMesh::HalfEdgeAttributeVector<int> edge_labels;
@@ -265,12 +265,12 @@ namespace DSC2D {
         /**
          Returns the new position of the vertex with ID vid.
          */
-        vec2 get_pos_new(node_key vid) const;
+        vec2 get_destination(node_key vid) const;
         
         /**
          Returns the new positions of the vertices of the face with ID fid.
          */
-        std::vector<vec2> get_pos_new(face_key fid) const;
+        std::vector<vec2> get_destination(face_key fid) const;
         
         /**
          Returns the IDs of the neighbouring vertices of the vertex with ID vid. If the interface parameter is true, it only returns the neighbouring vertices which are also interface.

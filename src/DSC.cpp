@@ -45,7 +45,7 @@ namespace DSC2D
         
         create_simplicial_complex(points, faces);
         
-        new_pos = HMesh::VertexAttributeVector<vec2>(get_no_vertices(), vec2(0.));
+        destination = HMesh::VertexAttributeVector<vec2>(get_no_vertices(), vec2(0.));
         vertex_labels = HMesh::VertexAttributeVector<int>(get_no_vertices(), OUTSIDE);
         edge_labels = HMesh::HalfEdgeAttributeVector<int>(get_no_halfedges(), OUTSIDE);
         face_labels = HMesh::FaceAttributeVector<int>(get_no_faces(), OUTSIDE);
@@ -57,7 +57,7 @@ namespace DSC2D
         vertex_labels.cleanup(cleanup_map.vmap);
         edge_labels.cleanup(cleanup_map.hmap);
         face_labels.cleanup(cleanup_map.fmap);
-        new_pos.cleanup(cleanup_map.vmap);
+        destination.cleanup(cleanup_map.vmap);
     }
     
     
@@ -202,7 +202,7 @@ namespace DSC2D
     
     bool DeformableSimplicialComplex::move_vertex(node_key vid)
     {
-        vec2 v0_new = get_pos_new(vid);
+        vec2 v0_new = get_destination(vid);
         vec2 v0 = get_pos(vid);
         real l = (v0 - v0_new).length();
         if (l < EPSILON)
@@ -300,7 +300,7 @@ namespace DSC2D
         {
             if(is_movable(*vi))
             {
-                dist = (new_pos[*vi] - get_pos(*vi)).length();
+                dist = (destination[*vi] - get_pos(*vi)).length();
                 max_dist = Util::max(max_dist, dist);
             }
         }
@@ -355,17 +355,17 @@ namespace DSC2D
         return positions;
     }
     
-    vec2 DeformableSimplicialComplex::get_pos_new(node_key vid) const
+    vec2 DeformableSimplicialComplex::get_destination(node_key vid) const
     {
-        return vec2(new_pos[vid]);
+        return vec2(destination[vid]);
     }
     
-    std::vector<vec2> DeformableSimplicialComplex::get_pos_new(face_key fid) const
+    std::vector<vec2> DeformableSimplicialComplex::get_destination(face_key fid) const
     {
         std::vector<vec2> positions;
         for (auto hew = walker(fid); !hew.full_circle(); hew = hew.circulate_face_cw())
         {
-            positions.push_back(get_pos_new(hew.vertex()));
+            positions.push_back(get_destination(hew.vertex()));
         }
         return positions;
     }
@@ -432,7 +432,7 @@ namespace DSC2D
         {
             vec2 vec = dest - get_pos(vid);
             clamp_vector(vid, vec);
-            new_pos[vid] = get_pos(vid) + vec;
+            destination[vid] = get_pos(vid) + vec;
         }
     }
     
@@ -456,7 +456,7 @@ namespace DSC2D
     
     void DeformableSimplicialComplex::init_attributes(node_key vid)
     {
-        new_pos[vid] = get_pos(vid);
+        destination[vid] = get_pos(vid);
     }
     
     void DeformableSimplicialComplex::init_attributes(face_key fid, int label)
@@ -689,7 +689,7 @@ namespace DSC2D
     real DeformableSimplicialComplex::length_new(edge_key eid) const
     {
         auto hew = walker(eid);
-        return Util::length(get_pos_new(hew.vertex()) - get_pos_new(hew.opp().vertex()));
+        return Util::length(get_destination(hew.vertex()) - get_destination(hew.opp().vertex()));
     }
     
     real DeformableSimplicialComplex::min_edge_length(face_key fid)
@@ -927,7 +927,7 @@ namespace DSC2D
     
     real DeformableSimplicialComplex::area_new(face_key fid) const
     {
-        std::vector<vec2> positions = get_pos_new(fid);
+        std::vector<vec2> positions = get_destination(fid);
         real A = std::abs(Util::signed_area(positions[0], positions[1], positions[2]));
 #ifdef DEBUG
         assert(A > 0.);

@@ -42,7 +42,7 @@ public:
     }
     
     /**
-     Computes the motion of each interface vertex and stores the new position in new_pos in the simplicial complex class.
+     Computes the motion of each interface vertex and stores the destination in the simplicial complex class.
      */
     virtual void deform(DSC2D::DeformableSimplicialComplex& dsc);
 };

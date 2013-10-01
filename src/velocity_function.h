@@ -138,7 +138,7 @@ namespace DSC2D {
         
     private:
         /**
-         Computes the motion of each interface vertex and stores the new position in new_pos in the simplicial complex class.
+         Computes the motion of each interface vertex and stores the destination in the simplicial complex class.
          */
         virtual void deform(DeformableSimplicialComplex& complex) = 0;
         

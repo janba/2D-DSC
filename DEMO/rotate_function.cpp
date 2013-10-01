@@ -31,14 +31,14 @@ void RotateFunc::deform(DSC2D::DeformableSimplicialComplex& dsc)
     CGLA::Vec3f center = CGLA::Vec3f(cen[0], cen[1], 0.f);
     CGLA::Mat3x3f mrot = rotation_Mat3x3f(CGLA::ZAXIS, VELOCITY);
     DSC2D::vec2 p;
-    CGLA::Vec3f new_pos;
+    CGLA::Vec3f destination;
     for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
     {
         if(dsc.is_movable(*vi))
         {
             p = dsc.get_pos(*vi);
-            new_pos = center + mrot * (CGLA::Vec3f(p[0], p[1], 0.) - center);
-            dsc.set_destination(*vi, DSC2D::vec2(new_pos[0], new_pos[1]));
+            destination = center + mrot * (CGLA::Vec3f(p[0], p[1], 0.) - center);
+            dsc.set_destination(*vi, DSC2D::vec2(destination[0], destination[1]));
         }
     }
     update_compute_time(init_time);

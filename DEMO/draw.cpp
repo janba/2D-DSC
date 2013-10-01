@@ -130,7 +130,7 @@ void Painter::draw_interface(const DeformableSimplicialComplex& dsc, vec3 color)
 	for(auto vi = dsc.vertices_begin(); vi != dsc.vertices_end(); ++vi)
     {
         if (dsc.is_movable(*vi)) {
-            vec3 temp(dsc.get_pos_new(*vi)[0], dsc.get_pos_new(*vi)[1], 0.);
+            vec3 temp(dsc.get_destination(*vi)[0], dsc.get_destination(*vi)[1], 0.);
             glVertex3d(static_cast<double>(temp[0]), static_cast<double>(temp[1]), static_cast<double>(temp[2]));
         }
     }
@@ -143,8 +143,8 @@ void Painter::draw_interface(const DeformableSimplicialComplex& dsc, vec3 color)
         auto hew = dsc.walker(*hei);
         if (dsc.is_movable(hew.halfedge()) && (dsc.is_movable(hew.vertex()) || dsc.is_movable(hew.opp().vertex())))
         {
-            p1 = vec3(dsc.get_pos_new(hew.vertex())[0], dsc.get_pos_new(hew.vertex())[1], 0.);
-            p2 = vec3(dsc.get_pos_new(hew.opp().vertex())[0], dsc.get_pos_new(hew.opp().vertex())[1], 0.);
+            p1 = vec3(dsc.get_destination(hew.vertex())[0], dsc.get_destination(hew.vertex())[1], 0.);
+            p2 = vec3(dsc.get_destination(hew.opp().vertex())[0], dsc.get_destination(hew.opp().vertex())[1], 0.);
             glVertex3d(static_cast<double>(p1[0]), static_cast<double>(p1[1]), static_cast<double>(p1[2]));
             glVertex3d(static_cast<double>(p2[0]), static_cast<double>(p2[1]), static_cast<double>(p2[2]));
         }
@@ -166,7 +166,7 @@ void Painter::draw_arrows(const DeformableSimplicialComplex& dsc, const HMesh::V
             p = vec3(dsc.get_pos(*vi)[0], dsc.get_pos(*vi)[1], 0.);
 #ifdef DEBUG
             if (dsc.is_movable(*vi)) {
-                p = vec3(dsc.get_pos_new(*vi)[0], dsc.get_pos_new(*vi)[1], 0.);
+                p = vec3(dsc.get_destination(*vi)[0], dsc.get_destination(*vi)[1], 0.);
             }
 #endif
             glBegin(GL_LINES);
