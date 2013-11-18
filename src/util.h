@@ -106,6 +106,10 @@ namespace DSC2D
             return m;
         }
         
+        inline vec2 barycenter(const vec2& p0, const vec2& p1)
+        {
+            return 0.5*(p0 + p1);
+        }
         
         /**
          Computes the signed area of a triangle.

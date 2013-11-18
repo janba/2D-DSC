@@ -925,7 +925,7 @@ namespace DSC2D
         return HMesh::area(*mesh, fid);
     }
     
-    real DeformableSimplicialComplex::area_new(face_key fid) const
+    real DeformableSimplicialComplex::area_destination(face_key fid) const
     {
         std::vector<vec2> positions = get_destination(fid);
         real A = std::abs(Util::signed_area(positions[0], positions[1], positions[2]));

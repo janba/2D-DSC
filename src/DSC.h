@@ -656,7 +656,7 @@ namespace DSC2D {
         /**
          Calculates the area of the face with ID fid when using the new positions.
          */
-        real area_new(face_key fid) const;
+        real area_destination(face_key fid) const;
         
         /**
          Returns the positions of the optimization variables (the movable interface nodes).
