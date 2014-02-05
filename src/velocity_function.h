@@ -27,6 +27,7 @@ namespace DSC2D {
     template <typename DeformableSimplicialComplex = DeformableSimplicialComplex>
     class VelocityFunc
     {
+    protected:
         int time_step;
         int MAX_TIME_STEPS;
         
