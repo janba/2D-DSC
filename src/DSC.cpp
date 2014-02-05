@@ -772,7 +772,7 @@ namespace DSC2D
             int fa;
             for(auto hei = halfedges_begin(); hei != halfedges_end(); ++hei)
             {
-                if(unsafe_editable(*hei) && precond_flip_edge(*mesh, *hei))
+                if(safe_editable(*hei) && precond_flip_edge(*mesh, *hei))
                 {
                     auto hew = walker(*hei);
                     p0 = get_pos(hew.vertex());
@@ -960,22 +960,22 @@ namespace DSC2D
     bool DeformableSimplicialComplex::split_interface()
     {
         bool change = false;
-        std::vector<edge_key> half_edges;
+        std::vector<edge_key> edges;
         for(auto hei = halfedges_begin(); hei != halfedges_end(); ++hei)
         {
             auto hew = walker(*hei);
             if(is_movable(*hei) && get_label(hew.face()) < get_label(hew.opp().face()))
             {
-                half_edges.push_back(*hei);
+                edges.push_back(*hei);
             }
         }
         
-        for (auto heit = half_edges.begin(); heit != half_edges.end(); heit++)
+        for (auto e : edges)
         {
-            auto hew = walker(*heit);
-            if(length(*heit) > MAX_EDGE_LENGTH || is_crossing(hew.vertex()) || is_crossing(hew.opp().vertex()))
+            auto hew = walker(e);
+            if(length(e) > MAX_EDGE_LENGTH || is_crossing(hew.vertex()) || is_crossing(hew.opp().vertex()))
             {
-                bool success = split(*heit);
+                bool success = split(e);
                 change = success | change;
 #ifdef DEBUG
                 if(success)
@@ -1030,11 +1030,11 @@ namespace DSC2D
         }
         
         bool change = false;
-        for (auto fi = faces.begin(); fi != faces.end(); fi++)
+        for (auto f : faces)
         {
-            if(area(*fi) > MAX_AREA && !is_outside(*fi))
+            if(area(f) > MAX_AREA)
             {
-                bool success = split(*fi);
+                bool success = split(f);
                 change = success | change;
 #ifdef DEBUG
                 if(success)
