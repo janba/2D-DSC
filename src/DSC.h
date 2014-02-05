@@ -535,14 +535,19 @@ namespace DSC2D {
         bool split(edge_key eid);
         
         /**
-         Safely collapses the halfedge with ID heid and updates attributes. Returns whether it suceeds or not.
+         Collapses the edge with ID eid and updates attributes. If safe is true, the collapse will affect the shape of the interface minimally. Returns whether it suceeds or not.
          */
-        bool safe_collapse(edge_key eid);
+        bool collapse(const edge_key& eid, bool safe);
         
         /**
-         Collapses the halfedge with ID heid and updates attributes. Returns whether it suceeds or not. Note that this method may edit the interface.
+         Collapses the face with ID fid and updates attributes. If safe is true, the collapse will affect the shape of the interface minimally. Returns whether it suceeds or not.
          */
-        bool unsafe_collapse(edge_key heid);
+        bool collapse(const face_key& fid, bool safe);
+        
+        /**
+         Collapses the edge with pointed to by the walker hew and updates attributes. The weight determines position and destination of the surviving node which are a weight between the two original nodes. Returns whether it suceeds or not.
+         */
+        bool collapse(HMesh::Walker hew, real weight);
         
         
         //************** QUALITY CONTROL ***************
@@ -636,6 +641,16 @@ namespace DSC2D {
          Returns the minimum edge length of the edges of the face with ID fid.
          */
         real min_edge_length(face_key fid);
+        
+        /**
+         * Returns the new minimum face quality (minimum angle) when moving a node from old_pos to new_pos. The edges in the link of the node should be passed in eids.
+         */
+        real min_quality(const std::vector<edge_key>& eids, const vec2& pos_old, const vec2& pos_new);
+        
+        /**
+         Returns whether the half edge is possible to collapse.
+         */
+        bool is_collapsable(HMesh::Walker hew, bool safe);
         
     public:
         /**

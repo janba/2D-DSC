@@ -618,41 +618,136 @@ namespace DSC2D
         return true;
     }
     
-    
-    bool DeformableSimplicialComplex::safe_collapse(edge_key eid)
+    real DeformableSimplicialComplex::min_quality(const std::vector<edge_key>& eids, const vec2& pos_old, const vec2& pos_new)
     {
-        std::vector<vec2> positions;
-        for(auto hew = walker(eid); !hew.full_circle(); hew = hew.circulate_vertex_ccw())
+        real min_q = INFINITY;
+        for (auto e : eids)
         {
-            positions.push_back(get_pos(hew.vertex()));
-        }
-        
-        real a, A;
-        for(int j = 1; j < positions.size() - 1; j++)
-        {
-            A = Util::signed_area(positions[0], positions[j], positions[j+1]);
-            a = Util::min_angle(positions[0], positions[j], positions[j+1]);
-            if(a < MIN_ANGLE || A < EPSILON || A > MAX_AREA)
+            auto hew = walker(e);
+            if(Util::sign(Util::signed_area(get_pos(hew.vertex()), get_pos(hew.opp().vertex()), pos_old)) !=
+               Util::sign(Util::signed_area(get_pos(hew.vertex()), get_pos(hew.opp().vertex()), pos_new)))
             {
-                return false;
+                return -INFINITY;
             }
+            min_q = Util::min(min_q, std::abs(Util::min_angle(get_pos(hew.vertex()), get_pos(hew.opp().vertex()), pos_new)));
         }
-        return unsafe_collapse(eid);
+        return min_q;
     }
     
-    bool DeformableSimplicialComplex::unsafe_collapse(edge_key eid)
+    bool DeformableSimplicialComplex::is_collapsable(HMesh::Walker hew, bool safe)
     {
-        auto hew = walker(eid);
+        if(safe)
+        {
+            if(safe_editable(hew.opp().vertex()))
+            {
+                return true;
+            }
+        }
+        else {
+            if(unsafe_editable(hew.opp().vertex()))
+            {
+                return true;
+            }
+        }
+        if(is_interface(hew.halfedge()))
+        {
+            vec2 p0 = get_pos(hew.opp().vertex());
+            vec2 p1 = get_pos(hew.vertex());
+            vec2 p2 = get_pos(previous_interface(hew).opp().vertex());
+            return Util::cos_angle(p2, p0, p1) < -COS_MIN_ANGLE;
+        }
+        if(boundary(*mesh, hew.halfedge()))
+        {
+            vec2 p0 = get_pos(hew.opp().vertex());
+            vec2 p1 = get_pos(hew.vertex());
+            auto hw = hew.circulate_vertex_ccw();
+            while (!boundary(*mesh, hw.halfedge()))
+            {
+                hw = hw.circulate_vertex_ccw();
+            }
+            vec2 p2 = get_pos(hw.vertex());
+            return Util::cos_angle(p2, p0, p1) < EPSILON-1.;
+        }
+        return false;
+    }
+    
+    bool DeformableSimplicialComplex::collapse(const edge_key& eid, bool safe)
+    {
         if (!precond_collapse_edge(*mesh, eid) || !unsafe_editable(eid))
         {
             return false;
         }
-        if(!unsafe_editable(hew.opp().vertex()) && unsafe_editable(hew.vertex()))
+        
+        auto hew = walker(eid);
+        bool n0_is_editable = is_collapsable(hew, safe);
+        bool n1_is_editable = is_collapsable(hew.opp(), safe);
+        
+        if (!n0_is_editable && !n1_is_editable)
         {
-            hew = hew.opp();
+            return false;
+        }
+        std::vector<real> test_weights;
+        if (!n0_is_editable || !n1_is_editable)
+        {
+            test_weights = {0.};
+            if(!n0_is_editable)
+            {
+                hew = hew.opp();
+            }
+        }
+        else {
+            test_weights = {0., 0.5, 1.};
         }
         
+        std::vector<node_key> nids = {hew.opp().vertex(), hew.vertex()};
+        std::vector<face_key> e_fids = {hew.face(), hew.opp().face()};
+        std::vector<edge_key> eids0, eids1;
+        
+        for(auto hw = walker(hew.halfedge()); !hw.full_circle(); hw = hw.circulate_vertex_cw())
+        {
+            if(hw.face() != e_fids[0] && hw.face() != e_fids[1])
+            {
+                eids0.push_back(hw.next().halfedge());
+            }
+        }
+        for(auto hw = walker(hew.opp().halfedge()); !hw.full_circle(); hw = hw.circulate_vertex_cw())
+        {
+            if(hw.face() != e_fids[0] && hw.face() != e_fids[1])
+            {
+                eids1.push_back(hw.next().halfedge());
+            }
+        }
+        
+        real q_max = -INFINITY;
+        real weight;
+        for (real w : test_weights)
+        {
+            vec2 p = (1.-w) * get_pos(nids[1]) + w * get_pos(nids[0]);
+            real q = Util::min(min_quality(eids0, get_pos(nids[0]), p), min_quality(eids1, get_pos(nids[1]), p));
+            
+            if (q > q_max && ((!is_interface(nids[0]) && !is_interface(nids[1])) || design_domain->is_inside(p)))
+            {
+                q_max = q;
+                weight = w;
+            }
+        }
+        
+        if(q_max > EPSILON)
+        {
+            if(!safe || q_max > MIN_ANGLE + EPSILON)
+            {
+                collapse(hew, weight);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    bool DeformableSimplicialComplex::collapse(HMesh::Walker hew, real weight)
+    {
         node_key vid = hew.vertex();
+        vec2 p = (1.-weight) * get_pos(hew.vertex()) + weight * get_pos(hew.opp().vertex());
+        vec2 d = (1.-weight) * get_destination(hew.vertex()) + weight * get_destination(hew.opp().vertex());
         
         update_attributes(hew.halfedge(), OUTSIDE, OUTSIDE);
         update_attributes(hew.prev().halfedge(), OUTSIDE, OUTSIDE);
@@ -662,9 +757,21 @@ namespace DSC2D
         update_attributes(hew.opp().vertex(), OUTSIDE);
         
         mesh->collapse_edge(hew.halfedge());
-        
         update_locally(vid);
+        set_pos(vid, p);
+        set_destination(vid, d);
         return true;
+    }
+    
+    bool DeformableSimplicialComplex::collapse(const face_key& fid, bool safe)
+    {
+        for (auto e : sorted_face_edges(fid)) {
+            if(collapse(e, safe))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     
     std::vector<HMesh::HalfEdgeID> DeformableSimplicialComplex::sorted_face_edges(face_key fid)
@@ -742,21 +849,7 @@ namespace DSC2D
                 if(min_edge_length(*fi) < DEG_EDGE_LENGTH ||
                    min_angle(*fi) < DEG_ANGLE || area(*fi) < DEG_AREA)
                 {
-                    auto hew = walker(sorted_face_edges(*fi)[0]);
-                    vec2 next = get_pos(hew.vertex()) - get_pos(hew.next().vertex());
-                    vec2 prev = get_pos(hew.prev().vertex()) - get_pos(hew.prev().prev().vertex());
-                    if(sqr_length(next) < sqr_length(prev) && unsafe_editable(hew.vertex()))
-                    {
-                        hew = hew.opp();
-                    }
-#ifdef DEBUG
-                    if (unsafe_collapse(hew.halfedge()))
-                    {
-                        std::cout << "Remove degenerate face" << std::endl;
-                    }
-#else
-                    unsafe_collapse(hew.halfedge());
-#endif
+                    collapse(*fi, false);
                 }
             }
         }
@@ -998,22 +1091,15 @@ namespace DSC2D
             {
                 if(is_movable(*heit) && length(*heit) < MIN_EDGE_LENGTH)
                 {
-                    node_key vid = walker(*heit).opp().vertex();
-                    std::vector<node_key> vertices = get_verts(vid, true);
-                    real angle = Util::cos_angle(get_pos(vertices[0]), get_pos(vid), get_pos(vertices[1]));
-                    //                real angle = dot(normalize(get_pos(vertices[0]) - get_pos(vid)), normalize(get_pos(vertices[1]) - get_pos(vid)));
-                    if(angle < -COS_MIN_ANGLE || length(*heit) < DEG_EDGE_LENGTH)
-                    {
-                        bool success = safe_collapse(*heit);
-                        change = success | change;
-                        
+                    bool success = collapse(*heit, false);
+                    change = success | change;
+                    
 #ifdef DEBUG
-                        if(success)
-                        {
-                            std::cout << "Collapse interface" << std::endl;
-                        }
-#endif
+                    if(success)
+                    {
+                        std::cout << "Collapse interface" << std::endl;
                     }
+#endif
                 }
             }
         }
@@ -1050,21 +1136,18 @@ namespace DSC2D
     bool DeformableSimplicialComplex::thinning()
     {
         bool change = false;
-        for(auto hei = halfedges_begin(); hei != halfedges_end(); ++hei)
+        for(auto fi = faces_begin(); fi != faces_end(); fi++)
         {
-            if(mesh->in_use(*hei))
+            if(mesh->in_use(*fi) && area(*fi) < MIN_AREA)
             {
-                if(safe_editable(walker(*hei).opp().vertex()) && safe_editable(*hei))
-                {
-                    bool success = safe_collapse(*hei);
-                    change = success | change;
+                bool success = collapse(*fi, true);
+                change = success | change;
 #ifdef DEBUG
-                    if(success)
-                    {
-                        std::cout << "Thinning" << std::endl;
-                    }
-#endif
+                if(success)
+                {
+                    std::cout << "Thinning" << std::endl;
                 }
+#endif
             }
         }
         return change;
