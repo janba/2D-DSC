@@ -275,12 +275,12 @@ namespace DSC2D
     
     bool DeformableSimplicialComplex::unsafe_editable(node_key vid) const
     {
-        return !boundary(*mesh, vid);
+        return !boundary(*mesh, vid) && !is_crossing(vid);
     }
     
     bool DeformableSimplicialComplex::safe_editable(node_key vid) const
     {
-        return unsafe_editable(vid) && !is_interface(vid) && !is_crossing(vid);
+        return unsafe_editable(vid) && !is_interface(vid);
     }
     
     bool DeformableSimplicialComplex::unsafe_editable(edge_key eid) const
