@@ -223,9 +223,31 @@ namespace DSC2D
         }
         
         /**
+         Calculates the intersection between the line segment defined by p + t*r (0 <= t <= 1) and the line defined by positions a and b. The method returns t. If t is not in the range 0 <= t <= 1, the line segments do not intersect.
+         */
+        inline real intersection_ray_line(const vec2& p, const vec2& r, const vec2& a, const vec2& b)
+        {
+            real t = INFINITY;
+            real x = cross(a-p, b-a);
+            real y = cross(r, b-a);
+            if(std::abs(y) < EPSILON) // r and s are parallel if true
+            {
+                if(std::abs(x) < EPSILON) // r and s are collinear if true
+                {
+                    t = 0.;
+                }
+            }
+            else
+            {
+                t = x/y;
+            }
+            return t;
+        }
+        
+        /**
          Calculates the intersection between the line segments defined by p + t*r and q + u*s, where 0 <= t <= 1 and 0 <= u <= 1. The method returns t if 0 <= u <= 1 and INFINITY otherwise. If t is not in the range 0 <= t <= 1, the line segments do not intersect.
          */
-        inline real intersection(const vec2& p, const vec2& r, const vec2& q, const vec2& s)
+        inline real intersection_ray_ray(const vec2& p, const vec2& r, const vec2& q, const vec2& s)
         {
             real t = INFINITY;
             real a = cross(q-p, s);

@@ -168,27 +168,22 @@ namespace DSC2D
     
     real DeformableSimplicialComplex::intersection_with_link(const node_key& vid, vec2 destination) const
     {
-        real scale = INFINITY;
-        vec2 p = get_pos(vid);
-        vec2 r = destination - p;
-        vec2 q, s;
+        vec2 pos = get_pos(vid);
+        vec2 ray = destination - pos;
+        
+        real min_t = INFINITY;
         for(auto hew = walker(vid); !hew.full_circle(); hew = hew.circulate_vertex_cw())
         {
-            q = get_pos(hew.vertex());
-            s = get_pos(hew.next().vertex()) - q;
-            real t = Util::intersection(p, r, q, s);
+            real t = Util::intersection_ray_line(pos, ray, get_pos(hew.vertex()), get_pos(hew.next().vertex()));
             if(0. <= t && t < INFINITY)
             {
-                scale = t;
+                min_t = Util::min(t, min_t);
             }
         }
 #ifdef DEBUG
         assert(scale < INFINITY);
 #endif
-        if (scale == INFINITY) {
-            scale = 0.;
-        }
-        return scale;
+        return min_t;
     }
     
     bool DeformableSimplicialComplex::move_vertex(node_key vid)

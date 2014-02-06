@@ -71,7 +71,7 @@ namespace DSC2D {
                         {
                             q = corners[j];
                             s = corners[(j+1)%corners.size()] - q;
-                            real t = Util::intersection(p, r, q, s);
+                            real t = Util::intersection_ray_ray(p, r, q, s);
                             if(0. <= t && t <= 1.)
                             {
                                 scale = t;

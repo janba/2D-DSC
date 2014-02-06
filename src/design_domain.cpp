@@ -64,7 +64,7 @@ namespace DSC2D {
             {
                 c0 = corners[i];
                 c1 = corners[(i+1)%corners.size()];
-                t = Util::intersection(p, v, c0, c1 - c0);
+                t = Util::intersection_ray_ray(p, v, c0, c1 - c0);
                 if(t >= 0. && t < 1.)
                 {
                     v = t*v;
