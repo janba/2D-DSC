@@ -590,6 +590,11 @@ namespace DSC2D {
         void remove_caps();
         
         /**
+         Remove degenerate edges.
+         */
+        void remove_degenerate_edges();
+        
+        /**
          Remove degenerate faces.
          */
         void remove_degenerate_faces();

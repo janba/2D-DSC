@@ -840,14 +840,27 @@ namespace DSC2D
         }
     }
     
+    void DeformableSimplicialComplex::remove_degenerate_edges()
+    {
+        for(auto ei = halfedges_begin(); ei != halfedges_end(); ei++)
+        {
+            if(mesh->in_use(*ei))
+            {
+                if(length(*ei) < DEG_EDGE_LENGTH && !collapse(*ei, true))
+                {
+                    collapse(*ei, false);
+                }
+            }
+        }
+    }
+    
     void DeformableSimplicialComplex::remove_degenerate_faces()
     {
         for(auto fi = faces_begin(); fi != faces_end(); ++fi)
         {
             if(mesh->in_use(*fi))
             {
-                if(min_edge_length(*fi) < DEG_EDGE_LENGTH ||
-                   min_angle(*fi) < DEG_ANGLE || area(*fi) < DEG_AREA)
+                if((min_angle(*fi) < DEG_ANGLE || area(*fi) < DEG_AREA) && !collapse(*fi, true))
                 {
                     collapse(*fi, false);
                 }
