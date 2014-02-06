@@ -145,12 +145,9 @@ namespace DSC2D
     {
         smooth();
         
-        remove_needles();
-        
         max_min_angle();
         
-        remove_caps();
-        
+        remove_degenerate_edges();
         remove_degenerate_faces();
         
         smooth();
@@ -158,20 +155,14 @@ namespace DSC2D
     
     void DeformableSimplicialComplex::resize_complex()
     {
-        bool work = true;
-        int count = 0;
-        while (work && count < 5)
-        {
-            work = split_interface();
-            
-            work = collapse_interface() | work;
-            
-            work = thickening() | work;
-            
-            work = thinning() | work;
-            
-            count++;
-        }
+        thickening_interface();
+        
+        thinning_interface();
+        
+        thickening();
+        
+        thinning();
+        
         fix_complex();
     }
     
