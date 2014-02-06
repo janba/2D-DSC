@@ -188,32 +188,19 @@ namespace DSC2D
     
     bool DeformableSimplicialComplex::move_vertex(node_key vid)
     {
-        vec2 v0_new = get_destination(vid);
-        vec2 v0 = get_pos(vid);
-        real l = (v0 - v0_new).length();
-        if (l < EPSILON)
+        vec2 pos = get_pos(vid);
+        vec2 destination = get_destination(vid);
+        real l = Util::length(destination - pos);
+        if (l < 1e-4 * AVG_EDGE_LENGTH)
         {
             return true;
         }
         
-        real scale = intersection_with_link(vid, v0_new);
-        l = Util::max(Util::min(l*scale - MIN_DEFORMATION, l), 0.);
-        vec2 v0_temp = v0 + l*normalize(v0_new - v0);
+        real max_l = l*intersection_with_link(vid, destination) - 1e-4 * AVG_EDGE_LENGTH;
+        l = Util::max(Util::min(0.5*max_l, l), 0.);
+        set_pos(vid, pos + l*Util::normalize(destination - pos));
         
-        vec2 v1, v2;
-        for(auto hew = walker(vid); !hew.full_circle(); hew = hew.circulate_vertex_cw())
-        {
-            v1 = get_pos(hew.vertex());
-            v2 = get_pos(hew.next().vertex());
-            
-            if (!Util::is_left_of(v0_temp, v1, v2)) {
-                return false;
-            }
-        }
-        
-        set_pos(vid, v0_temp);
-        
-        if((v0_temp - v0_new).length() < EPSILON)
+        if(Util::length(destination - get_pos(vid)) < 1e-4 * AVG_EDGE_LENGTH)
         {
             return true;
         }
