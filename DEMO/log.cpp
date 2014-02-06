@@ -113,7 +113,6 @@ void Log::write_log(const DeformableSimplicialComplex& dsc)
 {
     write_message("SIMPLICIAL COMPLEX INFO");
     write_variable("Avg edge length", dsc.get_avg_edge_length());
-    write_variable("Min deformation", dsc.get_min_deformation());
     write_variable("Total volume", dsc.get_volume());
     write_variable("#vertices", dsc.get_no_vertices());
     write_variable("#edges\t", dsc.get_no_halfedges());

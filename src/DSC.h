@@ -75,8 +75,6 @@ namespace DSC2D {
         real MIN_EDGE_LENGTH;
         real MAX_EDGE_LENGTH;
         
-        real MIN_DEFORMATION;
-        
         vec3 INTERFACE_COLOR;
         vec3 OUTSIDE_COLOR;
         vec3 CROSSING_COLOR;
@@ -197,14 +195,6 @@ namespace DSC2D {
         real get_avg_edge_length() const
         {
             return AVG_EDGE_LENGTH;
-        }
-        
-        /**
-         Returns the minimum deformation possible.
-         */
-        real get_min_deformation() const
-        {
-            return MIN_DEFORMATION;
         }
         
         /**

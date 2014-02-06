@@ -23,18 +23,16 @@ namespace DSC2D
     {
         MIN_ANGLE = M_PI * 2./180.;
         COS_MIN_ANGLE = cos(MIN_ANGLE);
-        DEG_ANGLE = 0.5*MIN_ANGLE;
+        DEG_ANGLE = 0.2*MIN_ANGLE;
         
-        MAX_EDGE_LENGTH = 1.5*AVG_EDGE_LENGTH;
-        MIN_EDGE_LENGTH = 0.5*AVG_EDGE_LENGTH;
-        DEG_EDGE_LENGTH = 0.5*MIN_EDGE_LENGTH;
-        
-        MIN_DEFORMATION = DEG_EDGE_LENGTH;
+        MAX_EDGE_LENGTH = 5.*AVG_EDGE_LENGTH;
+        MIN_EDGE_LENGTH = 0.2*AVG_EDGE_LENGTH;
+        DEG_EDGE_LENGTH = 0.2*MIN_EDGE_LENGTH;
         
         real avg_area = 0.5*std::sqrt(3./4.)*AVG_EDGE_LENGTH*AVG_EDGE_LENGTH;
-        MAX_AREA = 1.5*avg_area;
-        MIN_AREA = 0.5*avg_area;
-        DEG_AREA = 0.5*MIN_AREA;
+        MAX_AREA = 5.*avg_area;
+        MIN_AREA = 0.2*avg_area;
+        DEG_AREA = 0.2*MIN_AREA;
         
         INTERFACE_COLOR = DARK_RED;
         CROSSING_COLOR = RED;
