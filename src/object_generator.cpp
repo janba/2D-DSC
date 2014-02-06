@@ -115,7 +115,7 @@ namespace DSC2D {
         label_faces(dsc, corners, label);
         dsc.update_attributes(); // Maybe not necessary??
         
-        dsc.fix_mesh();
+        dsc.fix_complex();
     }
     
 }

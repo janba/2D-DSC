@@ -141,7 +141,7 @@ namespace DSC2D
         }
     }
     
-    void DeformableSimplicialComplex::fix_mesh()
+    void DeformableSimplicialComplex::fix_complex()
     {
         smooth();
         
@@ -156,7 +156,7 @@ namespace DSC2D
         smooth();
     }
     
-    void DeformableSimplicialComplex::resize_elements()
+    void DeformableSimplicialComplex::resize_complex()
     {
         bool work = true;
         int count = 0;
@@ -170,9 +170,9 @@ namespace DSC2D
             
             work = thinning() | work;
             
-            fix_mesh();
             count++;
         }
+        fix_complex();
     }
     
     real DeformableSimplicialComplex::intersection_with_link(const node_key& vid, vec2 destination) const
@@ -249,11 +249,11 @@ namespace DSC2D
                 }
             }
             
-            fix_mesh();
+            fix_complex();
             count++;
         }
         
-        resize_elements();
+        resize_complex();
         
         HMesh::IDRemap cleanup_map;
         cleanup_attributes(cleanup_map);
@@ -1050,7 +1050,7 @@ namespace DSC2D
     }
     
     
-    bool DeformableSimplicialComplex::split_interface()
+    bool DeformableSimplicialComplex::thickening_interface()
     {
         bool change = false;
         std::vector<edge_key> edges;
@@ -1082,7 +1082,7 @@ namespace DSC2D
     }
     
     
-    bool DeformableSimplicialComplex::collapse_interface()
+    bool DeformableSimplicialComplex::thinning_interface()
     {
         bool change = false;
         for(auto heit = halfedges_begin(); heit != halfedges_end(); heit++)

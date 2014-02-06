@@ -556,7 +556,7 @@ namespace DSC2D {
         /**
          Improves the quality of the simplicial complex by smoothing, removing needles and caps, maximize the minimum angle and removing degenerate faces.
          */
-        void fix_mesh();
+        void fix_complex();
         
     private:
         
@@ -600,18 +600,18 @@ namespace DSC2D {
         /**
          Resize the elements of the simplicial complex by thinning, thickening and splitting of the interface.
          */
-        void resize_elements();
+        void resize_complex();
         
     private:
         /**
          Split interface edges that are too long.
          */
-        bool split_interface();
+        bool thickening_interface();
         
         /**
          Collapse interface edges that are too long.
          */
-        bool collapse_interface();
+        bool thinning_interface();
         
         /**
          Remove any vertex as long as the min angles of the resulting triangulation
