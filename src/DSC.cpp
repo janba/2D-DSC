@@ -21,12 +21,12 @@ namespace DSC2D
 {    
     DeformableSimplicialComplex::DeformableSimplicialComplex(real AVG_EDGE_LENGTH_, const std::vector<real>& points, const std::vector<int>& faces, DesignDomain *domain): AVG_EDGE_LENGTH(AVG_EDGE_LENGTH_), design_domain(domain)
     {
-        MIN_ANGLE = M_PI * 2./180.;
+        MIN_ANGLE = M_PI * 10./180.;
         COS_MIN_ANGLE = cos(MIN_ANGLE);
         DEG_ANGLE = 0.2*MIN_ANGLE;
         
-        MAX_EDGE_LENGTH = 5.*AVG_EDGE_LENGTH;
-        MIN_EDGE_LENGTH = 0.2*AVG_EDGE_LENGTH;
+        MAX_EDGE_LENGTH = 2.*AVG_EDGE_LENGTH;
+        MIN_EDGE_LENGTH = 0.5*AVG_EDGE_LENGTH;
         DEG_EDGE_LENGTH = 0.2*MIN_EDGE_LENGTH;
         
         real avg_area = 0.5*std::sqrt(3./4.)*AVG_EDGE_LENGTH*AVG_EDGE_LENGTH;
@@ -179,7 +179,7 @@ namespace DSC2D
             }
         }
 #ifdef DEBUG
-        assert(scale < INFINITY);
+        assert(min_t < INFINITY);
 #endif
         return min_t;
     }
