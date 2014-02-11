@@ -525,7 +525,7 @@ namespace DSC2D
         {
             if(!boundary(*mesh, hew.halfedge()))
             {
-                DeformableSimplicialComplex::update_attributes(hew.face());
+                update_attributes(hew.face());
             }
         }
     }
@@ -1114,7 +1114,7 @@ namespace DSC2D
         {
             if(area(f) > MAX_AREA*AVG_AREA)
             {
-                bool success = split(f);
+                bool success = split(sorted_face_edges(f).back());
 #ifdef DEBUG
                 if(success)
                 {
