@@ -61,7 +61,8 @@ namespace DSC2D {
         
     protected:
         
-        real AVG_EDGE_LENGTH;
+        real AVG_LENGTH;
+        real AVG_AREA;
         
         real DEG_ANGLE;
         real MIN_ANGLE;
@@ -71,9 +72,9 @@ namespace DSC2D {
         real MIN_AREA;
         real MAX_AREA;
         
-        real DEG_EDGE_LENGTH;
-        real MIN_EDGE_LENGTH;
-        real MAX_EDGE_LENGTH;
+        real DEG_LENGTH;
+        real MIN_LENGTH;
+        real MAX_LENGTH;
         
         vec3 INTERFACE_COLOR;
         vec3 OUTSIDE_COLOR;
@@ -194,7 +195,7 @@ namespace DSC2D {
          */
         real get_avg_edge_length() const
         {
-            return AVG_EDGE_LENGTH;
+            return AVG_LENGTH;
         }
         
         /**
@@ -322,6 +323,15 @@ namespace DSC2D {
          To actually move the vertices to their destination, call the deform function.
          */
         virtual void set_destination(node_key vid, vec2 dest);
+        
+        /**
+         Sets the average edge length of the edges in the simplical complex.
+         */
+        void set_avg_edge_length(real avg_edge_length)
+        {
+            AVG_LENGTH = avg_edge_length;
+            AVG_AREA = 0.5*std::sqrt(3./4.)*avg_edge_length*avg_edge_length;
+        }
         
         //************** ITERATORS ***************
     public:
@@ -601,23 +611,23 @@ namespace DSC2D {
         /**
          Split interface edges that are too long.
          */
-        bool thickening_interface();
+        void thickening_interface();
         
         /**
          Collapse interface edges that are too long.
          */
-        bool thinning_interface();
+        void thinning_interface();
         
         /**
          Remove any vertex as long as the min angles of the resulting triangulation
          are not too bad.
          */
-        bool thinning();
+        void thinning();
         
         /**
          Inserts vertices where faces are too big.
          */
-        bool thickening();
+        void thickening();
         
         //************** UTIL ***************
     private:

@@ -19,19 +19,19 @@
 
 namespace DSC2D
 {    
-    DeformableSimplicialComplex::DeformableSimplicialComplex(real AVG_EDGE_LENGTH_, const std::vector<real>& points, const std::vector<int>& faces, DesignDomain *domain): AVG_EDGE_LENGTH(AVG_EDGE_LENGTH_), design_domain(domain)
+    DeformableSimplicialComplex::DeformableSimplicialComplex(real AVG_EDGE_LENGTH, const std::vector<real>& points, const std::vector<int>& faces, DesignDomain *domain): design_domain(domain)
     {
+        set_avg_edge_length(AVG_EDGE_LENGTH);
         MIN_ANGLE = M_PI * 10./180.;
         COS_MIN_ANGLE = cos(MIN_ANGLE);
         DEG_ANGLE = 0.2*MIN_ANGLE;
         
-        MAX_EDGE_LENGTH = 2.*AVG_EDGE_LENGTH;
-        MIN_EDGE_LENGTH = 0.5*AVG_EDGE_LENGTH;
-        DEG_EDGE_LENGTH = 0.2*MIN_EDGE_LENGTH;
+        MAX_LENGTH = 2.;
+        MIN_LENGTH = 0.5;
+        DEG_LENGTH = 0.2*MIN_LENGTH;
         
-        real avg_area = 0.5*std::sqrt(3./4.)*AVG_EDGE_LENGTH*AVG_EDGE_LENGTH;
-        MAX_AREA = 5.*avg_area;
-        MIN_AREA = 0.2*avg_area;
+        MAX_AREA = 5.;
+        MIN_AREA = 0.2;
         DEG_AREA = 0.2*MIN_AREA;
         
         INTERFACE_COLOR = DARK_RED;
@@ -189,16 +189,16 @@ namespace DSC2D
         vec2 pos = get_pos(vid);
         vec2 destination = get_destination(vid);
         real l = Util::length(destination - pos);
-        if (l < 1e-4 * AVG_EDGE_LENGTH)
+        if (l < 1e-4 * AVG_LENGTH)
         {
             return true;
         }
         
-        real max_l = l*intersection_with_link(vid, destination) - 1e-4 * AVG_EDGE_LENGTH;
+        real max_l = l*intersection_with_link(vid, destination) - 1e-4 * AVG_LENGTH;
         l = Util::max(Util::min(0.5*max_l, l), 0.);
         set_pos(vid, pos + l*Util::normalize(destination - pos));
         
-        if(Util::length(destination - get_pos(vid)) < 1e-4 * AVG_EDGE_LENGTH)
+        if(Util::length(destination - get_pos(vid)) < 1e-4 * AVG_LENGTH)
         {
             return true;
         }
@@ -795,7 +795,7 @@ namespace DSC2D
             auto edges = sorted_face_edges(f);
             if(min_angle(f) < MIN_ANGLE
                && std::abs(length(edges[1]) - length(edges[0])) > std::abs(length(edges[2]) - length(edges[1]))
-               && area(f) > DEG_AREA)
+               && area(f) > DEG_AREA*AVG_AREA)
                 //&& length(m,edges[2])/length(m,edges[1]) < 1.3
                 //&& length(m,edges[2])/length(m,edges[1]) > 0.7)// length(m,edges[2])/length(m,edges[0]) > SPLIT_EDGE_RATIO)
             {
@@ -817,7 +817,7 @@ namespace DSC2D
         {
             if(mesh->in_use(*ei))
             {
-                if(length(*ei) < DEG_EDGE_LENGTH && !collapse(*ei, true))
+                if(length(*ei) < DEG_LENGTH*AVG_LENGTH && !collapse(*ei, true))
                 {
                     collapse(*ei, false);
                 }
@@ -831,7 +831,7 @@ namespace DSC2D
         {
             if(mesh->in_use(*fi))
             {
-                if((min_angle(*fi) < DEG_ANGLE || area(*fi) < DEG_AREA) && !collapse(*fi, true))
+                if((min_angle(*fi) < DEG_ANGLE || area(*fi) < DEG_AREA*AVG_AREA) && !collapse(*fi, true))
                 {
                     collapse(*fi, false);
                 }
@@ -1034,9 +1034,13 @@ namespace DSC2D
     }
     
     
-    bool DeformableSimplicialComplex::thickening_interface()
+    void DeformableSimplicialComplex::thickening_interface()
     {
-        bool change = false;
+        if(MAX_LENGTH == INFINITY)
+        {
+            return;
+        }
+        
         std::vector<edge_key> edges;
         for(auto hei = halfedges_begin(); hei != halfedges_end(); ++hei)
         {
@@ -1050,10 +1054,9 @@ namespace DSC2D
         for (auto e : edges)
         {
             auto hew = walker(e);
-            if(length(e) > MAX_EDGE_LENGTH || is_crossing(hew.vertex()) || is_crossing(hew.opp().vertex()))
+            if(length(e) > MAX_LENGTH*AVG_LENGTH || is_crossing(hew.vertex()) || is_crossing(hew.opp().vertex()))
             {
                 bool success = split(e);
-                change = success | change;
 #ifdef DEBUG
                 if(success)
                 {
@@ -1062,22 +1065,23 @@ namespace DSC2D
 #endif
             }
         }
-        return change;
     }
     
     
-    bool DeformableSimplicialComplex::thinning_interface()
+    void DeformableSimplicialComplex::thinning_interface()
     {
-        bool change = false;
+        if(MIN_LENGTH <= 0.)
+        {
+            return;
+        }
+        
         for(auto heit = halfedges_begin(); heit != halfedges_end(); heit++)
         {
             if(mesh->in_use(*heit))
             {
-                if(is_movable(*heit) && length(*heit) < MIN_EDGE_LENGTH)
+                if(is_movable(*heit) && length(*heit) < MIN_LENGTH*AVG_LENGTH)
                 {
                     bool success = collapse(*heit, false);
-                    change = success | change;
-                    
 #ifdef DEBUG
                     if(success)
                     {
@@ -1087,25 +1091,30 @@ namespace DSC2D
                 }
             }
         }
-        return change;
     }
     
     
-    bool DeformableSimplicialComplex::thickening()
+    void DeformableSimplicialComplex::thickening()
     {
+        if(MAX_AREA == INFINITY)
+        {
+            return;
+        }
+        
         std::vector<face_key> faces;
         for(auto fi = faces_begin(); fi != faces_end(); ++fi)
         {
-            faces.push_back(*fi);
+            if(area(*fi) > MAX_AREA*AVG_AREA)
+            {
+                faces.push_back(*fi);
+            }
         }
         
-        bool change = false;
         for (auto f : faces)
         {
-            if(area(f) > MAX_AREA)
+            if(area(f) > MAX_AREA*AVG_AREA)
             {
                 bool success = split(f);
-                change = success | change;
 #ifdef DEBUG
                 if(success)
                 {
@@ -1114,18 +1123,20 @@ namespace DSC2D
 #endif
             }
         }
-        return change;
     }
     
-    bool DeformableSimplicialComplex::thinning()
+    void DeformableSimplicialComplex::thinning()
     {
-        bool change = false;
+        if(MIN_AREA <= 0.)
+        {
+            return;
+        }
+        
         for(auto fi = faces_begin(); fi != faces_end(); fi++)
         {
-            if(mesh->in_use(*fi) && area(*fi) < MIN_AREA)
+            if(mesh->in_use(*fi) && area(*fi) < MIN_AREA*AVG_AREA)
             {
                 bool success = collapse(*fi, true);
-                change = success | change;
 #ifdef DEBUG
                 if(success)
                 {
@@ -1134,7 +1145,6 @@ namespace DSC2D
 #endif
             }
         }
-        return change;
     }
     
     
