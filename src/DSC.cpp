@@ -992,6 +992,42 @@ namespace DSC2D
         return n;
     }
     
+    vec2 DeformableSimplicialComplex::get_normal_destination(node_key nid) const
+    {
+        if(!is_interface(nid))
+        {
+            return vec2(0.);
+        }
+        
+        vec2 n(0.f), r(0.f);
+        int i = 0;
+        for(auto hew = walker(nid); !hew.full_circle(); hew = hew.circulate_vertex_cw())
+        {
+            if(is_interface(hew.halfedge()))
+            {
+                if(get_label(hew.face()) > get_label(hew.opp().face()))
+                {
+                    r = normalize(get_destination(hew.vertex()) - get_destination(nid));
+                }
+                else
+                {
+                    r = normalize(get_destination(nid) - get_destination(hew.vertex()));
+                }
+                n += vec2(r[1], -r[0]);
+                i++;
+            }
+        }
+#ifdef DEBUG
+        assert(i == 2);
+        assert(!Util::isnan(n[0]) && !Util::isnan(n[1]));
+#endif
+        if(sqr_length(n) > EPSILON)
+        {
+            n.normalize();
+        }
+        return n;
+    }
+    
     void DeformableSimplicialComplex::clamp_vector(const node_key& vid, vec2& vec) const
     {
         design_domain->clamp_vector(get_pos(vid), vec);
