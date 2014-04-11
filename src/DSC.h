@@ -322,7 +322,7 @@ namespace DSC2D {
          Sets the destination of the vertex with ID vid to dest.
          To actually move the vertices to their destination, call the deform function.
          */
-        virtual void set_destination(node_key vid, vec2 dest);
+        virtual void set_destination(const node_key& vid, const vec2& dest);
         
         /**
          Sets the average edge length of the edges in the simplical complex.

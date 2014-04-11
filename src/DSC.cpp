@@ -397,7 +397,7 @@ namespace DSC2D
         mesh->pos(vid) = CGLA::Vec3d(p[0], p[1], 0.f);
     }
     
-    void DeformableSimplicialComplex::set_destination(node_key vid, vec2 dest)
+    void DeformableSimplicialComplex::set_destination(const node_key& vid, const vec2& dest)
     {
         if(is_movable(vid))
         {
