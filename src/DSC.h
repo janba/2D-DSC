@@ -701,6 +701,11 @@ namespace DSC2D {
         vec2 get_barycenter(node_key vid, bool interface) const;
         
         /**
+         Calculates the average position of the vertices to the face with ID fid.
+         */
+        vec2 get_barycenter(face_key fid) const;
+        
+        /**
          For a given walker on a interface edge returnes walker moved to the next edge allong the interface. 
          It follows (also in crossings) the interface of the single label (defined by the face of the given edge).
          NOTE: is not an atomic operation (no_steps is incremented more than once), but full_circle can be used, 

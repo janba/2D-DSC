@@ -901,6 +901,19 @@ namespace DSC2D
         return avg_pos/n;
     }
     
+    vec2 DeformableSimplicialComplex::get_barycenter(face_key fid) const
+    {
+        vec2 avg_pos(0.);
+        for (auto hew = walker(fid); !hew.full_circle(); hew = hew.circulate_face_cw())
+        {
+            avg_pos += get_pos(hew.vertex());
+        }
+#ifdef DEBUG
+        assert(!Util::isnan(avg_pos[0]) && !Util::isnan(avg_pos[1]));
+#endif
+        return avg_pos/3.;
+    }
+    
     HMesh::Walker DeformableSimplicialComplex::next_interface(HMesh::Walker hw) const
     {
         if (!is_interface(hw.halfedge())) // should only be used for interface halfedges
