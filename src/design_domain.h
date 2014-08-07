@@ -46,9 +46,9 @@ namespace DSC2D {
                 case L:
                     corners.push_back(vec2(0.,0.));
                     corners.push_back(vec2(0., SIZE_Y));
-                    corners.push_back(vec2(SIZE_X/2., SIZE_Y));
-                    corners.push_back(vec2(SIZE_X/2., SIZE_Y/2.));
-                    corners.push_back(vec2(SIZE_X, SIZE_Y/2.));
+                    corners.push_back(vec2(0.4*SIZE_X, SIZE_Y));
+                    corners.push_back(vec2(0.4*SIZE_X, 0.4*SIZE_Y));
+                    corners.push_back(vec2(SIZE_X, 0.4*SIZE_Y));
                     corners.push_back(vec2(SIZE_X, 0.));
                     break;
                 case ESO:
