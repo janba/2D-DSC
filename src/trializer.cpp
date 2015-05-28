@@ -39,8 +39,6 @@ namespace DSC2D {
         }
         x_half.push_back(width+avg_edge_length); x_half.push_back(width+2*avg_edge_length);
         
-        int idx = 0;
-        
         for (int k = 0; k<x_full.size(); k++)
         {
             points.push_back(x_full[k]); points.push_back(0); points.push_back(0); // first line of points
@@ -51,7 +49,6 @@ namespace DSC2D {
             
             for (int k = 0; k<x_full.size(); k++)
             {
-                idx++;
                 points.push_back(x_full[k]);
                 points.push_back(y); points.push_back(0); // lines with points on triangle basis
                 
@@ -60,7 +57,6 @@ namespace DSC2D {
             {
                 points.push_back(x_half[k]);
                 points.push_back(y+h); points.push_back(0); // lines with points on triangle tops/bottoms
-                idx++;
             }
         }
         
