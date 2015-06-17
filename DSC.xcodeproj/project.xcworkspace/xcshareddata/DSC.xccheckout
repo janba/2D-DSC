@@ -10,29 +10,29 @@
 	<string>DSC</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>729B663A-C65E-4FE1-83C0-A42968F5E064</key>
-		<string>https://github.com/asny/2D-DSC.git</string>
+		<key>F29B5E51A5B97DCCD0EC2FAF945213024A5D39C4</key>
+		<string>https://github.com/tuannt8/2D-DSC.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>DSC.xcodeproj/project.xcworkspace</string>
+	<string>DSC.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>729B663A-C65E-4FE1-83C0-A42968F5E064</key>
+		<key>F29B5E51A5B97DCCD0EC2FAF945213024A5D39C4</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/asny/2D-DSC.git</string>
+	<string>https://github.com/tuannt8/2D-DSC.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>729B663A-C65E-4FE1-83C0-A42968F5E064</string>
+	<string>F29B5E51A5B97DCCD0EC2FAF945213024A5D39C4</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>729B663A-C65E-4FE1-83C0-A42968F5E064</string>
+			<string>F29B5E51A5B97DCCD0EC2FAF945213024A5D39C4</string>
 			<key>IDESourceControlWCCName</key>
 			<string>2D-DSC</string>
 		</dict>
