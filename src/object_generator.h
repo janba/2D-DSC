@@ -51,6 +51,14 @@ namespace DSC2D {
             
             create_object(dsc, corners, label);
         }
+        
+        static void label_tris(DeformableSimplicialComplex& dsc,
+                               std::vector<DeformableSimplicialComplex::face_key> faces,
+                               int label){
+            for (auto f : faces){
+                dsc.update_attributes(f, label);
+             }
+        }
     };
     
     

@@ -28,18 +28,39 @@
 #include <GEL/HMesh/mesh_optimization.h>
 #endif
 
+//#define TUAN_SEG
+
+// #define TUAN_MULTI_RES
+
+#ifdef TUAN_MULTI_RES
+class image;
+#endif
+
+#define NB_FORCES 10
+
+struct node_atrr{
+    
+};
 
 namespace DSC2D {
-    
+    typedef DSC2D::vec2 Vec2;
+    typedef DSC2D::vec3 Vec3;
+
     
     /**
      The base class representing a simplicial complex.
      */
     class DeformableSimplicialComplex
     {
+#ifdef TUAN_MULTI_RES
+    public:
+        image * img;
+        int pixel_spread = 4;  // To avoid computing energy near edge
+        double collapse_ene_thres = 0.15;
+#endif
         friend class ObjectGenerator;
     public:
-        enum LABEL_OPT {NO_LABEL = -3, OUTSIDE = 0, INTERFACE = -1, CROSSING = -2};
+        enum LABEL_OPT {NO_LABEL = -3, OUTSIDE = 0, INTERFACE_DSC = -1, CROSSING = -2};
         enum OBJECTS_TYPE {FILLED_HALF, FILLED, SQUARE, BLOB, BLOBS};
         
         typedef HMesh::VertexID node_key;
@@ -59,7 +80,7 @@ namespace DSC2D {
             pri(_pri), h(_h), time(_time) {}
         };
         
-    protected:
+    protected:public: // testing
         
         real AVG_LENGTH;
         real AVG_AREA;
@@ -83,18 +104,39 @@ namespace DSC2D {
         vec3 OUTSIDE_FACE_COLOR;
         vec3 DEFAULT_FACE_COLOR;
         
-    private:
+    public:
         HMesh::Manifold *mesh;
         DesignDomain *design_domain;
         
         HMesh::VertexAttributeVector<vec2> destination;
         
+        HMesh::VertexAttributeVector<vec2> internal_node_forces;
+        HMesh::VertexAttributeVector<vec2> external_node_forces;
+        HMesh::VertexAttributeVector<int> bStable;
+        
+        
+        HMesh::VertexAttributeVector<std::vector<vec2>> forces;
+        
+        double default_dt = 0.0;
+        HMesh::VertexAttributeVector<double> dts;
+        void set_default_dt(double dt_);
+
+        
         HMesh::VertexAttributeVector<int> vertex_labels;
         HMesh::HalfEdgeAttributeVector<int> edge_labels;
         HMesh::FaceAttributeVector<int> face_labels;
+ 
+    public:
+        HMesh::FaceAttributeVector<std::vector<vec2>> face_att;
+        
+        // attibute
+        HMesh::VertexAttributeVector<std::vector<int>> node_att_i;
+        HMesh::HalfEdgeAttributeVector<std::vector<int>> edge_att_i;
         
         //************** INITIALISATION ***************
     public:
+        
+        
         
         /**
          Creates a simplicial complex with size (SIZE_X_, SIZE_Y_). The input parameters specifies the design domain, the initial object(s) and the discretization. The latter is defined by the parameter AVG_EDGE_LENGTH, which tells how long edges are on average.
@@ -112,7 +154,10 @@ namespace DSC2D {
          */
         void create_simplicial_complex(const std::vector<real>& points, const std::vector<int>& faces);
         
+        DeformableSimplicialComplex(){};
+        
         //************** DISPLAY FUNCTIONS ***************
+#pragma mark - Display fuctions
     public:
         /**
          Returns the vertex colors.
@@ -128,9 +173,11 @@ namespace DSC2D {
          Returns the face colors.
          */
         virtual HMesh::FaceAttributeVector<vec3> get_face_colors() const;
+    
         
         //************** ATTRIBUTE FUNCTIONS ***************
-    protected:
+#pragma mark - attribute functions
+    public:
         
         /**
          Clean up the attribute vectors (the lists that stores the attributes of each vertex, edge and face). Should be called after removing primitives.
@@ -145,7 +192,7 @@ namespace DSC2D {
         /**
          Initialise the attribute vectors for the vertex with ID vid. Should be called after a new vertex has been created.
          */
-        virtual void init_attributes(node_key vid);
+        virtual void init_attributes(node_key vid, bool keep = false);
         
         /**
          Initialise the attribute vectors for the edge with ID eid. Should be called after a new edge has been created.
@@ -188,6 +235,7 @@ namespace DSC2D {
         
         
         //************** GETTERS ***************
+#pragma mark - Getters
     public:
         
         /**
@@ -254,6 +302,11 @@ namespace DSC2D {
         std::vector<vec2> get_pos(face_key fid) const;
         
         /**
+         Returns the positions of the vertices of the edge with ID fid.
+         */
+        std::vector<vec2> get_pos(edge_key fid) const;
+        
+        /**
          Returns the new position of the vertex with ID vid.
          */
         vec2 get_destination(node_key vid) const;
@@ -266,7 +319,7 @@ namespace DSC2D {
         /**
          Returns the IDs of the neighbouring vertices of the vertex with ID vid. If the interface parameter is true, it only returns the neighbouring vertices which are also interface.
          */
-        std::vector<node_key> get_verts(node_key vid, bool interface = false) const;
+        std::vector<node_key> get_verts(node_key vid, bool _interface = false) const;
         
         /**
          Returns the IDs of the vertices of the face with ID fid.
@@ -308,8 +361,49 @@ namespace DSC2D {
          */
         std::vector<int> get_interface_labels(node_key vid) const;
         
+        /**
+         Node force
+         */
+        vec2 get_node_internal_force(node_key vid) const{
+            return internal_node_forces[vid];
+        }
+        
+        vec2 get_node_external_force(node_key vid) const{
+            return external_node_forces[vid];
+        }
+        
+        const HMesh::VertexAttributeVector<vec2> & get_internal_force () const{
+            return internal_node_forces;
+        }
+        
+        const HMesh::VertexAttributeVector<vec2> & get_external_force () const{
+            return external_node_forces;
+        }
+        
+        vec2 get_node_force(node_key vid, int index){
+            return forces[vid][index];
+        }
+        
+        void set_node_force(node_key vid, vec2 f, int index){
+            forces[vid][index] = f;
+        }
+        
+        void add_node_force(node_key vid, vec2 f, int index){
+            forces[vid][index] += f;
+        }
+        
+        /*
+         Time step
+         */
+        void set_time(node_key vid, double new_t){
+            dts[vid] = new_t;
+        };
+        double time_step(node_key const vid) const{
+            return dts[vid];
+        }
         
         //************** SETTERS ***************
+#pragma mark - Setter
     protected:
         
         /**
@@ -318,6 +412,44 @@ namespace DSC2D {
         void set_pos(node_key vid, vec2 p);
         
     public:
+        
+        /**
+         Internal force
+         */
+        void set_node_internal_force(node_key vid, vec2 force){
+            internal_node_forces[vid] = force;
+        }
+        
+        void add_node_internal_force(node_key vid, vec2 force){
+#ifdef DEBUG
+            assert(!Util::isnan(force[0]) && !Util::isnan(force[1]));
+#endif
+            internal_node_forces[vid] += force;
+        }
+        
+        /**
+         External force
+         */
+        void set_node_external_force(node_key vid, vec2 force){
+            external_node_forces[vid] = force;
+        }
+        
+        void add_node_external_force(node_key vid, vec2 force){
+            external_node_forces[vid] += force;
+        }
+
+        void set_label(face_key fid, int new_label){
+            face_labels[fid] = new_label;
+        }
+        
+        void set_phase_attr(face_key fid, vec2 new_attr, int idx){
+            face_att[fid][idx] = new_attr;
+        };
+        
+        vec2 get_phase_attr(face_key fid, int idx){
+            return face_att[fid][idx];
+        }
+        
         /**
          Sets the destination of the vertex with ID vid to dest.
          To actually move the vertices to their destination, call the deform function.
@@ -334,17 +466,8 @@ namespace DSC2D {
         }
         
         //************** ITERATORS ***************
+#pragma mark - Iterators
     public:
-        HMesh::IDIteratorPair<HMesh::Vertex> vertices() const {
-            return mesh->vertices();
-        }
-        HMesh::IDIteratorPair<HMesh::Face> faces() const {
-            return mesh->faces();
-        }
-        HMesh::IDIteratorPair<HMesh::HalfEdge> halfedges() const {
-            return mesh->halfedges();
-        }
-        
         HMesh::VertexIDIterator vertices_begin() const
         {
             return mesh->vertices_begin();
@@ -370,6 +493,18 @@ namespace DSC2D {
             return mesh->faces_begin();
         }
         
+        HMesh::IDIteratorPair<HMesh::Vertex> vertices() const {
+            return mesh->vertices();
+        }
+
+        HMesh::IDIteratorPair<HMesh::HalfEdge> halfedges() const {
+            return mesh->halfedges();
+        }
+        
+        HMesh::IDIteratorPair<HMesh::Face> faces() const {
+            return mesh->faces();
+        }
+        
         HMesh::FaceIDIterator faces_end() const
         {
             return mesh->faces_end();
@@ -391,6 +526,7 @@ namespace DSC2D {
         }
         
         //************** PRECONDITIONS ***************
+#pragma mark - Preconditions
     public:
         /**
          Returns whether the vertex with ID vid is situated at a crossing of interfaces.
@@ -413,7 +549,7 @@ namespace DSC2D {
          */
         bool is_interface(node_key vid)
         {
-            return vertex_labels[vid] == INTERFACE;
+            return vertex_labels[vid] == INTERFACE_DSC;
         }
         
         /**
@@ -421,7 +557,7 @@ namespace DSC2D {
          */
         bool is_interface(node_key vid) const
         {
-            return vertex_labels[vid] == INTERFACE;
+            return vertex_labels[vid] == INTERFACE_DSC;
         }
         
         /**
@@ -429,7 +565,7 @@ namespace DSC2D {
          */
         bool is_interface(edge_key eid)
         {
-            return edge_labels[eid] == INTERFACE;
+            return edge_labels[eid] == INTERFACE_DSC;
         }
         
         /**
@@ -437,7 +573,7 @@ namespace DSC2D {
          */
         bool is_interface(edge_key eid) const
         {
-            return edge_labels[eid] == INTERFACE;
+            return edge_labels[eid] == INTERFACE_DSC;
         }
         
         /**
@@ -498,7 +634,7 @@ namespace DSC2D {
          */
         virtual bool is_movable(edge_key eid) const;
         
-    protected:
+    public:
         
         /**
          Returns whether the vertex with ID vid is editable, but not safe to interface changes i.e. if you edit the vertex you may change the interface.
@@ -521,13 +657,14 @@ namespace DSC2D {
         virtual bool safe_editable(edge_key eid) const;
         
         //************** MESH FUNCTIONS ***************
+#pragma mark - Mesh functions
     public:
         /**
          Move the vertices in the simplicial complex to their new position. The new position is set by the update_pos function.
          */
         void deform();
         
-    private:
+    public:
         
         /**
          Moves a the vertex with ID vid to its new position. Returns whether the vertex was succesfully moved to its new position.
@@ -559,8 +696,15 @@ namespace DSC2D {
          */
         bool collapse(HMesh::Walker hew, real weight);
         
+        /**
+         Splits the edge eid by inserting a vertex at the center of the edge and splitting the two neighbouring faces of the edge. Returns whether it suceeds or not.
+         For mesh adaptation. We need stability of the vertex.
+         */
+        bool split_adpat_mesh(edge_key eid);
+        
         
         //************** QUALITY CONTROL ***************
+#pragma mark - Quality control
         
     protected:
         /**
@@ -584,11 +728,13 @@ namespace DSC2D {
          */
         void max_min_angle();
         
+    public:
         /**
          Performs Laplacian smoothing on all safe editable vertices.
          */
         void smooth(real t = 1.);
-        
+    
+    private:
         /**
          Remove needles, triangles with one very short edge, by splitting the face (inserting a vertex at the barycenter of the face).
          */
@@ -610,6 +756,7 @@ namespace DSC2D {
         void remove_degenerate_faces();
         
         //************** DETAIL CONTROL ***************
+#pragma mark - Detail control
         
     public:
         /**
@@ -624,7 +771,7 @@ namespace DSC2D {
         void thickening_interface();
         
         /**
-         Collapse interface edges that are too long.
+         Collapse interface edges that are too short.
          */
         void thinning_interface();
         
@@ -640,7 +787,8 @@ namespace DSC2D {
         void thickening();
         
         //************** UTIL ***************
-    private:
+#pragma mark - Utilities
+    private: public:
         
         /**
          Checks that the mesh is valid, i.e. that each face has three vertices and that the area of a face is positive (the face is not degenerate).
@@ -651,6 +799,17 @@ namespace DSC2D {
          Returns the minimum angle of the face with ID fid.
          */
         real min_angle(face_key fid);
+        
+        /**
+         Returns the max angle of the face with ID fid.
+         */
+        real max_angle(face_key fid, HMesh::Walker &hmax);
+
+        /**
+         Returns the vertex of max angle.
+         The half edge point to that vertex
+         */
+        HMesh::Walker max_angle_point(face_key fid);
         
         /**
          Returns the minimum edge length of the edges of the face with ID fid.
@@ -668,6 +827,12 @@ namespace DSC2D {
         bool is_collapsable(HMesh::Walker hew, bool safe);
         
     public:
+        /**
+         Load and save
+         */
+        bool save(const char * filePath);
+        bool load(char * filePath);
+        
         /**
          Returns the length of the edge with ID eid.
          */
@@ -708,7 +873,7 @@ namespace DSC2D {
          Calculates the average position of the neighbouring vertices to the vertex with ID vid.
          If interface is true, the average position is only calculated among the neighbouring vertices that are interface.
          */
-        vec2 get_barycenter(node_key vid, bool interface) const;
+        vec2 get_barycenter(node_key vid, bool _interface) const;
         
         /**
          Calculates the average position of the vertices to the face with ID fid.
@@ -759,7 +924,29 @@ namespace DSC2D {
          Calculates the intersection with the link of the vertex with ID vid and the line from the position of this vertex towards destination and to infinity. It returns t which is where on the line the intersection occurs. If t=0, the interesection occured at the position of the vertex with ID vid or never occured. If t=1 the intersection occured at the destination point. If 0<t<1 the intersection occured between these points. Finally, if t>1 the intersection occured farther away from the vertex position than destination.
          */
         real intersection_with_link(const node_key& vid, vec2 destination) const;
+
+#pragma mark - TESTING
+    public:
+        void increase_resolution_range(); // reduce smallest edge by 2. For multi resolution
+        void refine_without_change_interface();
         
+        void remove_degenerate_needle(face_key fkey);
+        void remove_degenerate_needle2(face_key fkey);
+        /**
+         Set coefficients. Smallest feature size in pixel
+         */
+        void set_smallest_feature_size(double length);
+        void set_uniform_smallest_feature(double length);
+        
+        double get_min_length_ratio(){return MIN_LENGTH;}
+        
+        
+        void  split_edge(edge_key ek);
+        void clean_attributes();
+        
+
+        
+        DeformableSimplicialComplex * clone();
     };
     
 }

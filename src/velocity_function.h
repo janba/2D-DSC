@@ -17,6 +17,7 @@
 #pragma once
 
 #include "DSC.h"
+#include <chrono>
 
 namespace DSC2D {
     

@@ -25,12 +25,15 @@ namespace DSC2D {
      */
     class DesignDomain
     {
+    public:
         std::vector<vec2> corners; // Specified in a clockwise order
         real volume = -1.;
         
     public:
         enum DESIGN_DOMAIN_TYPE {RECTANGLE, L, ESO};
         
+        
+        DesignDomain(){}
         /**
          Creates a design domain defined by the design domain type and size. It is possible to specify a boundary gap which translates the entire domain by the amount specified by the input parameter.
          */
