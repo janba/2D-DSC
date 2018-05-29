@@ -52,12 +52,6 @@ namespace DSC2D {
      */
     class DeformableSimplicialComplex
     {
-#ifdef TUAN_MULTI_RES
-    public:
-        image * img;
-        int pixel_spread = 4;  // To avoid computing energy near edge
-        double collapse_ene_thres = 0.15;
-#endif
         friend class ObjectGenerator;
     public:
         enum LABEL_OPT {NO_LABEL = -3, OUTSIDE = 0, INTERFACE_DSC = -1, CROSSING = -2};
@@ -154,7 +148,7 @@ namespace DSC2D {
          */
         void create_simplicial_complex(const std::vector<real>& points, const std::vector<int>& faces);
         
-        DeformableSimplicialComplex(){};
+        DeformableSimplicialComplex(){}
         
         //************** DISPLAY FUNCTIONS ***************
 #pragma mark - Display fuctions
@@ -290,6 +284,11 @@ namespace DSC2D {
         {
             return static_cast<int>(mesh->no_faces());
         }
+
+        int get_no_faces_allocated() const
+        {
+            return static_cast<int>(mesh->allocated_faces());
+        }
         
         /**
          Returns the position of the vertex with ID vid.
@@ -367,6 +366,8 @@ namespace DSC2D {
         vec2 get_node_internal_force(node_key vid) const{
             return internal_node_forces[vid];
         }
+
+
         
         vec2 get_node_external_force(node_key vid) const{
             return external_node_forces[vid];
@@ -662,7 +663,7 @@ namespace DSC2D {
         /**
          Move the vertices in the simplicial complex to their new position. The new position is set by the update_pos function.
          */
-        void deform();
+        void deform(bool adaptive = false);
         
     public:
         
@@ -694,7 +695,7 @@ namespace DSC2D {
         /**
          Collapses the edge with pointed to by the walker hew and updates attributes. The weight determines position and destination of the surviving node which are a weight between the two original nodes. Returns whether it suceeds or not.
          */
-        bool collapse(HMesh::Walker hew, real weight);
+        bool collapse(HMesh::Walker hew, real weight, bool safe = false);
         
         /**
          Splits the edge eid by inserting a vertex at the center of the edge and splitting the two neighbouring faces of the edge. Returns whether it suceeds or not.
@@ -947,6 +948,9 @@ namespace DSC2D {
 
         
         DeformableSimplicialComplex * clone();
+
+        void recursive_split(HMesh::AttributeVector<int, face_key> faces_to_split);
+        bool split_triangle_sub(face_key f, HMesh::AttributeVector<int, face_key> & faces_to_split);
     };
     
 }

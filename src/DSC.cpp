@@ -25,7 +25,6 @@
 
 #define TETRA_PAK
 
-
 namespace DSC2D
 {
     const  DSC2D::vec3 BACKGROUND_COLOR = DSC2D::vec3(0.7); // DSC2D::vec3(1.0);
@@ -215,17 +214,6 @@ namespace DSC2D
     
     void DeformableSimplicialComplex::resize_complex()
     {
-#ifdef TUAN_SEG
-        thickening_interface();
-        
-      //  thinning_interface();
-        
-        thickening();
-        
-        thinning();
-        
-        fix_complex();
-#else
         thickening_interface();
  
         thinning_interface();
@@ -235,7 +223,6 @@ namespace DSC2D
         thinning();
         
         fix_complex();
-#endif /* TUAN_SEG */
     }
     
     real DeformableSimplicialComplex::intersection_with_link(const node_key& vid, vec2 destination) const
@@ -293,8 +280,54 @@ namespace DSC2D
 
         return new_dsc;
     }
+
+    void DeformableSimplicialComplex::recursive_split(HMesh::AttributeVector<int, face_key> faces_to_split)
+    {
+        for(int i = 0; i < faces_to_split.size(); i++)
+        {
+            if(faces_to_split[face_key(i)])
+                split_triangle_sub(face_key(i), faces_to_split);
+        }
+    }
+
+    bool DeformableSimplicialComplex::split_triangle_sub(face_key f, HMesh::AttributeVector<int, face_key> & faces_to_split)
+    {
+        auto eid = sorted_face_edges(f);
+        auto longest_e = eid[2];
+
+        while(1)
+        {
+            // Check the other edge
+            auto hew = walker(longest_e);
+            if(hew.face() != f)
+                hew = hew.opp();
+
+            auto other_tri = hew.opp().face();
+            if(other_tri == HMesh::InvalidFaceID)
+                break;
+
+            auto eid2 = sorted_face_edges(other_tri);
+            auto longest_e2 = eid[2];
+            if(longest_e2 != longest_e)
+            {
+                if(!split_triangle_sub(other_tri, faces_to_split))
+                    break;
+            }else{
+                break;
+            }
+        }
+
+
+        split(longest_e);
+
+        // Update the list
+        if(f.get_index() < faces_to_split.size())
+            faces_to_split[f] = 0;
+
+        return true;
+    }
     
-    void DeformableSimplicialComplex::deform()
+    void DeformableSimplicialComplex::deform(bool adaptive)
     {
         bool work = true;
         int count = 0;
@@ -313,7 +346,8 @@ namespace DSC2D
             count++;
         }
         
-        resize_complex();
+        if(!adaptive)
+            resize_complex();
         
         HMesh::IDRemap cleanup_map;
         cleanup_attributes(cleanup_map);
@@ -796,7 +830,14 @@ namespace DSC2D
         else
         //--
         {
-            
+//            // Check quality first
+//            bool should_split = true;
+//            {
+//                auto pts = get_pos(fid);
+//                auto v = (pts[0] + pts[1] + pts[2])/3.0;
+
+//            }
+
             int fa = get_label(fid);
             node_key vid = mesh->split_face_by_vertex(fid);
             
@@ -950,9 +991,14 @@ namespace DSC2D
         return false;
     }
     
-    bool DeformableSimplicialComplex::collapse(HMesh::Walker hew, real weight)
+    bool DeformableSimplicialComplex::collapse(HMesh::Walker hew, real weight, bool safe)
     {
-        
+        if(! (precond_collapse_edge(*mesh, hew.halfedge())
+              && is_collapsable(hew, safe)
+              && unsafe_editable(hew.halfedge())
+              ))
+            return false;
+
         node_key vid = hew.vertex();
         vec2 p = (1.-weight) * get_pos(hew.vertex()) + weight * get_pos(hew.opp().vertex());
         vec2 d = (1.-weight) * get_destination(hew.vertex()) + weight * get_destination(hew.opp().vertex());
