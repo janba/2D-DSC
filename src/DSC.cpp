@@ -87,18 +87,9 @@ namespace DSC2D
         face_labels = HMesh::FaceAttributeVector<int>(get_no_faces(), OUTSIDE);
         face_att = HMesh::FaceAttributeVector<std::vector<vec2>>(get_no_faces(),
                                                         std::vector<vec2>(NB_FORCES, Vec2(0.)));
-        internal_node_forces = HMesh::VertexAttributeVector<vec2>(get_no_vertices(),
-                                                                  vec2(0.0f));
-        external_node_forces = HMesh::VertexAttributeVector<vec2>(get_no_vertices(),
-                                                                  vec2(0.0f));
         bStable = HMesh::VertexAttributeVector<int>(get_no_vertices(), 1);
 
-        dts = HMesh::VertexAttributeVector<double>(get_no_vertices(), 0.0);
-        node_att_i = HMesh::VertexAttributeVector<std::vector<int>>(get_no_vertices(),
-                                                    std::vector<int>(NB_FORCES, 0) );
-        
-        edge_att_i = HMesh::HalfEdgeAttributeVector<std::vector<int>>(get_no_halfedges(),
-                                                    std::vector<int>(NB_FORCES, 0));
+
     }
     
     void DeformableSimplicialComplex::cleanup_attributes(HMesh::IDRemap& cleanup_map)
@@ -106,17 +97,13 @@ namespace DSC2D
         mesh->cleanup(cleanup_map);
         vertex_labels.cleanup(cleanup_map.vmap);
         
-   //     edge_att_i.cleanup(cleanup_map.hmap);
         edge_labels.cleanup(cleanup_map.hmap);
         face_labels.cleanup(cleanup_map.fmap);
-//        face_att.cleanup(cleanup_map.fmap);
+
         destination.cleanup(cleanup_map.vmap);
-        internal_node_forces.cleanup(cleanup_map.vmap);
-        external_node_forces.cleanup(cleanup_map.vmap);
         bStable.cleanup(cleanup_map.vmap);
-        dts.cleanup(cleanup_map.vmap);
+
         
-  //     node_att_i.cleanup(cleanup_map.vmap);
     }
     
     
@@ -345,6 +332,8 @@ namespace DSC2D
             fix_complex();
             count++;
         }
+        
+        std::cout << "Deform DSC in " << count << " steps" << std::endl;
         
         if(!adaptive)
             resize_complex();
@@ -607,9 +596,6 @@ namespace DSC2D
     void DeformableSimplicialComplex::init_attributes(node_key vid, bool keep)
     {
         destination[vid] = get_pos(vid);
-        internal_node_forces[vid] = vec2(0.0);
-        external_node_forces[vid] = vec2(0.0);
-        
 
         bStable[vid] = 1;
         
@@ -623,13 +609,7 @@ namespace DSC2D
         }
     }
     
-    void DeformableSimplicialComplex::set_default_dt(double dt_)
-    {
-        default_dt = dt_;
-        for (auto nkey : vertices()) {
-            dts[nkey] = default_dt;
-        }
-    }
+
     
     void DeformableSimplicialComplex::update_attributes(node_key vid, int label)
     {
@@ -724,7 +704,7 @@ namespace DSC2D
     
     void DeformableSimplicialComplex::update_attributes()
     {
-        for(auto fi = faces_begin(); fi != faces_end(); ++fi)
+           for(auto fi = faces_begin(); fi != faces_end(); ++fi)
         {
             update_attributes(*fi);
         }
@@ -880,7 +860,7 @@ namespace DSC2D
             {
                 return true;
             }
-            /*TUAN add: Do not move crossing vertex, even one of the iinterface is straight*/
+            /*TUAN add: Do not move crossing vertex, even one of the interface is straight*/
             else
             {
                 if (is_crossing(hew.opp().vertex()))
@@ -995,7 +975,7 @@ namespace DSC2D
     {
         if(! (precond_collapse_edge(*mesh, hew.halfedge())
               && is_collapsable(hew, safe)
-              && unsafe_editable(hew.halfedge())
+//              && unsafe_editable(hew.halfedge()) // Tuan: boundary should becollapsable
               ))
             return false;
 
@@ -1936,12 +1916,12 @@ namespace DSC2D
     {
         // Length
         MAX_LENGTH = 10.;
-        MIN_LENGTH = length / AVG_LENGTH /2.0;
+        MIN_LENGTH = length / AVG_LENGTH;
         DEG_LENGTH = MIN_LENGTH;// 0.2*MIN_LENGTH;
         
         // Area
         MAX_AREA = 10.;
-        MIN_AREA = MIN_LENGTH*MIN_LENGTH;
+        MIN_AREA = MIN_LENGTH*MIN_LENGTH*0.5;
         DEG_AREA = MIN_AREA; //0.2*MIN_AREA;
     }
     
