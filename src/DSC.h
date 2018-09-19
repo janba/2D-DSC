@@ -284,6 +284,11 @@ namespace DSC2D {
         {
             return static_cast<int>(mesh->no_faces());
         }
+        
+        int get_no_nodes_allocated() const
+        {
+            return static_cast<int>(mesh->allocated_vertices());
+        }
 
         int get_no_faces_allocated() const
         {
