@@ -352,7 +352,9 @@ namespace DSC2D
         HMesh::IDRemap cleanup_map;
         cleanup_attributes(cleanup_map);
         
-        init_attributes();
+// Tuan commented out: It crash topology opt
+//        init_attributes();
+// End comment out
         update_attributes();
     }
     
@@ -600,11 +602,11 @@ namespace DSC2D
         
         for(auto vi = vertices_begin(); vi != vertices_end(); ++vi)
         {
-            init_attributes(*vi, true);
+            init_attributes(*vi);
         }
     }
     
-    void DeformableSimplicialComplex::init_attributes(node_key vid, bool keep)
+    void DeformableSimplicialComplex::init_attributes(node_key vid)
     {
         destination[vid] = get_pos(vid);
         internal_node_forces[vid] = vec2(0.0);

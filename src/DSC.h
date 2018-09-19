@@ -186,7 +186,7 @@ namespace DSC2D {
         /**
          Initialise the attribute vectors for the vertex with ID vid. Should be called after a new vertex has been created.
          */
-        virtual void init_attributes(node_key vid, bool keep = false);
+        virtual void init_attributes(node_key vid);
         
         /**
          Initialise the attribute vectors for the edge with ID eid. Should be called after a new edge has been created.
