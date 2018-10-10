@@ -107,15 +107,46 @@ namespace DSC2D {
         }
     }
     
+    void ObjectGenerator::label_faces(DeformableSimplicialComplex& dsc, const std::vector<int>& labels)
+    {
+        int face_ind = 0;
+        for (auto fi = dsc.faces_begin(); fi != dsc.faces_end(); fi++)
+        {
+            int label = labels[face_ind];
+            
+            if (label == 1)
+            {
+                // std::cout << "label: " << label << std::endl;
+                dsc.update_attributes(*fi, 1);
+            }
+            face_ind++;
+        }
+    }
+    
     void ObjectGenerator::create_object(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners, int label)
     {
-        dsc.init_attributes(); // Maybe not necessary??
-        
+       // dsc.init_attributes(); // Maybe not necessary??
         fit_mesh_to_object(dsc, corners);
+        dsc.init_attributes(); // it should be here, because fit_mesh_object change the pos. Haojie.
         label_faces(dsc, corners, label);
         dsc.update_attributes(); // Maybe not necessary??
         
         dsc.fix_complex();
+        dsc.init_attributes();
+        dsc.update_attributes();
+    }
+    
+    void ObjectGenerator::create_object_from_labels(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners, const std::vector<int>& labels)
+    {
+        // dsc.init_attributes(); // Maybe not necessary??
+        fit_mesh_to_object(dsc, corners);
+        dsc.init_attributes(); // it should be here, because fit_mesh_object change the pos. Haojie.
+        label_faces(dsc, labels);
+        dsc.update_attributes(); // Maybe not necessary??
+        
+        dsc.fix_complex();
+        dsc.init_attributes();
+        dsc.update_attributes();
     }
     
 }

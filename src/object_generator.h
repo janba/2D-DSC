@@ -23,13 +23,17 @@ namespace DSC2D {
     
     class ObjectGenerator {
         
-        static void fit_mesh_to_object(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners);
-        
         static void label_faces(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners, int label);
+        
+    public:
+        
+        static void label_faces(DeformableSimplicialComplex& dsc, const std::vector<int>& labels);
+        
+        static void fit_mesh_to_object(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners);
         
         static void create_object(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners, int label);
         
-    public:
+        static void create_object_from_labels(DeformableSimplicialComplex& dsc, const std::vector<vec2>& corners, const std::vector<int>& labels);
         
         static void create_blob(DeformableSimplicialComplex& dsc, const vec2& center, const real& radius, int label)
         {
@@ -50,14 +54,6 @@ namespace DSC2D {
             corners.push_back(origin + vec2(size[0], 0.));
             
             create_object(dsc, corners, label);
-        }
-        
-        static void label_tris(DeformableSimplicialComplex& dsc,
-                               std::vector<DeformableSimplicialComplex::face_key> faces,
-                               int label){
-            for (auto f : faces){
-                dsc.update_attributes(f, label);
-             }
         }
     };
     

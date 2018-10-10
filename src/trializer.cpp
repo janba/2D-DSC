@@ -28,51 +28,43 @@ namespace DSC2D {
         std::vector<real> x_half;
         
         x_full.push_back(0.);
-        for (int i = 0; i <= Nx; i++) {
-            x_full.push_back(avg_edge_length + i*b);
+        for (real x=avg_edge_length; x<avg_edge_length+(Nx+1)*b; x+=b) // stopping condition: x<= AVG_EDGE_LENGTH+Nx*b
+        {
+            x_full.push_back(x);
         }
         x_full.push_back(width+2*avg_edge_length);
         
+        // x positions of points on triangle tops/bottoms
         x_half.push_back(0.); x_half.push_back(avg_edge_length);
-        for (int i = 0; i < Nx; i++) {
-            x_half.push_back(avg_edge_length + i*b + b/2);
+        for (real x=avg_edge_length+b/2; x<avg_edge_length+(Nx+1)*b-b/2; x+=b) // stopping condition: x<=AVG_EDGE_LENGTH+Nx*b-b/2
+        {
+            x_half.push_back(x);
         }
         x_half.push_back(width+avg_edge_length); x_half.push_back(width+2*avg_edge_length);
-        
-        int idx = 0;
         
         for (int k = 0; k<x_full.size(); k++)
         {
             points.push_back(x_full[k]); points.push_back(0); points.push_back(0); // first line of points
         }
         
-        for (int i = 0; i < Ny/2; i++) {
-            real y = avg_edge_length + 2*i*h;
-            
+        for (real y = avg_edge_length; y<avg_edge_length + Ny*h; y+=2*h) // stopping condition: y<=AVG_EDGE_LENGTH + (Ny-2)*h;
+        {
             for (int k = 0; k<x_full.size(); k++)
             {
-                idx++;
-                points.push_back(x_full[k]);
-                points.push_back(y); points.push_back(0); // lines with points on triangle basis
-
+                points.push_back(x_full[k]); points.push_back(y); points.push_back(0); // lines with points on triangle basis
             }
             for (int k = 0; k<x_half.size(); k++)
             {
-                points.push_back(x_half[k]);
-                points.push_back(y+h); points.push_back(0); // lines with points on triangle tops/bottoms
-                idx++;
+                points.push_back(x_half[k]); points.push_back(y+h); points.push_back(0); // lines with points on triangle tops/bottoms
             }
         }
-        
         for (int k = 0; k<x_full.size(); k++)
         {
-            points.push_back(x_full[k]);
-            points.push_back(height+avg_edge_length); points.push_back(0); // line between inside and boundary
+            points.push_back(x_full[k]); points.push_back(height+avg_edge_length); points.push_back(0); // line between inside and boundary
         }
         for (int k = 0; k<x_full.size(); k++)
         {
-            points.push_back(x_full[k]);
-            points.push_back(height+2*avg_edge_length); points.push_back(0); // last line of points
+            points.push_back(x_full[k]); points.push_back(height+2*avg_edge_length); points.push_back(0); // last line of points
         }
     }
     

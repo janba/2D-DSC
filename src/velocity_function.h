@@ -17,6 +17,8 @@
 #pragma once
 
 #include "DSC.h"
+#include <iomanip>
+#include <ctime>
 #include <chrono>
 
 namespace DSC2D {
@@ -63,6 +65,11 @@ namespace DSC2D {
         int get_time_step() const
         {
             return time_step;
+        }
+        
+        void set_max_time_steps(int max)
+        {
+            MAX_TIME_STEPS = max;
         }
         
         /**
@@ -158,16 +165,18 @@ namespace DSC2D {
          */
         virtual bool is_motion_finished(DeformableSimplicialComplex& dsc)
         {
-            if (time_step == MAX_TIME_STEPS) {
+            if (time_step >= MAX_TIME_STEPS)
+            {
                 return true;
             }
             std::vector<vec2> pos = dsc.get_design_variable_positions();
+            double avg_length = dsc.get_avg_edge_length();
             for (auto &p : pos)
             {
                 bool match = false;
                 for (int i = 0; i + 1 < pos_old.size(); i += 2)
                 {
-                    if (Util::min_dist_sqr(pos_old[i], pos_old[i+1], p) < ACCURACY*ACCURACY)
+                    if (Util::min_dist_sqr(pos_old[i], pos_old[i+1], p) < avg_length*ACCURACY*avg_length*ACCURACY)
                     {
                         match = true;
                         break;
