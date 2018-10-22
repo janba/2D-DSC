@@ -573,7 +573,7 @@ namespace DSC2D {
          */
         void deform();
         
-    private:
+    protected:
         
         /**
          Moves a the vertex with ID vid to its new position. Returns whether the vertex was succesfully moved to its new position.

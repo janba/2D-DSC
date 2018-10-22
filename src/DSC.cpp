@@ -186,6 +186,7 @@ namespace DSC2D
     
     bool DeformableSimplicialComplex::move_vertex(node_key vid)
     {
+        
         vec2 pos = get_pos(vid);
         vec2 destination = get_destination(vid);
         real l = Util::length(destination - pos);
