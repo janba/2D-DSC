@@ -401,6 +401,11 @@ namespace DSC2D {
             return mesh->vertices_end();
         }
         
+        HMesh::IDIteratorPair<HMesh::Vertex> vertices() const
+        {
+            return mesh->vertices();
+        }
+        
         HMesh::HalfEdgeIDIterator halfedges_begin() const
         {
             return mesh->halfedges_begin();
@@ -409,6 +414,11 @@ namespace DSC2D {
         HMesh::HalfEdgeIDIterator halfedges_end() const
         {
             return mesh->halfedges_end();
+        }
+        
+        HMesh::IDIteratorPair<HMesh::HalfEdge> halfedges() const
+        {
+            return mesh->halfedges();
         }
         
         HMesh::FaceIDIterator faces_begin() const
@@ -420,6 +430,11 @@ namespace DSC2D {
         {
             return mesh->faces_end();
         }
+        
+        HMesh::IDIteratorPair<HMesh::Face> faces() const{
+            return mesh->faces();
+        }
+       
         
         HMesh::Walker walker(node_key vid) const
         {
