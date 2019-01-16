@@ -85,6 +85,7 @@ namespace DSC2D {
         vec3 DEFAULT_FACE_COLOR;
         
     private:
+    public:
         HMesh::Manifold *mesh;
         DesignDomain *design_domain;
         
@@ -132,7 +133,7 @@ namespace DSC2D {
         
         //************** ATTRIBUTE FUNCTIONS ***************
     protected:
-        
+    public:
         /**
          Clean up the attribute vectors (the lists that stores the attributes of each vertex, edge and face). Should be called after removing primitives.
          */
@@ -401,6 +402,11 @@ namespace DSC2D {
             return mesh->vertices_end();
         }
         
+        HMesh::IDIteratorPair<HMesh::Vertex> vertices() const
+        {
+            return mesh->vertices();
+        }
+        
         HMesh::HalfEdgeIDIterator halfedges_begin() const
         {
             return mesh->halfedges_begin();
@@ -419,6 +425,11 @@ namespace DSC2D {
         HMesh::FaceIDIterator faces_end() const
         {
             return mesh->faces_end();
+        }
+        
+        HMesh::IDIteratorPair<HMesh::Face> faces() const
+        {
+            return mesh->faces();
         }
         
         HMesh::Walker walker(node_key vid) const
@@ -609,6 +620,7 @@ namespace DSC2D {
         //************** QUALITY CONTROL ***************
         
     protected:
+    public:
         /**
          Improves the quality of the simplicial complex by smoothing, removing needles and caps, maximize the minimum angle and removing degenerate faces.
          */
@@ -625,6 +637,7 @@ namespace DSC2D {
         void priority_queue_optimization(const HMesh::EnergyFun& efun);
         
     private:
+    public:
         /**
          Maximize minimum angles using greedy approach by flipping edges.
          */
