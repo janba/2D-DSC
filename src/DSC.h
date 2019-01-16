@@ -417,6 +417,11 @@ namespace DSC2D {
             return mesh->halfedges_end();
         }
         
+        HMesh::IDIteratorPair<HMesh::HalfEdge> halfedges() const
+        {
+            return mesh->halfedges();
+        }
+        
         HMesh::FaceIDIterator faces_begin() const
         {
             return mesh->faces_begin();
@@ -431,6 +436,7 @@ namespace DSC2D {
         {
             return mesh->faces();
         }
+
         
         HMesh::Walker walker(node_key vid) const
         {

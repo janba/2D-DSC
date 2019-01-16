@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
+		<key>DEMO.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>DSC.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
