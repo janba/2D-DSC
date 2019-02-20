@@ -25,9 +25,13 @@
 #include "CGLA/Vec3d.h"
 #else
 #include <GEL/CGLA/Vec2d.h>
+#include <GEL/CGLA/Vec2i.h>
  #include <GEL/CGLA/Vec3d.h>
 #endif
 
+typedef CGLA::Vec2d vec2;
+typedef CGLA::Vec3d vec3;
+typedef CGLA::Vec2i vec2i;
 
 namespace DSC2D
 {
