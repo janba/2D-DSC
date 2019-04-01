@@ -169,6 +169,31 @@ namespace DSC2D
             return sqr_length(p - projection);
         }
         
+        /*
+        Returns the projection of point p to line segment vw
+        */
+        inline vec2 project_point_to_line_segment(const vec2& v, const vec2& w, const vec2& p)
+        {
+            const real l2 = dot(v-w, v-w);  // i.e. |w-v|^2 -  avoid a sqrt
+            if (l2 == 0.)
+            {
+                return v;   // v == w case
+            }
+            // Consider the line extending the segment, parameterized as v + t (w - v).
+            // We find projection of point p onto the line.
+            // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+            const real t = dot(p - v, w - v) / l2;
+            if (t < 0.0)
+            {
+                return v;       // Beyond the 'v' end of the segment
+            }
+            else if (t > 1.0)
+            {
+                return w;  // Beyond the 'w' end of the segment
+            }
+            return v + t * (w - v);  // Projection falls on the segment
+        }
+        
         /**
          Returns whether you have to turn left when going from a to b to c.
          */
