@@ -591,6 +591,7 @@ namespace DSC2D {
         void deform();
         
     protected:
+    public:
         
         /**
          Moves a the vertex with ID vid to its new position. Returns whether the vertex was succesfully moved to its new position.
@@ -605,7 +606,7 @@ namespace DSC2D {
         /**
          Splits the edge eid by inserting a vertex at the center of the edge and splitting the two neighbouring faces of the edge. Returns whether it suceeds or not.
          */
-        bool split(edge_key eid);
+        bool split(edge_key eid, node_key * n = nullptr);
         
         /**
          Collapses the edge with ID eid and updates attributes. If safe is true, the collapse will affect the shape of the interface minimally. Returns whether it suceeds or not.

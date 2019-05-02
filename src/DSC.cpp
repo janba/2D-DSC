@@ -575,7 +575,7 @@ namespace DSC2D
     }
     
     
-    bool DeformableSimplicialComplex::split(edge_key eid)
+    bool DeformableSimplicialComplex::split(edge_key eid, node_key * n)
     {
         if (!unsafe_editable(eid))
         {
@@ -606,6 +606,10 @@ namespace DSC2D
         init_attributes(newf2, get_label(f2));
         
         update_locally(vid);
+        
+        if(n)
+            *n = vid;
+        
         return true;
     }
     
