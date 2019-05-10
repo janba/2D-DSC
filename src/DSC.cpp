@@ -227,6 +227,8 @@ namespace DSC2D
        
         resize_complex();
         
+//        remove_needles();
+        
         HMesh::IDRemap cleanup_map;
         cleanup_attributes(cleanup_map);
         
