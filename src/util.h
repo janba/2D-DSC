@@ -21,13 +21,17 @@
 #include <sstream>
 
 #ifdef WIN32
-#include <CGLA/Vec2d.h>
-#include <CGLA/Vec3d.h>
+#include "CGLA/Vec2d.h"
+#include "CGLA/Vec3d.h"
 #else
 #include <GEL/CGLA/Vec2d.h>
-#include <GEL/CGLA/Vec3d.h>
+#include <GEL/CGLA/Vec2i.h>
+ #include <GEL/CGLA/Vec3d.h>
 #endif
 
+typedef CGLA::Vec2d vec2;
+typedef CGLA::Vec3d vec3;
+typedef CGLA::Vec2i vec2i;
 
 namespace DSC2D
 {
@@ -165,6 +169,31 @@ namespace DSC2D
             return sqr_length(p - projection);
         }
         
+        /*
+        Returns the projection of point p to line segment vw
+        */
+        inline vec2 project_point_to_line_segment(const vec2& v, const vec2& w, const vec2& p)
+        {
+            const real l2 = dot(v-w, v-w);  // i.e. |w-v|^2 -  avoid a sqrt
+            if (l2 == 0.)
+            {
+                return v;   // v == w case
+            }
+            // Consider the line extending the segment, parameterized as v + t (w - v).
+            // We find projection of point p onto the line.
+            // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+            const real t = dot(p - v, w - v) / l2;
+            if (t < 0.0)
+            {
+                return v;       // Beyond the 'v' end of the segment
+            }
+            else if (t > 1.0)
+            {
+                return w;  // Beyond the 'w' end of the segment
+            }
+            return v + t * (w - v);  // Projection falls on the segment
+        }
+        
         /**
          Returns whether you have to turn left when going from a to b to c.
          */
@@ -199,25 +228,65 @@ namespace DSC2D
          */
         inline bool is_inside(const vec2& p, std::vector<vec2> corners)
         {
-            vec2 c0, c1, c2;
-            while(corners.size() > 2)
+
+            double x = p[0];
+            double y = p[1];
+            
+            int  i, j = static_cast<int>(corners.size())-1 ;
+            bool  oddNodes=false;
+            double eps = 1e-8;
+            
+            for (i=0; i<corners.size(); i++)
             {
-                int i = 0;
-                do {
-#ifdef DEBUG
-                    assert(i < corners.size());
-#endif
-                    c0 = corners[i];
-                    c1 = corners[(i+1)%corners.size()];
-                    c2 = corners[(i+2)%corners.size()];
-                    i++;
-                } while (is_left_of(c0,c1,c2));
-                
-                if(!is_left_of(c0, c1, p) && !is_left_of(c1, c2, p) && !is_left_of(c2, c0, p))
+                if( min_dist_sqr(corners[i], corners[j], p) <= eps)
                 {
                     return true;
                 }
-                corners.erase(corners.begin() + (i%corners.size()));
+                
+                if ( ( (corners[i][1]< y && corners[j][1]>=y) || (corners[j][1]< y && corners[i][1]>=y) ) &&  (corners[i][0]<=x ||corners[j][0]<=x) )
+                 {
+                    oddNodes^=(corners[i][0]+(y-corners[i][1])/(corners[j][1]-corners[i][1])*(corners[j][0]-corners[i][0])<x);
+                }
+                j=i;
+            }
+            
+            return oddNodes;
+            
+//            vec2 c0, c1, c2;
+//            while(corners.size() > 2)
+//            {
+//                int i = 0;
+//                do {
+//#ifdef DEBUG
+//                    assert(i < corners.size());
+//#endif
+//                    c0 = corners[i];
+//                    c1 = corners[(i+1)%corners.size()];
+//                    c2 = corners[(i+2)%corners.size()];
+//                    i++;
+//                } while (is_left_of(c0,c1,c2));
+//                
+//                if(!is_left_of(c0, c1, p) && !is_left_of(c1, c2, p) && !is_left_of(c2, c0, p))
+//                {
+//                    return true;
+//                }
+//                corners.erase(corners.begin() + (i%corners.size()));
+//            }
+//            return false;
+        }
+        
+        inline bool on_boundary(const vec2& p, std::vector<vec2> corners)
+        {
+            int  i, j = static_cast<int>(corners.size())-1 ;
+            double eps = 1e-2;
+            
+            for (i=0; i<corners.size(); i++)
+            {
+                if( min_dist_sqr(corners[i], corners[j], p) <= eps)
+                {
+                    return true;
+                }
+                j=i;
             }
             return false;
         }

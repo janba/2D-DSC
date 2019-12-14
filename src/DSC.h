@@ -28,9 +28,10 @@
 #include <GEL/HMesh/mesh_optimization.h>
 #endif
 
+#define EPSILON 1e-9
 
 namespace DSC2D {
-    
+
     
     /**
      The base class representing a simplicial complex.
@@ -84,6 +85,7 @@ namespace DSC2D {
         vec3 DEFAULT_FACE_COLOR;
         
     private:
+    public:
         HMesh::Manifold *mesh;
         DesignDomain *design_domain;
         
@@ -131,7 +133,7 @@ namespace DSC2D {
         
         //************** ATTRIBUTE FUNCTIONS ***************
     protected:
-        
+    public:
         /**
          Clean up the attribute vectors (the lists that stores the attributes of each vertex, edge and face). Should be called after removing primitives.
          */
@@ -184,7 +186,7 @@ namespace DSC2D {
         /**
          Updates face, edge and vertex attributes.
          */
-        void update_attributes();
+        void update_attributes(); // It should be protected, but keep it public for the backforward compatibility. (Haojie).
         
         
         //************** GETTERS ***************
@@ -196,6 +198,56 @@ namespace DSC2D {
         real get_avg_edge_length() const
         {
             return AVG_LENGTH;
+        }
+        
+        real get_min_edge_length() const
+        {
+            return MIN_LENGTH;
+        }
+        
+        real get_deg_edge_length() const
+        {
+            return DEG_LENGTH;
+        }
+        
+        real get_max_edge_length() const
+        {
+            return MAX_LENGTH;
+        }
+        
+        real get_avg_area() const
+        {
+            return AVG_AREA;
+        }
+        
+        real get_min_area() const
+        {
+            return MIN_AREA;
+        }
+        
+        real get_deg_area() const
+        {
+            return DEG_AREA;
+        }
+        
+        real get_max_area() const
+        {
+            return MAX_AREA;
+        }
+
+        real get_min_angle() const
+        {
+            return MIN_ANGLE;
+        }
+        
+        real get_deg_angle() const
+        {
+            return DEG_ANGLE;
+        }
+        
+        real get_cos_min_angle() const
+        {
+            return COS_MIN_ANGLE;
         }
         
         /**
@@ -247,6 +299,11 @@ namespace DSC2D {
          Returns the position of the vertex with ID vid.
          */
         vec2 get_pos(node_key vid) const;
+        
+        /**
+         Returns the positions of the vertices of the edge with ID eid.
+         */
+        std::vector<vec2> get_pos(edge_key eid) const;
         
         /**
          Returns the positions of the vertices of the face with ID fid.
@@ -345,6 +402,11 @@ namespace DSC2D {
             return mesh->vertices_end();
         }
         
+        HMesh::IDIteratorPair<HMesh::Vertex> vertices() const
+        {
+            return mesh->vertices();
+        }
+        
         HMesh::HalfEdgeIDIterator halfedges_begin() const
         {
             return mesh->halfedges_begin();
@@ -353,6 +415,11 @@ namespace DSC2D {
         HMesh::HalfEdgeIDIterator halfedges_end() const
         {
             return mesh->halfedges_end();
+        }
+        
+        HMesh::IDIteratorPair<HMesh::HalfEdge> halfedges() const
+        {
+            return mesh->halfedges();
         }
         
         HMesh::FaceIDIterator faces_begin() const
@@ -364,6 +431,12 @@ namespace DSC2D {
         {
             return mesh->faces_end();
         }
+        
+        HMesh::IDIteratorPair<HMesh::Face> faces() const
+        {
+            return mesh->faces();
+        }
+
         
         HMesh::Walker walker(node_key vid) const
         {
@@ -517,7 +590,8 @@ namespace DSC2D {
          */
         void deform();
         
-    private:
+    protected:
+    public:
         
         /**
          Moves a the vertex with ID vid to its new position. Returns whether the vertex was succesfully moved to its new position.
@@ -532,7 +606,7 @@ namespace DSC2D {
         /**
          Splits the edge eid by inserting a vertex at the center of the edge and splitting the two neighbouring faces of the edge. Returns whether it suceeds or not.
          */
-        bool split(edge_key eid);
+        bool split(edge_key eid, node_key * n = nullptr);
         
         /**
          Collapses the edge with ID eid and updates attributes. If safe is true, the collapse will affect the shape of the interface minimally. Returns whether it suceeds or not.
@@ -553,6 +627,7 @@ namespace DSC2D {
         //************** QUALITY CONTROL ***************
         
     protected:
+    public:
         /**
          Improves the quality of the simplicial complex by smoothing, removing needles and caps, maximize the minimum angle and removing degenerate faces.
          */
@@ -569,6 +644,7 @@ namespace DSC2D {
         void priority_queue_optimization(const HMesh::EnergyFun& efun);
         
     private:
+    public:
         /**
          Maximize minimum angles using greedy approach by flipping edges.
          */
@@ -630,32 +706,32 @@ namespace DSC2D {
         void thickening();
         
         //************** UTIL ***************
-    private:
+    protected:
         
         /**
          Checks that the mesh is valid, i.e. that each face has three vertices and that the area of a face is positive (the face is not degenerate).
          */
-        void validity_check();
+        void validity_check() const;
         
         /**
          Returns the minimum angle of the face with ID fid.
          */
-        real min_angle(face_key fid);
+        real min_angle(face_key fid) const;
         
         /**
          Returns the minimum edge length of the edges of the face with ID fid.
          */
-        real min_edge_length(face_key fid);
+        real min_edge_length(face_key fid) const;
         
         /**
          * Returns the new minimum face quality (minimum angle) when moving a node from old_pos to new_pos. The edges in the link of the node should be passed in eids.
          */
-        real min_quality(const std::vector<edge_key>& eids, const vec2& pos_old, const vec2& pos_new);
+        real min_quality(const std::vector<edge_key>& eids, const vec2& pos_old, const vec2& pos_new) const;
         
         /**
          Returns whether the half edge is possible to collapse.
          */
-        bool is_collapsable(HMesh::Walker hew, bool safe);
+        bool is_collapsable(HMesh::Walker hew, bool safe) const;
         
     public:
         /**
@@ -683,10 +759,14 @@ namespace DSC2D {
          */
         std::vector<vec2> get_design_variable_positions();
         
+        std::vector<vec2> get_design_variable_destinations();
+        
         /**
          Returns the positions of the interface edges.
          */
         std::vector<vec2> get_interface_edge_positions();
+        
+        std::vector<vec2> get_interface_edge_destinations();
         
         /**
          Returns the maximum distance a vertex is supposed to be moved (the distance between its new and old position).
@@ -752,4 +832,4 @@ namespace DSC2D {
         
     };
     
-}
+};
